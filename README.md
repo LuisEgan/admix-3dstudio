@@ -1,4 +1,4 @@
-<img src="https://user-images.githubusercontent.com/4368477/53872237-70534e80-4006-11e9-827f-5c0d28c64afb.png">
+<img src="https://admix.in/wp-content/uploads/2018/08/admix.1f291914fot.png">
 
 # 3D Studio
 
