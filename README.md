@@ -1,4 +1,4 @@
-<img src="https://admix.in/wp-content/uploads/2018/08/admix.1f291914fot.png">
+<img style="display:block; margin:auto" src="https://admix.in/wp-content/uploads/2018/08/admix.1f291914fot.png">
 
 # 3D Studio
 
