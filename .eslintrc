@@ -1,0 +1,44 @@
+{
+  "extends": [
+    "prettier"
+  ],
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "import/no-unresolved": "off",
+    "react/forbid-prop-types": "off",
+    "react/prop-types": "off",
+    "no-prototype-builtins": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/prefer-stateless-function": [
+      0
+    ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowShortCircuit": true
+      }
+    ],
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "no-await-in-loop": "off",
+    "no-return-await": "off",
+    "no-param-reassign": "off",
+    "linebreak-style": [
+      "off",
+      "windows"
+    ]
+  },
+  "globals": {
+    "Promise": true,
+    "it": true,
+    "logger": true,
+    "expect": true,
+    "describe": true
+  },
+  "plugins": [
+    "promise"
+  ]
+}
