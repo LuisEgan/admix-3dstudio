@@ -1,9 +1,15 @@
-const { GraphQLObjectType } = require('graphql');
-const posts = require('./posts');
+const { GraphQLObjectType } = require("graphql");
+const campaigns = require("./campaigns");
+const creatives = require("./creatives");
+const groups = require("./groups");
+const users = require("./users");
 
 module.exports = new GraphQLObjectType({
-  name: 'Mutation',
+  name: "Mutation",
   fields: () => ({
-    ...posts,
+    ...campaigns,
+    ...creatives,
+    ...groups,
+    ...users,
   }),
 });

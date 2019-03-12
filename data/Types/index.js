@@ -1,5 +1,11 @@
-const PostType = require('./posts');
+const CampaignsType = require('./campaigns');
+const CreativesType = require('./creatives');
+const GroupsType = require('./groups');
+const UsersType = require('./users');
 
 module.exports = {
-  PostType,
+  CampaignsType,
+  CreativesType,
+  GroupsType,
+  UsersType,
 };

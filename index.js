@@ -34,9 +34,9 @@ app.prepare().then(() => {
 
   httpServer.listen(PORT, () => {
     logger.info(`🎉 Application ready at ${HOST}:${PORT}`);
-    logger.info(
-      `🚀 Subscriptions ready at ${WS_HOST}:${PORT}${apollo.subscriptionsPath}`,
-    );
+    // logger.info(
+    //   `🚀 Subscriptions ready at ${WS_HOST}:${PORT}${apollo.subscriptionsPath}`,
+    // );
     dev &&
       logger.info(
         `⚡️ GraphQL console ready at ${HOST}:${PORT}${apollo.graphqlPath}`,
