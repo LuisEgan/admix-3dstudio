@@ -7,7 +7,6 @@ This application contains following frameworks and technologies:
 * [GraphQL](https://graphql.org/learn/)
 * [Apollo Server](https://www.apollographql.com/docs/apollo-server/)
 * [Apollo Client](https://www.apollographql.com/docs/react/)
-* [Ant Design](https://ant.design/docs/react/introduce)
 
 ## How to start
 * Go to folder and run: `yarn`.
