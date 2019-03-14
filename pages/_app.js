@@ -1,11 +1,12 @@
-import React from "react";
-import App, { Container } from "next/app";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import withApollo from "../lib/withApollo";
-import withRedux from "../lib/withRedux";
+import React from 'react';
+import App, { Container } from 'next/app';
+import { Provider } from 'react-redux';
+import { ApolloProvider } from 'react-apollo';
+import { PersistGate } from 'redux-persist/integration/react';
+import withApolloClient from '../lib/withApollo';
+import withRedux from '../lib/withRedux';
 
-import "../scss/index.scss";
+import '../scss/index.scss';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -17,13 +18,15 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps, reduxStore } = this.props;
+    const { Component, pageProps, reduxStore, apolloClient } = this.props;
 
     return (
       <Container>
         <Provider store={reduxStore}>
           <PersistGate persistor={reduxStore.__persistor}>
-            <Component {...pageProps} />
+            <ApolloProvider client={apolloClient}>
+              <Component apolloClient={apolloClient} {...pageProps} />
+            </ApolloProvider>
           </PersistGate>
         </Provider>
       </Container>
@@ -31,7 +34,4 @@ class MyApp extends App {
   }
 }
 
-MyApp = withRedux(MyApp);
-MyApp = withApollo(MyApp);
-
-export default MyApp;
+export default withApolloClient(withRedux(MyApp));
