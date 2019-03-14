@@ -12,4 +12,6 @@ class Campaigns extends React.Component {
   }
 }
 
+// * Query to fetch campaigns
+
 export default connect()(Campaigns);

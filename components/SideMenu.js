@@ -3,6 +3,12 @@ import { connect } from "react-redux";
 import Link from "next/link";
 import { withRouter } from "next/router";
 
+import actions from "../lib/actions";
+
+import logo from "../assets/img/logo.png";
+
+const { logout } = actions;
+
 function openInNewTab(url) {
   const sideMenu = document.getElementById("sideMenu");
   const a = document.createElement("a");
@@ -76,10 +82,14 @@ class SideMenu extends Component {
   }
 
   render() {
+    const { logout, isLoggedIn } = this.props;
+
+    if (!isLoggedIn) return null;
+
     return (
       <div id="sideMenu">
         <div id="sideMenu-header">
-          <img src={"logo"} alt="logo" />
+          <img src={logo} alt="logo" onClick={logout} />
         </div>
         {this.renderSections()}
       </div>
@@ -87,7 +97,22 @@ class SideMenu extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  const { auth } = state;
+
+  return {
+    ...auth,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(logout()),
+});
+
 SideMenu = withRouter(SideMenu);
-SideMenu = connect()(SideMenu);
+SideMenu = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SideMenu);
 
 export default SideMenu;

@@ -1391,9 +1391,9 @@ $inputsFontSize: calc(0.45em+0.3vw);
 // ----------------------------------------------------------------------------------------------------------
 // LOGIN ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
-#login {
+#bigImagePanel {
   display: flex;
-  height: 100%;
+  height: 100vh;
   min-height: 100%;
   background-color: white;
   form {
@@ -1419,7 +1419,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
   }
-  .login-asyncMessage {
+  .bigImagePanel-asyncMessage {
     position: absolute;
     text-align: center;
     width: 80%;
@@ -1454,10 +1454,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
       background-size: cover;
     }
   }
-  #login-header {
+  #bigImagePanel-header {
     height: 20%;
   }
-  #login-title {
+  #bigImagePanel-title {
     height: 10%;
     > div {
       @extend .cc;
@@ -1466,7 +1466,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       border-bottom: solid #f5f7fa;
     }
   }
-  #login-forms {
+  #bigImagePanel-forms {
     transition: 0s;
     position: relative;
     flex-flow: column;
@@ -1479,7 +1479,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       color: #14b9be;
     }
   }
-  #login-nav {
+  #bigImagePanel-nav {
     height: 10%;
     flex-flow: column;
     transition: 0s;
