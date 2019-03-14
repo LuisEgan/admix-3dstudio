@@ -26,6 +26,11 @@ class AppWrapper extends React.Component {
         </Head>
         <SideMenu />
         {children}
+        <style jsx>{`
+          main {
+            height: 100vh;
+          }
+        `}</style>
       </main>
     );
   }
