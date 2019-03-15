@@ -695,7 +695,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.3.1":
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.3.4.tgz#73d12ba819e365fcf7fd152aed56d6df97d21c83"
   integrity sha512-IvfvnMdSaLBateu0jfsYIpZTxAc2cKEXEMiezGGN75QcBcecDUKd3PgLAncT0oOgxKy8dd8hrJKj9MfzgfZd6g==
@@ -803,6 +803,11 @@
   integrity sha512-MI4Xx6LHs4Webyvi6EbspgyAb4D2Q2VtnCQ1blOJcoLS6mVa8lNN2rkIy1CVxfTUpoyIbCTkXES1rLXztFD1lg==
   dependencies:
     any-observable "^0.3.0"
+
+"@tanem/svg-injector@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@tanem/svg-injector/-/svg-injector-2.1.4.tgz#b804f1c78b5179365ae21061f119263acccbeb13"
+  integrity sha512-//NIrFl8G59OCHWEeMUcI/UI05/xtkHOu0kVrfJe3Zh13gtKKSkkSdlr2kZSJthFal2JvdMm3T3XBm8grbbRbw==
 
 "@types/accepts@^1.3.5":
   version "1.3.5"
@@ -6416,7 +6421,7 @@ prop-types@15.6.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6643,6 +6648,15 @@ react-redux@^5.0.6:
     prop-types "^15.6.1"
     react-is "^16.6.0"
     react-lifecycles-compat "^3.0.0"
+
+react-svg@^7.2.12:
+  version "7.2.12"
+  resolved "https://registry.yarnpkg.com/react-svg/-/react-svg-7.2.12.tgz#e7b08af2b23ce39c8ad77f234643f9c40e62cef1"
+  integrity sha512-9Ik3siTJ60pxRa3lqRkz7P6W75+f1FqK8LBF1TdXC36Af5zkYBEIA74hd5oFn7UKO9KdsuaEWvD35YyoESoYtw==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+    "@tanem/svg-injector" "^2.1.4"
+    prop-types "^15.7.2"
 
 react@^16.8.4:
   version "16.8.4"

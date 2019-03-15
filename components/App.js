@@ -28,6 +28,7 @@ class AppWrapper extends React.Component {
         {children}
         <style jsx>{`
           main {
+            display: flex;
             height: 100vh;
           }
         `}</style>

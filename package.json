@@ -32,6 +32,7 @@
     "react-apollo": "^2.0.1",
     "react-dom": "^16.8.4",
     "react-redux": "^5.0.6",
+    "react-svg": "^7.2.12",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-logger": "^3.0.6",

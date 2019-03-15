@@ -524,7 +524,7 @@ p {
   }
 
   100% {
-      background-position-x: 50%;
+    background-position-x: 50%;
   }
 }
 
@@ -823,13 +823,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
   width: 7.5%;
   background-image: linear-gradient(135.78deg, #002590 0%, #1388b7 50.87%, #56c4c6 100%);
   min-width: 115px;
-  padding: 2.5% 0;
 }
 #sideMenu-header {
+  @extend .cc;
   height: 15%;
-  text-align: center;
   img {
-    width: 70%;
+    width: 55%;
   }
 }
 #sideMenu-body {
@@ -840,12 +839,20 @@ $inputsFontSize: calc(0.45em+0.3vw);
   height: 90%;
   width: 100%;
 
-  img{
+  a {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+  }
+  img {
     max-width: 50px;
   }
   svg {
-    min-width: 100%;
-    g {
+    max-width: 30%;
+    margin-bottom: 10px;
+    g,
+    path {
       fill: white;
     }
   }
@@ -859,7 +866,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
     height: 15vh;
     max-height: 120px;
     opacity: 0.3;
-    color: #ffffff;
     &:hover {
       opacity: 1;
       cursor: pointer;
@@ -871,6 +877,9 @@ $inputsFontSize: calc(0.45em+0.3vw);
       position: absolute;
       top: 0;
       left: 0;
+    }
+    a {
+      color: #ffffff;
     }
     > div {
       padding: 7% 0;
@@ -1035,6 +1044,9 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 .step-container {
   padding: 2% $sidesPadding calc(2% + 64px);
+  width: 100%;
+  overflow: auto;
+
   .step-title {
     margin: 35px 0 40px 0;
   }
@@ -1609,6 +1621,91 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 }
 // ----------------------------------------------------------------------------------------------------------
+// GROUPS ----------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
+#groups {
+  svg,
+  g,
+  path {
+    height: 100%;
+    width: 15px;
+    fill: white;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .group {
+    padding: 1.5vh 0;
+
+    .group-name {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+
+      svg,
+      g,
+      path {
+        fill: black;
+      }
+    }
+    .group-creatives {
+      display: flex;
+      box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
+      border-radius: 5px;
+      padding: 15px;
+      min-height: 25vh;
+      flex-wrap: wrap;
+
+      .group-creative {
+        display: flex;
+        flex-flow: column-reverse;
+        position: relative;
+        width: 150px;
+        min-height: 20vh;
+        margin: 15px;
+        background-position: 0 0;
+        border-radius: 2px;
+        background-size: cover;
+        cursor: pointer;
+
+        img {
+          height: 100%;
+          width: 100%;
+        }
+
+        .creative-title {
+          display: flex;
+          color: white;
+          justify-content: space-between;
+          align-items: flex-end;
+          padding: 10px 15px;
+
+          span {
+            max-width: 80%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
+        }
+      }
+
+      .group-creative-new {
+        @extend .cc;
+        flex-flow: column;
+        background-color: #1b77e1;
+        color: white;
+        svg,
+        g,
+        path {
+          height: unset;
+          width: unset;
+        }
+      }
+    }
+  }
+}
+// ----------------------------------------------------------------------------------------------------------
 // CUSTOM COMPONENTS ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
 $ballSize: 20px;
@@ -1620,7 +1717,7 @@ $ballSize: 20px;
   background-color: #ffffff;
   border-radius: 50px;
   box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.10000000149011612), 0 0 1px 0 rgba(10, 31, 68, 0.07999999821186066);
-  width: 181px;
+  width: 180px;
   height: 48px;
   color: #0a1f44;
   &:focus {
@@ -1632,10 +1729,15 @@ $ballSize: 20px;
   background-color: $blueAdmix;
   color: white;
 }
+.red-btn {
+  @extend .white-btn;
+  background-color: #cc0000;
+  color: white;
+}
 .gradient-btn {
   background-image: linear-gradient(135.78deg, #002590 0%, #1388b7 50.87%, #56c4c6 100%);
   border-radius: 50px;
-  width: 103px;
+  width: 180px;
   height: 48px;
   color: white;
   box-shadow: none;
@@ -1968,15 +2070,23 @@ $ballSize: 20px;
     background: white;
     padding: 2% 5%;
     border-radius: 5px;
-    text-align: center;
     z-index: 1;
     .popup-title {
       @extend .st;
       padding: 5px 0;
+      width: 100%;
+      text-align: center;
+      display: block;
     }
     .popup-text {
       @extend .mb;
       padding: 5px;
+    }
+    .input {
+      padding: 20px 0;
+    }
+    .input-label {
+      color: #b3b3b3;
     }
     .gradient-btn {
       width: 100%;

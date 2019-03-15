@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Router from "next/router";
 import { connect } from "react-redux";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import isEmail from "validator/lib/isEmail";
 import actions from "../lib/actions";
 

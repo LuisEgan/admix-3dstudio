@@ -5,7 +5,11 @@ import { withRouter } from "next/router";
 
 import actions from "../lib/actions";
 
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/logo-vertical.png";
+import ProfileSVG from "../assets/svg/profile.svg";
+import CampaignsSVG from "../assets/svg/campaigns.svg";
+import BellSVG from "../assets/svg/bell.svg";
+import DocumentationSVG from "../assets/svg/documentation.svg";
 
 const { logout } = actions;
 
@@ -21,22 +25,22 @@ function openInNewTab(url) {
 
 const sections = [
   {
-    icon: "Camps",
+    icon: <CampaignsSVG />,
     title: "My campaigns",
     pathname: "/campaigns",
   },
   {
-    icon: "Docs",
+    icon: <DocumentationSVG />,
     title: "Documentation",
     pathname: "https://docs.admix.in/",
   },
   {
-    icon: "Bell",
+    icon: <BellSVG />,
     title: "Notifications",
     pathname: "/",
   },
   {
-    icon: "Prof",
+    icon: <ProfileSVG />,
     title: "My profile",
     pathname: "/",
   },
@@ -56,7 +60,6 @@ class SideMenu extends Component {
     if (pathname.indexOf("http") >= 0) {
       openInNewTab(pathname);
     }
-    // this.props.history.push(pathname);
   }
 
   renderSections() {
@@ -69,12 +72,16 @@ class SideMenu extends Component {
         {sections.map(section => {
           isSelected = section.pathname === pathname ? "selectedSection" : "";
           return (
-            <React.Fragment key={section.title}>
-              <div>{section.icon}</div>
+            <div key={section.title}>
               <Link prefetch href={section.pathname} key={section.title}>
-                <a>{section.title}</a>
+                <a
+                  target={section.title === "Documentation" ? "__blank" : null}
+                >
+                  <div>{section.icon}</div>
+                  {section.title}
+                </a>
               </Link>
-            </React.Fragment>
+            </div>
           );
         })}
       </div>
