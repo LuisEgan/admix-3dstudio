@@ -35,7 +35,7 @@ const sections = [
     pathname: "https://docs.admix.in/",
   },
   {
-    icon: <BellSVG />,
+    icon: <DocumentationSVG />,
     title: "Notifications",
     pathname: "/",
   },

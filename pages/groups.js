@@ -26,7 +26,7 @@ const dbGroups = [
       },
       {
         image:
-          "https://www.creativeuncut.com/gallery-20/art/wowc-barrens-split.jpg",
+          "http://vgtribune.com/VGTribune/wp-content/uploads/2015/05/env-tuskarr-full-820x380.jpg",
         name: "Creative 3",
       },
     ],
@@ -46,7 +46,7 @@ const dbGroups = [
       },
       {
         image:
-          "https://www.creativeuncut.com/gallery-20/art/wowc-barrens-split.jpg",
+          "http://vgtribune.com/VGTribune/wp-content/uploads/2015/05/env-tuskarr-full-820x380.jpg",
         name: "Creative 3234",
       },
       {
