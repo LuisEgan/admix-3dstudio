@@ -13,16 +13,21 @@
   },
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
-    "apollo-client": "2.2.0",
-    "apollo-client-preset": "^1.0.4",
+    "apollo-boost": "^0.3.1",
+    "apollo-link-context": "^1.0.15",
     "apollo-server-express": "^2.4.8",
+    "bcrypt": "^3.0.4",
+    "cookie": "^0.3.1",
+    "cors": "^2.8.5",
     "dotenv": "^6.2.0",
+    "dotenv-webpack": "^1.7.0",
     "express": "^4.16.4",
     "formik": "^1.5.1",
     "graphql": "^14.1.1",
     "graphql-anywhere": "^4.0.2",
     "graphql-tag": "^2.5.0",
     "isomorphic-unfetch": "^2.0.0",
+    "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.18",
     "next": "^8.0.3",
     "next-images": "^1.1.1",
@@ -39,7 +44,8 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.2.0",
     "validator": "^10.11.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "yup": "^0.26.10"
   },
   "husky": {
     "hooks": {
