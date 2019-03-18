@@ -1406,7 +1406,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 #bigImagePanel {
   display: flex;
   height: 100%;
-  min-height: 100%;
+  width: 100%;
   background-color: white;
   form {
     width: 70%;

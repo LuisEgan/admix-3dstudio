@@ -3,6 +3,8 @@ import Head from "next/head";
 import Router from "next/router";
 import SideMenu from "./SideMenu";
 
+import favicon from "../assets/img/favicon.png";
+
 class AppWrapper extends React.Component {
   render() {
     const { children, isLoggedIn } = this.props;
@@ -19,6 +21,7 @@ class AppWrapper extends React.Component {
       <main>
         <Head>
           <title>Admix - 3D Studio</title>
+          <link rel="shortcut icon" href={favicon}></link>
           <meta
             name="viewport"
             content="initial-scale=1.0, width=device-width"
