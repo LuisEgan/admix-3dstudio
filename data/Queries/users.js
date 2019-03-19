@@ -3,7 +3,7 @@ const { UsersType } = require("../Types");
 const Users = require("../Models/users");
 
 module.exports = {
-  allUsers: {
+  users: {
     type: new GraphQLList(UsersType),
     resolve() {
       return Users.find({});

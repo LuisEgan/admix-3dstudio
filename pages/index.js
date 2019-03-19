@@ -1,26 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Router from "next/router";
 
-class Index extends React.Component {
-
-  componentDidMount() {
-    Router.push("/login")
-  }
+let Index = props => {
+  useEffect(() => {
+    Router.push("/login");
+  });
 
   signout = apolloClient => () => {
-    document.cookie = cookie.serialize('token', '', { maxAge: -1 });
+    document.cookie = cookie.serialize("token", "", { maxAge: -1 });
     apolloClient.cache.reset().then(() => {
-      redirect({}, '/signin');
+      redirect({}, "/signin");
     });
   };
 
-  render() {
-    return null
-    // Hello {this.props.loggedInUser.user.name}! <br />
-    // <button onClick={this.signout(props.apolloClient)}>Sign out</button>
-
-  }
-}
+  return null;
+};
 
 export default Index;
-// export default withAuth(Index);
