@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useReducer } from "react";
 import { connect } from "react-redux";
 import Router from "next/router";
 
@@ -32,28 +32,30 @@ const campaigns = {
     owner: "National Geographic",
   },
 };
-class Campaigns extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      redirectTo: null,
-      showContent: true,
-      selectedCampaign: {},
-      showPopupNewCampaign: false,
-    };
-  }
+const initialState = {
+  showContent: true,
+  selectedCampaign: {},
+  showPopupNewCampaign: false,
+};
 
-  selectCampaign = ({ cid, redirectTo }) => {
-    console.log("cid: ", cid);
+let Campaigns = props => {
+  const [state, setState] = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    initialState,
+  );
+
+  const selectCampaign = ({ cid, redirectTo }) => {
     Router.push(redirectTo);
   };
 
-  togglePopup = popup => {
-    this.setState({ [popup]: !this.state[popup] });
+  const togglePopup = popup => {
+    setState({
+      [popup]: !state[popup],
+    });
   };
 
-  renderCampaigns() {
+  const renderCampaigns = () => {
     const toRender = [];
 
     for (let cid in campaigns) {
@@ -78,20 +80,18 @@ class Campaigns extends Component {
             <div>
               <div className="campaign-buttons">
                 <button
-                  onClick={() =>
-                    this.selectCampaign({ cid, redirectTo: "/groups" })
-                  }
+                  onClick={() => selectCampaign({ cid, redirectTo: "/groups" })}
                 >
                   {<SetupSVG />}
                 </button>
                 <button
-                  onClick={() => this.selectCampaign({ cid, redirectTo: "/" })}
+                  onClick={() => selectCampaign({ cid, redirectTo: "/" })}
                 >
                   {<InfoSVG />}
                 </button>
 
                 <button
-                  onClick={() => this.selectCampaign({ cid, redirectTo: "/" })}
+                  onClick={() => selectCampaign({ cid, redirectTo: "/" })}
                 >
                   {<ReportSVG />}
                 </button>
@@ -105,42 +105,40 @@ class Campaigns extends Component {
     }
 
     return toRender;
-  }
+  };
 
-  render() {
-    const { showContent, showPopupNewCampaign } = this.state;
+  const { showContent, showPopupNewCampaign } = state;
 
-    return (
-      <App>
-        <div className="step-container" id="campaigns">
-          <NewCampaignPopup
-            show={showPopupNewCampaign}
-            togglePopup={() => this.togglePopup("showPopupNewCampaign")}
-          />
+  return (
+    <App>
+      <div className="step-container" id="campaigns">
+        <NewCampaignPopup
+          show={showPopupNewCampaign}
+          togglePopup={() => togglePopup("showPopupNewCampaign")}
+        />
 
-          <div id="apps-header" className="step-title">
-            <h3 className="st sc-h3">My apps</h3>
-          </div>
-
-          <div id="apps-buttons">
-            <button
-              id="filter"
-              className="mb unselectable blue-btn"
-              type="button"
-              onClick={() => this.togglePopup("showPopupNewCampaign")}
-            >
-              +<span>New campaign</span>
-            </button>
-          </div>
-
-          {!showContent && <AdmixLoading loadingText="Loading" />}
-
-          {showContent && this.renderCampaigns()}
+        <div id="apps-header" className="step-title">
+          <h3 className="st sc-h3">My apps</h3>
         </div>
-      </App>
-    );
-  }
-}
+
+        <div id="apps-buttons">
+          <button
+            id="filter"
+            className="mb unselectable blue-btn"
+            type="button"
+            onClick={() => togglePopup("showPopupNewCampaign")}
+          >
+            +<span>New campaign</span>
+          </button>
+        </div>
+
+        {!showContent && <AdmixLoading loadingText="Loading" />}
+
+        {showContent && renderCampaigns()}
+      </div>
+    </App>
+  );
+};
 
 const mapStateToProps = state => state;
 

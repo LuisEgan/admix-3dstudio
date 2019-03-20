@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const { GraphQLNonNull, GraphQLString } = require('graphql');
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const { GraphQLNonNull, GraphQLString } = require("graphql");
 
-const { UsersType, JWTType } = require('../Types');
-const Users = require('../Models/users');
+const { UsersType, JWTType } = require("../Types");
+const Users = require("../Models/users");
 
 const SECRET = process.env.SERVER_TOKEN_SECRET;
 const TOKEN_EXPIRE = process.env.TOKEN_EXPIRE;
