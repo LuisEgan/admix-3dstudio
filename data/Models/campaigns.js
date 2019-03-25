@@ -15,6 +15,8 @@ const campaignsSchema = new Schema(
       enum: states,
     },
     name: String,
+    advertiser: String,
+    description: String,
     startDate: { type: Date, default: null },
     endDate: { type: Date, default: null },
   },

@@ -3,7 +3,7 @@ const CampaignsQueries = require('./campaigns');
 
 module.exports = new GraphQLObjectType({
   name: 'Query',
-  fields: () => ({
+  fields: {
     ...CampaignsQueries,
-  }),
+  },
 });
