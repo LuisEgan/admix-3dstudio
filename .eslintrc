@@ -2,13 +2,19 @@
   "parser": "babel-eslint",
   "extends": [
     "itomych-react",
-    "prettier"
+    "prettier",
+    "airbnb"
   ],
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
+    "es6": true
   },
   "rules": {
+    "prettier/prettier": ["error"],
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "no-console": "off",
     "import/no-unresolved": "off",
     "react/forbid-prop-types": "off",
     "react/prop-types": "off",
@@ -31,7 +37,8 @@
     "linebreak-style": [
       "off",
       "windows"
-    ]
+    ],
+    "jsx-a11y/aria-role": "off"
   },
   "globals": {
     "Promise": true,
@@ -42,6 +49,7 @@
   },
   "plugins": [
     "react",
-    "promise"
+    "promise",
+    "prettier"
   ]
 }

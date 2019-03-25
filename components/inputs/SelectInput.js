@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 
-class Input extends React.Component {
+class Select extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     rootstyle: PropTypes.object,
@@ -54,7 +54,7 @@ class Input extends React.Component {
   }
 
   render() {
-    const { label, icon, guideline, name, type, errors } = this.props;
+    const { label, icon, guideline, name, errors, options } = this.props;
     const { focused, displayError, touched } = this.state;
 
     let inputStyle = {};
@@ -79,14 +79,21 @@ class Input extends React.Component {
           {icon && <div id="input-icon">{icon}</div>}
           <div>
             <Field
-              type={type}
               name={name}
-              onFocus={this.onFocus}
-              onBlur={this.onBlur}
+              component="select"
               innerRef={i => {
                 this.input = i;
               }}
-            />
+            >
+              <option value="" />
+              {options.map(opt => {
+                return (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                );
+              })}
+            </Field>
           </div>
           {displayError && <span className="asyncError">{errors[name]}</span>}
         </div>
@@ -98,4 +105,4 @@ class Input extends React.Component {
   }
 }
 
-export default Input;
+export default Select;

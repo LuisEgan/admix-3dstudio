@@ -1,27 +1,33 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React from 'react';
+import { Formik, Form } from 'formik';
 
-import Popup from "../Popup";
-import TextInput from "../inputs/TextInput";
+import Popup from '../Popup';
+import AdmixForm from '../Form';
+import TextInput from '../inputs/TextInput';
+import SelectInput from '../inputs/SelectInput';
+
+const initialValues = {
+  name: '',
+  description: '',
+  iab: '',
+  size: '',
+};
 
 export default ({ show, togglePopup }) => {
   const validate = values => {
     const errors = {};
-    const { email, password } = values;
 
-    if (!email || !isEmail(email)) {
-      errors.email = "Invalid email";
-    }
-
-    if (!password) {
-      errors.password = "Please enter a password";
+    for (let input in initialValues) {
+      if (values[input] === '') {
+        errors[input] = 'We need this';
+      }
     }
 
     return errors;
   };
 
   const onSubmit = values => {
-    console.log("values: ", values);
+    console.log('values: ', values);
   };
 
   return (
@@ -29,16 +35,41 @@ export default ({ show, togglePopup }) => {
       <div>
         <span className="popup-title">New creative</span>
         <div id="campaign-new-popup-btns">
-          <Formik validate={validate} onSubmit={onSubmit}>
+          <AdmixForm>
+            <TextInput name="name" label="Creative name*" />
+            <TextInput name="description" label="Description" />
+            <SelectInput
+              name="iab"
+              label="IAB"
+              options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
+            />
+            <SelectInput
+              name="size"
+              label="Creative size in the real world"
+              options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
+            />
+            <button type="submit" className="btn gradient-btn">
+              Create
+            </button>
+          </AdmixForm>
+          <Formik validate={validate} onSubmit={onSubmit} initialValues={initialValues}>
             {formProps => (
               <Form>
                 <TextInput {...formProps} name="name" label="Creative name*" />
-                <TextInput
+                <TextInput {...formProps} name="description" label="Description" />
+                <SelectInput
                   {...formProps}
-                  name="description"
-                  label="Description"
+                  name="iab"
+                  label="IAB"
+                  options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
                 />
-                <button type="button" className="btn gradient-btn">
+                <SelectInput
+                  {...formProps}
+                  name="size"
+                  label="Creative size in the real world"
+                  options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
+                />
+                <button type="submit" className="btn gradient-btn">
                   Create
                 </button>
               </Form>
