@@ -20,7 +20,7 @@ module.exports = new GraphQLObjectType({
     format: { type: GraphQLString },
     state: { type: GraphQLString },
     size: { type: GraphQLString },
-    IAB: { type: GraphQLInt },
+    IAB: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
     user: {
