@@ -1,10 +1,10 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID } = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql');
 
-const CampaignsModel = require("../Models/campaigns");
-const UsersType = require("./users");
+const UserModel = require('../Models/users');
+const UsersType = require('./users');
 
-const CampaignsType = new GraphQLObjectType({
-  name: "CampaignsType",
+module.exports = new GraphQLObjectType({
+  name: 'CampaignsType',
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -15,14 +15,8 @@ const CampaignsType = new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
     user: {
       type: UsersType,
-      resolve: async parentValue => {
-        const { user } = await CampaignsModel.findById(parentValue).populate(
-          "user",
-        );
-        return user;
-      },
+      resolve: async ({ user }) =>
+        await UserModel.findById(user).populate('user'),
     },
   }),
 });
-
-module.exports = CampaignsType;
