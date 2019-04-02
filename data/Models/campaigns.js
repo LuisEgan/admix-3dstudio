@@ -7,20 +7,20 @@ const campaignsSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
     state: {
       type: String,
       default: 'inactive',
-      enum: states,
+      enum: states
     },
     name: String,
+    advertiser: String,
+    description: String,
     startDate: { type: Date, default: null },
-    endDate: { type: Date, default: null },
+    endDate: { type: Date, default: null }
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
 
 campaignsSchema.virtual('id').get(function idToString() {

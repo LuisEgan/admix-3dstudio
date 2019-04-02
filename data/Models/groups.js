@@ -7,29 +7,29 @@ const groupsSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
     campaign: {
       type: Schema.Types.ObjectId,
-      ref: 'Campaign',
+      ref: 'Campaign'
     },
     creatives: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Creative',
-      },
+        ref: 'Creative'
+      }
     ],
     state: {
       type: String,
       default: 'inactive',
-      enum: states,
+      enum: states
     },
     name: String,
-    description: String,
+    description: String
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 groupsSchema.virtual('id').get(function idToString() {

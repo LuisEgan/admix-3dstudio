@@ -3,16 +3,18 @@ const {
   GraphQLString,
   GraphQLID,
   GraphQLList,
-} = require("graphql");
+} = require('graphql');
 
-const GroupsModel = require("../Models/groups");
-const UsersType = require("./users");
-const CampaignsType = require("./campaigns");
-const CreativesType = require("./creatives");
+const CampaignsModel = require('../Models/campaigns');
+const UsersModel = require('../Models/users');
+const CreativesModel = require('../Models/creatives');
+const UsersType = require('./users');
+const CampaignsType = require('./campaigns');
+const CreativesType = require('./creatives');
 
-const GroupsType = new GraphQLObjectType({
-  name: "GroupsType",
-  fields: () => ({
+module.exports = new GraphQLObjectType({
+  name: 'GroupsType',
+  fields: {
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     state: { type: GraphQLString },
@@ -21,32 +23,20 @@ const GroupsType = new GraphQLObjectType({
     updatedAt: { type: GraphQLString },
     user: {
       type: UsersType,
-      resolve: async parentValue => {
-        const { user } = await GroupsModel.findById(parentValue).populate(
-          "user",
-        );
-        return user;
-      },
+      resolve: async ({ user }) =>
+        await UsersModel.findById(user).populate('user'),
     },
     campaign: {
       type: CampaignsType,
-      resolve: async parentValue => {
-        const { campaign } = await GroupsModel.findById(parentValue).populate(
-          "campaign",
-        );
-        return campaign;
-      },
+      resolve: async ({ campaign }) =>
+        await CampaignsModel.findById(campaign).populate('campaign'),
     },
     creatives: {
       type: new GraphQLList(CreativesType),
-      resolve: async parentValue => {
-        const { creatives } = await GroupsModel.findById(parentValue).populate(
-          "creatives",
-        );
-        return creatives;
-      },
+      resolve: async ({ creatives }) =>
+        await CreativesModel.find({ _id: { $in: creatives } }).populate(
+          'creatives',
+        ),
     },
-  }),
+  },
 });
-
-module.exports = GroupsType;

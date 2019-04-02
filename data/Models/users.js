@@ -10,46 +10,44 @@ const userSchema = new Schema(
     name: {
       type: String,
       lowercase: true,
-      required: true,
+      required: true
     },
     company: {
-      type: String,
+      type: String
     },
     isVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     email: {
       type: String,
       unique: true,
       lowercase: true,
       required: true,
-      validate: validator.email,
+      validate: validator.email
     },
     resetPwd: {
       attempts: {
         type: Number,
-        default: 0,
+        default: 0
       },
       isRequested: {
         type: Boolean,
-        default: false,
-      },
+        default: false
+      }
     },
     accessGroups: {
       type: String,
       default: 'guest',
-      enum: accessGroups,
+      enum: accessGroups
     },
     password: {
       type: String,
       required: true,
-      validate: validator.password,
-    },
+      validate: validator.password
+    }
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
 
 userSchema.post('validate', async (doc, next) => {

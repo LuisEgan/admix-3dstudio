@@ -7,13 +7,13 @@ const creativesSchema = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
     groups: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Group',
-      },
+        ref: 'Group'
+      }
     ],
     name: String,
     sourceURL: String,
@@ -22,14 +22,12 @@ const creativesSchema = new Schema(
     state: {
       type: String,
       default: 'inactive',
-      enum: states,
+      enum: states
     },
     size: Number,
-    IAB: String,
+    IAB: String
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
 
 creativesSchema.virtual('id').get(function idToString() {
