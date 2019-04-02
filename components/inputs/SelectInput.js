@@ -30,7 +30,7 @@ class Select extends React.Component {
     const { hasBlurred } = state;
     const newState = {};
 
-    newState.displayError = !!errors[name] && (hasBlurred || submitCount > 0);
+    newState.displayError = errors && !!errors[name] && (hasBlurred || submitCount > 0);
 
     return newState;
   }
@@ -56,6 +56,8 @@ class Select extends React.Component {
   render() {
     const { label, icon, guideline, name, errors, options } = this.props;
     const { focused, displayError, touched } = this.state;
+
+    if (!errors) return null;
 
     let inputStyle = {};
     let guidelineStyle = {};

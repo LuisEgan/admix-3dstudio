@@ -7,9 +7,24 @@ let AdmixForm = props => {
   return (
     <Mutation mutation={mutation} onCompleted={onCompleted} onError={onError}>
       {(mutation, { error }) => {
-        <Formik validate={validate} onSubmit={onSubmit} initialValues={initialValues}>
-          {formProps => <Form>{React.cloneElement(children, { ...formProps, mutation })}</Form>}
-        </Formik>;
+        return (
+          <Formik
+            validate={validate}
+            onSubmit={values => onSubmit(values, mutation)}
+            initialValues={initialValues}
+          >
+            {formProps => {
+              return (
+                <Form>
+                  {React.Children.map(children, child => {
+                    if (typeof child.type !== 'function') return child;
+                    return React.cloneElement(child, { ...formProps, mutation });
+                  })}
+                </Form>
+              );
+            }}
+          </Formik>
+        );
       }}
     </Mutation>
   );
