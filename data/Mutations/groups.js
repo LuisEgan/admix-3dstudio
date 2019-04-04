@@ -67,7 +67,7 @@ module.exports = {
         user: Types.ObjectId(user),
       });
       await CleanCreativeByGroup(_id, creatives);
-      return _id;
+      return _id || null;
     },
   },
 };

@@ -128,7 +128,7 @@ module.exports = {
         user: Types.ObjectId(user),
       });
       await RemoveCreativeFromGroups(_id, groups);
-      return _id;
+      return _id || null;
     },
   },
 };
