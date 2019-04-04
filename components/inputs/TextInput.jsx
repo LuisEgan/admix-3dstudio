@@ -8,7 +8,7 @@ class Input extends React.Component {
     rootstyle: PropTypes.object,
     label: PropTypes.string,
     error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-    showErrors: PropTypes.bool,
+    showErrors: PropTypes.bool
   };
 
   constructor(props) {
@@ -17,7 +17,7 @@ class Input extends React.Component {
     this.state = {
       focused: false,
       displayError: false,
-      touched: false,
+      touched: false
     };
 
     this.forceFocus = this.forceFocus.bind(this);
@@ -57,7 +57,7 @@ class Input extends React.Component {
     const { label, icon, guideline, name, type, errors } = this.props;
     const { focused, displayError, touched } = this.state;
 
-    if(!errors) return null;
+    if (!errors) return null;
 
     let inputStyle = {};
     let guidelineStyle = {};

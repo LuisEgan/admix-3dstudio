@@ -19,11 +19,11 @@ export default ({ show, togglePopup }) => {
   const validate = values => {
     const errors = {};
 
-    // for (let input in initialValues) {
-    //   if (values[input] === '') {
-    //     errors[input] = 'We need this';
-    //   }
-    // }
+    for (let input in initialValues) {
+      if (values[input] === '') {
+        errors[input] = 'We need this';
+      }
+    }
 
     return errors;
   };
