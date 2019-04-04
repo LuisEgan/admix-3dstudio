@@ -2,6 +2,30 @@ const { GraphQLString, GraphQLID, GraphQLNonNull } = require('graphql');
 const { Types } = require('mongoose');
 const { CampaignsType } = require('../Types');
 const CampaignsModel = require('../Models/campaigns');
+const GroupsModel = require('../Models/groups');
+const CreativesModel = require('../Models/creatives');
+
+const CleanByCampaign = async campaign => {
+  if (!campaign) return null;
+  const groups = await GroupsModel.find({ campaign: campaign });
+  const creativeIds = groups.map(group => group.creatives).flat();
+  const groupsIds = groups.map(group => group._id);
+  await CreativesModel.updateMany(
+    {
+      _id: {
+        $in: creativeIds,
+      },
+    },
+    {
+      $pull: {
+        groups: {
+          $in: groupsIds,
+        },
+      },
+    },
+  );
+  await GroupsModel.deleteMany({ campaign: campaign });
+};
 
 module.exports = {
   createCampaign: {
@@ -50,11 +74,12 @@ module.exports = {
       user: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { campaign, user }) => {
-      const { deletedCount } = await CampaignsModel.deleteOne({
+      const deletedCampaign = await CampaignsModel.findOneAndDelete({
         _id: Types.ObjectId(campaign),
         user: Types.ObjectId(user),
       });
-      return deletedCount === 1 ? campaign : null;
+      await CleanByCampaign(deletedCampaign._id || null);
+      return deletedCampaign._id || null;
     },
   },
 };
