@@ -123,11 +123,12 @@ module.exports = {
       user: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { creative, user }) => {
-      const { deletedCount } = await CreativesModel.deleteOne({
+      const { groups, _id } = await CreativesModel.findOneAndDelete({
         _id: Types.ObjectId(creative),
         user: Types.ObjectId(user),
       });
-      return deletedCount === 1 ? creative : null;
+      await RemoveCreativeFromGroups(_id, groups);
+      return _id;
     },
   },
 };
