@@ -1,27 +1,30 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React from 'react';
+import mutations from '../../mutations';
 
-import Popup from "../Popup";
-import TextInput from "../inputs/TextInput";
+import Form from '../Form';
+import Popup from '../Popup';
+import TextInput from '../inputs/TextInput';
+
+const { createUser } = mutations;
+
+const initialValues = { name: '', advertiser: '', description: '' };
 
 export default ({ show, togglePopup }) => {
   const validate = values => {
     const errors = {};
-    const { email, password } = values;
 
-    if (!email || !isEmail(email)) {
-      errors.email = "Invalid email";
+    for (let input in values) {
+      if (!values[input] || values[input] === '') {
+        errors[input] = 'We need this';
+      }
     }
-
-    if (!password) {
-      errors.password = "Please enter a password";
-    }
-
     return errors;
   };
 
-  const onSubmit = values => {
-    console.log("values: ", values);
+  const onSubmit = (values, mutation) => {
+    console.log('mutation: ', mutation);
+    console.log('values: ', values);
+    // mutation(values);
   };
 
   return (
@@ -29,34 +32,20 @@ export default ({ show, togglePopup }) => {
       <div>
         <span className="popup-title">Create new campaign</span>
         <div id="campaign-new-popup-btns">
-          <Formik
-            initialValues={{ email: "", password: "" }}
+          <Form
+            initialValues={initialValues}
             validate={validate}
             onSubmit={onSubmit}
+            mutation={createUser}
+            onError={e => console.log(e)}
           >
-            {formProps => (
-              <Form>
-                <TextInput
-                  {...formProps}
-                  name="newName"
-                  label="Campaign name*"
-                />
-                <TextInput
-                  {...formProps}
-                  name="newAdvertiser"
-                  label="Campaign advertiser*"
-                />
-                <TextInput
-                  {...formProps}
-                  name="newDescription"
-                  label="Campaign description*"
-                />
-                <button type="button" className="btn gradient-btn">
-                  Create
-                </button>
-              </Form>
-            )}
-          </Formik>
+            <TextInput name="name" label="Campaign name*" />
+            <TextInput name="advertiser" label="Campaign advertiser*" />
+            <TextInput name="description" label="Campaign description*" />
+            <button type="submit" className="btn gradient-btn">
+              Create
+            </button>
+          </Form>
         </div>
       </div>
     </Popup>
