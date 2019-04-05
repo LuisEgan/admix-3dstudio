@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import Link from "next/link";
 
 import App from "../components/App";
 import Breadcrumbs from "../components/Breadcrumbs";
@@ -117,6 +118,9 @@ const Groups = props => {
           >
             <PlusSVG />
             <span>New creative</span>
+            <Link href="/about">
+              <a>here</a>
+            </Link>
           </div>
         </div>
       </div>
