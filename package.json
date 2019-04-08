@@ -43,7 +43,10 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.2.0",
-    "three": "^0.102.1",
+    "three": "0.92.0",
+    "three-fbx-loader": "^1.0.3",
+    "three-orbitcontrols": "^2.102.1",
+    "three-transform-ctrls": "^1.0.1",
     "validator": "^10.11.0",
     "winston": "^3.2.1",
     "yup": "^0.26.10"
