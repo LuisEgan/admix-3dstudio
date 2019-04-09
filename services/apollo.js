@@ -27,4 +27,8 @@ module.exports = dev =>
     schema,
     playground: dev,
     context: createContext,
+    uploads: {
+      maxFileSize: 10000000, // 10 MB
+      maxFiles: 20,
+    },
   });
