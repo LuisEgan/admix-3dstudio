@@ -1,0 +1,11 @@
+{
+    "version": 2,
+    "builds": [{ "src": "package.json", "use": "@now/next" }],
+    "env": {
+        "PORT":"4000",
+        "HOST":"http://localhost",
+        "WS_HOST":"ws://localhost",
+        "TOKEN_EXPIRE":"30d",
+        "SERVER_TOKEN_SECRET":"12345"
+      }
+}

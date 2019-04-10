@@ -7,9 +7,10 @@
     "front-dev": "next",
     "dev": "node index.js",
     "build": "next build",
+    "now-build": "next build",
     "prestart": "npm run build",
     "start": "SET NODE_ENV=production&& node index.js",
-    "front-start": "next start"
+    "front-start": "next start -p %PORT%"
   },
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
@@ -28,6 +29,7 @@
     "graphql-tag": "^2.5.0",
     "isomorphic-unfetch": "^2.0.0",
     "jsonwebtoken": "^8.5.0",
+    "lodash": "^4.17.11",
     "mongoose": "^5.4.18",
     "next": "^8.0.3",
     "next-images": "^1.1.1",
@@ -43,8 +45,10 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.2.0",
-    "three": "0.92.0",
-    "three-fbx-loader": "^1.0.3",
+    "three": "^0.103.0",
+    "three-fbxloader-offical": "^1.0.0",
+    "three-gltf-exporter": "^0.0.1",
+    "three-gltf-loader": "^1.103.0",
     "three-orbitcontrols": "^2.102.1",
     "three-transform-ctrls": "^1.0.1",
     "validator": "^10.11.0",
