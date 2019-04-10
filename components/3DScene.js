@@ -1,8 +1,11 @@
 import React from 'react';
 import * as THREE from 'three';
+import GLTFLoader from 'three-gltf-loader';
+import GLTFExporter from 'three-gltf-exporter';
 import TransformControls from 'three-transform-ctrls';
 import OrbitControls from 'three-orbitcontrols';
-import FBXLoader from 'three-fbx-loader';
+import FBXLoader from 'three-fbxloader-offical';
+import isEqual from 'lodash/isEqual';
 
 class THREEScene extends React.Component {
   constructor(props) {
@@ -16,7 +19,7 @@ class THREEScene extends React.Component {
   componentDidMount() {
     const { source } = this.props;
     this.threeSetup();
-    source && this.loadFBX(source);
+    source && this.loadObject();
     this.start();
   }
 
@@ -26,10 +29,14 @@ class THREEScene extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { source } = this.props;
+    const { source, objectScale } = this.props;
 
     if (source !== prevProps.source) {
-      this.loadFBX(source);
+      this.loadObject();
+    }
+
+    if (!isEqual(objectScale, prevProps.objectScale)) {
+      this.reScaleObject(objectScale);
     }
   }
 
@@ -39,11 +46,11 @@ class THREEScene extends React.Component {
     //SCENE
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xa0a0a0);
-    this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
+    // this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
     //CAMERA
     this.camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
-    this.camera.position.set(100, 200, 300);
+    this.camera.position.set(0, 100, 300);
 
     //RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -53,9 +60,9 @@ class THREEScene extends React.Component {
     this.mount.appendChild(this.renderer.domElement);
 
     //CONTROLS
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.target.set(0, 100, 0);
-    this.controls.update();
+    // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    // this.controls.target.set(0, 100, 0);
+    // this.controls.update();
     // this.scene.add(this.controls);
 
     //LIGHT
@@ -85,6 +92,8 @@ class THREEScene extends React.Component {
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
     this.scene.add(grid);
+
+    this.clock = new THREE.Clock();
   };
 
   threeLoadingManager = () => {
@@ -132,19 +141,78 @@ class THREEScene extends React.Component {
   animate = () => {
     this.renderer.render(this.scene, this.camera);
     this.frameId = window.requestAnimationFrame(this.animate);
+
+    const delta = this.clock.getDelta();
+    if (this.mixer) {
+      this.mixer.update(delta);
+    }
+  };
+
+  exportGLTF = input => {
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xffff00,
+      metalness: 0.5,
+      roughness: 1.0,
+      flatShading: true,
+    });
+    const sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(70, 10, 10), material);
+    sphere.position.set(0, 0, 0);
+    sphere.name = 'Sphere';
+
+    const gltfExporter = new GLTFExporter();
+    let output;
+
+    const options = {
+      trs: false,
+      onlyVisible: true,
+      truncateDrawRange: false,
+      binary: false,
+      forceIndices: false,
+      forcePowerOfTwoTextures: false,
+    };
+
+    gltfExporter.parse(
+      input,
+      function(result) {
+        output = JSON.stringify(result, null, 2);
+        const blob = new Blob([output], { type: 'text/plain' });
+        output = URL.createObjectURL(blob);
+        console.log('PARSE - output: ', output);
+        this.loadGTLF(output);
+      }.bind(this),
+      options,
+    );
+  };
+
+  loadObject = () => {
+    const { source, fileType } = this.props;
+
+    if (!fileType) return;
+
+    switch (fileType.toUpperCase()) {
+      case 'FBX':
+        this.loadFBX(source);
+        break;
+      case 'GLTF':
+        this.loadGTLF(source);
+        break;
+      default:
+        break;
+    }
   };
 
   loadFBX = source => {
     const onLoad = function(object) {
-      const mixer = new THREE.AnimationMixer(object);
-      const action = mixer.clipAction(object.animations[0]);
-      action.play();
-      object.traverse(function(child) {
-        if (child.isMesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
-        }
-      });
+      console.log('object: ', object);
+      object.name = 'ad';
+      object.position.set(0, 0, 0);
+      this.mixer = new THREE.AnimationMixer(object);
+      const action = this.mixer.clipAction(object.animations[0]);
+      // action.play();
+
+      // this.exportGLTF(object);
+      const box = new THREE.Box3().setFromObject(object);
+      console.log('box.getSize(): ', box.getSize());
       this.scene.add(object);
     }.bind(this);
 
@@ -152,14 +220,49 @@ class THREEScene extends React.Component {
       console.log(error);
     };
 
-    const loader = new FBXLoader(this.threeLoadingManager());
-    loader.load(source, fbx => onLoad(fbx), null, onLoaderError);
+    // const loader = new FBXLoader(this.threeLoadingManager());
+    const loader = new FBXLoader();
+    loader.load(source, onLoad, null, onLoaderError);
+  };
+
+  loadGTLF = source => {
+    const loader = new GLTFLoader();
+    loader.load(
+      source,
+      gltf => {
+        const model = gltf.scene;
+
+        this.mixer = new THREE.AnimationMixer(model);
+        gltf.animations.forEach(clip => {
+          this.mixer.clipAction(clip).play();
+        });
+
+        this.scene.add(model);
+      },
+      xhr => {
+        console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+      },
+      error => {
+        console.error('An error happened', error);
+      },
+    );
+  };
+
+  reScaleObject = newScale => {
+    newScale = 1 + (newScale - 1) / 50;
+    const object = this.scene.getObjectByName('ad');
+    if (object) {
+      object.scale.set(newScale, newScale, newScale);
+      const box = new THREE.Box3().setFromObject(object);
+      console.log('box.getSize(): ', box.getSize());
+    }
   };
 
   render() {
     const { id } = this.props;
     return (
       <div id={id}>
+        <h1>LMAOOOOOOOO</h1>
         <div
           style={{ width: '400px', height: '400px' }}
           ref={mount => {

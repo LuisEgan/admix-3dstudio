@@ -7,8 +7,10 @@ import THREEScene from '../components/3DScene';
 
 const fbx = '/static/models/fbx/SambaDancing.fbx';
 
-const Groups = props => {
+const Creatives = props => {
   const [source, setSource] = useState(null);
+  const [fileType, setFileType] = useState(null);
+  const [objectScale, setObjectScale] = useState(1);
 
   const setBreadcrumbs = () => {
     return [
@@ -30,12 +32,21 @@ const Groups = props => {
   const handleFile = event => {
     event.preventDefault();
 
-    let reader = new FileReader();
     let file = event.target.files[0];
-    let userImageURL = URL.createObjectURL(file);
-    setSource(userImageURL);
+    if (file) {
+      const type = file.name.substring(file.name.lastIndexOf('.') + 1);
+      setFileType(type);
 
-    reader.onloadend = () => {};
+      let userImageURL = URL.createObjectURL(file);
+      setSource(userImageURL);
+    }
+  };
+
+  const reScale = e => {
+    const {
+      target: { value },
+    } = e;
+    setObjectScale(value);
   };
 
   return (
@@ -47,12 +58,18 @@ const Groups = props => {
         </div>
 
         <div id="creatives-content">
-          <THREEScene id="creative-3d" source={source} />
+          <THREEScene
+            id="creative-3d"
+            source={source}
+            fileType={fileType}
+            objectScale={objectScale}
+          />
           <input type="file" onChange={handleFile} /> File
+          <input type="range" min="-100" max="100" value={objectScale} onChange={reScale} />
         </div>
       </div>
     </App>
   );
 };
 
-export default Groups;
+export default Creatives;
