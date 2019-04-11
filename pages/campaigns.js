@@ -3,6 +3,7 @@ import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import queries from '../queries';
+import actions from '../lib/actions';
 
 import App from '../components/App';
 import NewCampaignPopup from '../components/Popups/NewCampaignPopup';
@@ -13,6 +14,7 @@ import InfoSVG from '../assets/svg/info.svg';
 import ReportSVG from '../assets/svg/report.svg';
 
 const { campaigns: campaignsQuery } = queries;
+const { setSelected } = actions;
 
 const initialState = {
   showContent: true,
@@ -30,8 +32,10 @@ let Campaigns = props => {
     initialState,
   );
 
-  const selectCampaign = ({ cid, redirectTo }) => {
-    Router.push(redirectTo);
+  const selectCampaign = ({ id, redirectTo }) => {
+    const { selectCampaign } = props;
+    selectCampaign(id);
+    // Router.push(redirectTo);
   };
 
   const togglePopup = popup => {
@@ -59,14 +63,14 @@ let Campaigns = props => {
 
             <div>
               <div className="campaign-buttons">
-                <button onClick={() => selectCampaign({ cid, redirectTo: '/groups' })}>
+                <button onClick={() => selectCampaign({ id, redirectTo: '/groups' })}>
                   {<SetupSVG />}
                 </button>
-                <button onClick={() => selectCampaign({ cid, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
                   {<InfoSVG />}
                 </button>
 
-                <button onClick={() => selectCampaign({ cid, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
                   {<ReportSVG />}
                 </button>
               </div>
@@ -111,8 +115,16 @@ let Campaigns = props => {
 };
 
 const mapStateToProps = state => state;
+const mapDispatchToProps = dispatch => ({
+  selectCampaign: campaignId => {
+    dispatch(setSelected({ selectItem: 'campaign', value: campaignId }));
+  },
+});
 
-Campaigns = connect(mapStateToProps)(Campaigns);
+Campaigns = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Campaigns);
 Campaigns = graphql(campaignsQuery)(Campaigns);
 
 export default Campaigns;
