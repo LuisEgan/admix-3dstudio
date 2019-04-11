@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost';
 
-export const campaignsFragment = gql`
-  fragment CampaignsFragment on Campaigns {
+export const CAMPAIGNS_FRAGMENT = gql`
+  fragment CampaignsFragment on CampaignsType {
     id
     name
     state
@@ -26,6 +26,7 @@ export default {
         ...CampaignsFragment
       }
     }
+    ${CAMPAIGNS_FRAGMENT}
   `,
   editCampaign: gql`
     mutation EditCampaing(
@@ -51,6 +52,7 @@ export default {
         ...CampaignsFragment
       }
     }
+    ${CAMPAIGNS_FRAGMENT}
   `,
   deleteCampaign: gql`
     mutation DeleteCampaing($user: ID!, $campaign: ID!) {
