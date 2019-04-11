@@ -1,11 +1,13 @@
 import React from 'react';
 import mutations from '../../mutations';
+import queries from '../../queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-const { createUser } = mutations;
+const { createCampaign } = mutations;
+const { campaigns } = queries;
 
 const initialValues = { name: '', advertiser: '', description: '' };
 
@@ -22,9 +24,13 @@ export default ({ show, togglePopup }) => {
   };
 
   const onSubmit = (values, mutation) => {
-    console.log('mutation: ', mutation);
-    console.log('values: ', values);
-    // mutation(values);
+    mutation({
+      variables: {
+        user: '5c903dd7ea674f2b443f6491',
+        ...values,
+      },
+      refetchQueries: [{ query: campaigns }],
+    });
   };
 
   return (
@@ -36,7 +42,7 @@ export default ({ show, togglePopup }) => {
             initialValues={initialValues}
             validate={validate}
             onSubmit={onSubmit}
-            mutation={createUser}
+            mutation={createCampaign}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Campaign name*" />
