@@ -1,9 +1,28 @@
-const { GraphQLString, GraphQLID, GraphQLNonNull } = require('graphql');
+const { GraphQLString, GraphQLID, GraphQLBoolean, GraphQLNonNull } = require('graphql');
+const { GraphQLUpload } = require('graphql-upload');
+const fs = require('fs');
+const path = require('path');
 const { Types } = require('mongoose');
 const { CampaignsType } = require('../Types');
 const CampaignsModel = require('../Models/campaigns');
 const GroupsModel = require('../Models/groups');
 const CreativesModel = require('../Models/creatives');
+
+const storeFS = ({ stream, filename }) => {
+  const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
+  return new Promise((resolve, reject) =>
+    stream
+      .on('error', error => {
+        if (stream.truncated)
+          // Delete the truncated file.
+          fs.unlinkSync(filePath);
+        reject(error);
+      })
+      .pipe(fs.createWriteStream(filePath))
+      .on('error', error => reject(error))
+      .on('finish', () => resolve(filePath)),
+  );
+};
 
 const CleanByCampaign = async campaign => {
   if (!campaign) return null;
@@ -38,8 +57,7 @@ module.exports = {
       startDate: { type: GraphQLString },
       endDate: { type: GraphQLString },
     },
-    resolve: async (parentValue, args) =>
-      await CampaignsModel.create({ ...args }),
+    resolve: async (parentValue, args) => await CampaignsModel.create({ ...args }),
   },
   editCampaign: {
     type: CampaignsType,
@@ -80,6 +98,42 @@ module.exports = {
       });
       await CleanByCampaign(deletedCampaign._id || null);
       return deletedCampaign._id || null;
+    },
+  },
+  uploadModel: {
+    type: GraphQLBoolean,
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { createReadStream, filename } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
+    },
+  },
+  uploadGaze: {
+    type: GraphQLBoolean,
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { filename, createReadStream } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
+    },
+  },
+  uploadAction: {
+    type: GraphQLBoolean,
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { filename, createReadStream } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
     },
   },
 };
