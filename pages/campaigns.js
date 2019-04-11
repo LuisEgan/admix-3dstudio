@@ -14,29 +14,6 @@ import ReportSVG from '../assets/svg/report.svg';
 
 const { campaigns: campaignsQuery } = queries;
 
-const campaignsArr = {
-  as1209ejaw0s4jf3490: {
-    name: 'NatGeo Mars Season 2',
-    status: 'Live',
-    owner: 'National Geographic',
-  },
-  dfb434tfg3qer5g345v: {
-    name: 'NatGeo Mars Season 2',
-    status: 'Live',
-    owner: 'National Geographic',
-  },
-  '45y4ghbwwec3qervw34': {
-    name: 'NatGeo Mars Season 2',
-    status: 'Live',
-    owner: 'National Geographic',
-  },
-  '4hy356ujh647uj456hw4': {
-    name: 'NatGeo Mars Season 2',
-    status: 'Live',
-    owner: 'National Geographic',
-  },
-};
-
 const initialState = {
   showContent: true,
   selectedCampaign: {},
