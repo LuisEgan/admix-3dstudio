@@ -41,7 +41,7 @@ let Campaigns = props => {
   };
 
   const renderCampaigns = () => {
-    return campaigns.map(campaign => {
+    return (campaigns || []).map(campaign => {
       const { name, id } = campaign;
 
       return (
