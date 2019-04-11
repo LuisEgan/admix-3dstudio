@@ -35,7 +35,7 @@ let Campaigns = props => {
   const selectCampaign = ({ id, redirectTo }) => {
     const { selectCampaign } = props;
     selectCampaign(id);
-    // Router.push(redirectTo);
+    Router.push(redirectTo);
   };
 
   const togglePopup = popup => {

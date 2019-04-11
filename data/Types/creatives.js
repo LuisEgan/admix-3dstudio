@@ -1,14 +1,6 @@
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLList,
-} = require('graphql');
+const { GraphQLObjectType, GraphQLString, GraphQLID } = require('graphql');
 
-const UsersModel = require('../Models/users');
-const GroupsModel = require('../Models/groups');
-const UsersType = require('./users');
+const CreativesModel = require('../Models/creatives');
 
 module.exports = new GraphQLObjectType({
   name: 'CreativesType',
@@ -23,15 +15,9 @@ module.exports = new GraphQLObjectType({
     IAB: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
-    user: {
-      type: UsersType,
-      resolve: async ({ user }) =>
-        await UsersModel.findById(user).populate('user'),
-    },
-    groups: {
-      type: new GraphQLList(require('./groups')),
-      resolve: async ({ groups }) =>
-        await GroupsModel.find({ _id: { $in: groups } }).populate('groups'),
+    group: {
+      type: require('./groups'),
+      resolve: async parentValue => await CreativesModel.getGroup(parentValue._id),
     },
   }),
 });

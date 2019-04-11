@@ -7,47 +7,53 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
+    campaigns: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Campaign',
+      },
+    ],
     name: {
       type: String,
       lowercase: true,
-      required: true
+      required: true,
     },
     company: {
-      type: String
+      type: String,
     },
     isVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     email: {
       type: String,
       unique: true,
       lowercase: true,
       required: true,
-      validate: validator.email
+      validate: validator.email,
     },
     resetPwd: {
       attempts: {
         type: Number,
-        default: 0
+        default: 0,
       },
       isRequested: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     accessGroups: {
       type: String,
       default: 'guest',
-      enum: accessGroups
+      enum: accessGroups,
     },
     password: {
       type: String,
       required: true,
-      validate: validator.password
-    }
+      validate: validator.password,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.post('validate', async (doc, next) => {
@@ -59,5 +65,14 @@ userSchema.post('validate', async (doc, next) => {
 userSchema.virtual('id').get(function idToString() {
   return this._id.toString();
 });
+
+userSchema.statics.getCampaigns = async function(id) {
+  try {
+    const { campaigns } = await this.findById(id).populate('campaigns');
+    return campaigns;
+  } catch (error) {
+    console.error('error: ', error);
+  }
+};
 
 module.exports = mongoose.model('User', userSchema);
