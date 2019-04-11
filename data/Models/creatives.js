@@ -28,7 +28,7 @@ creativesSchema.virtual('id').get(function idToString() {
   return this._id.toString();
 });
 
-groupsSchema.statics.getGroup = async function(id) {
+creativesSchema.statics.getGroup = async function(id) {
   try {
     const { group } = await this.findById(id).populate('group');
     return group;
