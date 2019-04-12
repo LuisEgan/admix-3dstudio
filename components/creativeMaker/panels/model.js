@@ -6,15 +6,15 @@ import mutations from '../../../mutations';
 const { editCreative } = mutations;
 
 const Model = props => {
-  const { setPanel, handleFile, objSize } = props;
+  const { setPanel, handleFile, objSize, userSelectedHeight, setUserSelectedHeight } = props;
   const { x: originalObjHeight } = objSize;
 
   const [objHeight, setObjHeight] = useState(1);
   const [initializeHeight, setInitializeHeight] = useState(false);
 
   useEffect(() => {
-    if (!initializeHeight && originalObjHeight) {
-      setObjHeight(Math.round(originalObjHeight));
+    if (!initializeHeight && (userSelectedHeight || originalObjHeight)) {
+      setObjHeight(Math.round(userSelectedHeight || originalObjHeight));
       setInitializeHeight(true);
     }
   });
@@ -24,6 +24,25 @@ const Model = props => {
       target: { value },
     } = e;
     setObjHeight(Math.round(value));
+    setUserSelectedHeight(Math.round(value));
+  };
+
+  const setMin = () => {
+    if (!originalObjHeight) return -100;
+
+    if (originalObjHeight <= 50) return 0;
+    if (originalObjHeight <= 100) return 50;
+
+    return 100;
+  };
+
+  const setMax = () => {
+    if (!originalObjHeight) return 100;
+
+    if (originalObjHeight <= 50) return 50;
+    if (originalObjHeight <= 100) return 100;
+
+    return 500;
   };
 
   const handleSave = mutation => {
@@ -40,13 +59,7 @@ const Model = props => {
             </label>
             <input id="3dfile" type="file" style={{ display: 'none' }} onChange={handleFile} />
           </div>
-          <input
-            type="range"
-            min={originalObjHeight ? originalObjHeight - 100 : -100}
-            max={originalObjHeight ? originalObjHeight + 100 : 100}
-            value={objHeight}
-            onChange={reScale}
-          />
+          <input type="range" min={setMin()} max={setMax()} value={objHeight} onChange={reScale} />
           <div>Height: {objHeight} cm</div>
           <div>
             <button type="button" onClick={() => handleSave(mutation)}>

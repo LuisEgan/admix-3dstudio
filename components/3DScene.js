@@ -244,7 +244,7 @@ class THREEScene extends React.Component {
       });
 
       const box = new THREE.Box3().setFromObject(object);
-      setObjSize(box.getSize());
+      panel === 0 && setObjSize(box.getSize());
 
       this.scene.add(object);
     }.bind(this);

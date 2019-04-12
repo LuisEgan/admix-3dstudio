@@ -17,6 +17,7 @@ const CreativeMaker = props => {
   const [fileType, setFileType] = useState(null);
   const [objectScale, setObjectScale] = useState(1);
   const [objSize, setObjSize] = useState({});
+  const [userSelectedHeight, setUserSelectedHeight] = useState(null);
 
   const handleFile = event => {
     event.preventDefault();
@@ -68,7 +69,15 @@ const CreativeMaker = props => {
           </div>
         </div>
 
-        <div id="creative-panel">{Panels[panel]({ setPanel, handleFile, objSize })}</div>
+        <div id="creative-panel">
+          {Panels[panel]({
+            setPanel,
+            handleFile,
+            objSize,
+            userSelectedHeight,
+            setUserSelectedHeight,
+          })}
+        </div>
       </div>
     </div>
   );
