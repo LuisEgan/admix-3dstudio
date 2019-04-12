@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 import THREEScene from '../3DScene';
 
@@ -11,33 +14,33 @@ const Panels = [
   props => <Action {...props} />,
 ];
 
-const CreativeMaker = props => {
+const CreativeMaker = () => {
   const [panel, setPanel] = useState(0);
   const [source, setSource] = useState(null);
   const [fileType, setFileType] = useState(null);
-  const [objectScale, setObjectScale] = useState(1);
+  // const [objectScale, setObjectScale] = useState(1);
   const [objSize, setObjSize] = useState({});
   const [userSelectedHeight, setUserSelectedHeight] = useState(null);
 
   const handleFile = event => {
     event.preventDefault();
 
-    let file = event.target.files[0];
+    const file = event.target.files[0];
     if (file) {
       const type = file.name.substring(file.name.lastIndexOf('.') + 1);
       setFileType(type);
 
-      let userImageURL = URL.createObjectURL(file);
+      const userImageURL = URL.createObjectURL(file);
       setSource(userImageURL);
     }
   };
 
-  const reScale = e => {
-    const {
-      target: { value },
-    } = e;
-    setObjectScale(value);
-  };
+  // const reScale = e => {
+  //   const {
+  //     target: { value },
+  //   } = e;
+  //   setObjectScale(value);
+  // };
 
   const modelClass = panel === 0 ? 'creative-panel-active' : '';
   const gazeClass = panel === 1 ? 'creative-panel-active' : '';
@@ -58,13 +61,13 @@ const CreativeMaker = props => {
 
       <div id="creative-panels">
         <div id="creative-panels-toggle">
-          <div className={modelClass} onClick={() => setPanel(0)}>
+          <div role="panel-toggle" className={modelClass} onClick={() => setPanel(0)}>
             Model
           </div>
-          <div className={gazeClass} onClick={() => setPanel(1)}>
+          <div role="panel-toggle" className={gazeClass} onClick={() => setPanel(1)}>
             Gaze
           </div>
-          <div className={actionClass} onClick={() => setPanel(2)}>
+          <div role="panel-toggle" className={actionClass} onClick={() => setPanel(2)}>
             Action
           </div>
         </div>
