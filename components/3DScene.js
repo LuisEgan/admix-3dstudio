@@ -5,6 +5,8 @@ import GLTFExporter from 'three-gltf-exporter';
 import TransformControls from 'three-transform-ctrls';
 import OrbitControls from 'three-orbitcontrols';
 import FBXLoader from 'three-fbxloader-offical';
+// import FBXLoader from 'three-fbx-loader';
+// import OBJLoader from 'three/examples/jsm/loaders/OBJLoader';
 import isEqual from 'lodash/isEqual';
 
 class THREEScene extends React.Component {
@@ -29,7 +31,7 @@ class THREEScene extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { source, objectScale } = this.props;
+    const { source, objectScale, panel } = this.props;
 
     if (source !== prevProps.source) {
       this.loadObject();
@@ -37,6 +39,14 @@ class THREEScene extends React.Component {
 
     if (!isEqual(objectScale, prevProps.objectScale)) {
       this.reScaleObject(objectScale);
+    }
+
+    if (panel !== prevProps.panel) {
+      const currentObj = this.scene.getObjectByName(`ad_${prevProps.panel}`);
+      currentObj && this.toggleObject({ obj: currentObj, show: false });
+
+      const newObj = this.scene.getObjectByName(`ad_${panel}`);
+      newObj && this.toggleObject({ obj: newObj, show: true });
     }
   }
 
@@ -148,6 +158,14 @@ class THREEScene extends React.Component {
     }
   };
 
+  toggleObject = ({ obj, show }) => {
+    obj.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        child.visible = show;
+      }
+    });
+  };
+
   exportGLTF = input => {
     const material = new THREE.MeshStandardMaterial({
       color: 0xffff00,
@@ -202,27 +220,46 @@ class THREEScene extends React.Component {
   };
 
   loadFBX = source => {
-    const onLoad = function(object) {
-      console.log('object: ', object);
-      object.name = 'ad';
-      object.position.set(0, 0, 0);
-      this.mixer = new THREE.AnimationMixer(object);
-      const action = this.mixer.clipAction(object.animations[0]);
-      // action.play();
+    const { setObjSize, panel } = this.props;
 
+    const objAlreadyExists = this.scene.getObjectByName(`ad_${panel}`);
+    if (objAlreadyExists) this.scene.remove(objAlreadyExists);
+
+    const onLoad = function(object) {
+      object.name = `ad_${panel}`;
+      object.position.set(0, 0, 0);
       // this.exportGLTF(object);
+
+      if (object.animations[0]) {
+        this.mixer = new THREE.AnimationMixer(object);
+        const action = this.mixer.clipAction(object.animations[0]);
+        action.play();
+      }
+
+      object.traverse(function(child) {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+
       const box = new THREE.Box3().setFromObject(object);
-      console.log('box.getSize(): ', box.getSize());
+      setObjSize(box.getSize());
+
       this.scene.add(object);
     }.bind(this);
 
+    const onLoading = xhr => {
+      console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
+    };
+
     const onLoaderError = error => {
-      console.log(error);
+      console.error(error);
     };
 
     // const loader = new FBXLoader(this.threeLoadingManager());
     const loader = new FBXLoader();
-    loader.load(source, onLoad, null, onLoaderError);
+    loader.load(source, onLoad, onLoading, onLoaderError);
   };
 
   loadGTLF = source => {
@@ -262,7 +299,6 @@ class THREEScene extends React.Component {
     const { id } = this.props;
     return (
       <div id={id}>
-        <h1>LMAOOOOOOOO</h1>
         <div
           style={{ width: '400px', height: '400px' }}
           ref={mount => {

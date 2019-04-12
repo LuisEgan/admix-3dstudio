@@ -1,6 +1,6 @@
 // @import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab");
-@import url("./animate.min.css");
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600");
+@import url('./animate.min.css');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
 
 $mobileBreakpoint: 830px;
 $blueAdmix: #157cc1;
@@ -11,7 +11,7 @@ $white: #fff;
 $tableBorder: rgba(179, 179, 179, 0.1);
 
 * {
-  font-family: "Montserrat";
+  font-family: 'Montserrat';
   // transition: 0.5s ease-in-out;
 
   &::-webkit-scrollbar {
@@ -39,7 +39,6 @@ body {
 }
 
 @media only screen and (max-width: $mobileBreakpoint) {
-
   html,
   body {
     padding: 0;
@@ -49,7 +48,7 @@ body {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #383939;
   background: #fdfdfd;
   line-height: 1 !important;
@@ -419,7 +418,7 @@ p {
   position: relative;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     border: solid 10px black;
     border-radius: 5px;
@@ -587,12 +586,12 @@ p {
   border: 2px solid #ededed;
   border-radius: 5px;
 
-  >div {
+  > div {
     padding: 13px;
     z-index: 1;
   }
 
-  >svg {
+  > svg {
     fill: #14b9be;
     margin-right: 5px;
   }
@@ -606,13 +605,13 @@ p {
     background-color: transparent !important;
   }
 
-  >div {
+  > div {
     &:first-child {
       min-height: 64px;
     }
   }
 
-  [aria-expanded="true"]+div {
+  [aria-expanded='true'] + div {
     border-top: solid #f5f7fa;
   }
 }
@@ -668,7 +667,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     max-width: unset;
     width: 100%;
 
-    >div {
+    > div {
       height: 100%;
       margin: 0;
     }
@@ -689,7 +688,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     #pages-container {
       width: 55%;
 
-      >div {
+      > div {
         padding: 0 2%;
         min-width: 150px;
         text-align: center;
@@ -700,7 +699,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
         &::after {
           @extend .fadeIn;
-          content: "";
+          content: '';
           width: 100%;
           position: absolute;
           bottom: -6px;
@@ -749,7 +748,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         opacity: 0;
       }
 
-      >div {
+      > div {
         display: flex;
         width: 100%;
         text-align: center;
@@ -759,7 +758,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
           padding: 0 5%;
         }
 
-        >div {
+        > div {
           height: 100%;
           width: 25%;
 
@@ -865,7 +864,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     }
   }
 
-  >div {
+  > div {
     @extend .mbs;
     text-align: center;
     position: relative;
@@ -883,7 +882,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
     &::after {
       @extend .fadeIn;
-      content: "";
+      content: '';
       height: 100%;
       position: absolute;
       top: 0;
@@ -894,12 +893,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
       color: #ffffff;
     }
 
-    >div {
+    > div {
       padding: 7% 0;
     }
 
     &:nth-child(3) {
-      >div {
+      > div {
         svg {
           font-size: 3em;
         }
@@ -934,7 +933,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   min-width: 250px;
   box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1);
 
-  >div {
+  > div {
     padding: 20px 25px;
   }
 
@@ -945,7 +944,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       word-break: break-all;
     }
 
-    >div {
+    > div {
       display: flex;
       flex-flow: column;
     }
@@ -962,7 +961,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       color: #14b9be;
     }
 
-    >div {
+    > div {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1001,7 +1000,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     align-items: center;
     text-align: center;
 
-    >div {
+    > div {
       max-width: 100%;
       width: 100%;
       height: 5vh;
@@ -1031,7 +1030,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   display: flex;
   margin-bottom: 20px;
 
-  >div {
+  > div {
     &:nth-child(2n) {
       transform: rotate(-90deg);
       padding: 0 10px;
@@ -1074,7 +1073,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #snackbar.error {
-  >div {
+  > div {
     background: red;
   }
 }
@@ -1101,7 +1100,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .simple-container {
-  >div {
+  > div {
     text-align: center;
     padding: 5% 2%;
     background-color: white;
@@ -1214,7 +1213,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
 .arrowRight {
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     border-top: $arrowSize solid transparent;
     border-bottom: $arrowSize solid transparent;
@@ -1227,7 +1226,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   &::after {
     position: absolute;
     border-top: $arrowSize solid transparent;
-    content: "";
+    content: '';
     border-bottom: $arrowSize solid transparent;
     border-right: $arrowSize solid $arrowColor;
     border-left: $arrowSize solid transparent;
@@ -1325,7 +1324,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       // margin-bottom: 6px;
     }
 
-    >div {
+    > div {
       display: flex;
       height: 100%;
       flex-grow: 1;
@@ -1342,7 +1341,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         padding-bottom: 18px;
         flex-grow: unset;
 
-        >div {
+        > div {
           display: flex;
           justify-content: center;
 
@@ -1369,7 +1368,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   position: relative;
   width: 100%;
 
-  >div {
+  > div {
     width: 100%;
   }
 }
@@ -1422,7 +1421,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .rounded-box {
-  >div {
+  > div {
     &:first-child {
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
@@ -1441,7 +1440,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   height: 100%;
   width: 100%;
 
-  >div {
+  > div {
     @extend .cc;
     border: solid 2px;
     padding: 0 5px;
@@ -1478,7 +1477,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     bottom: -200%;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       top: -10px;
       width: 0;
@@ -1562,7 +1561,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     padding: 5% 0;
   }
 
-  >div {
+  > div {
     height: 100%;
 
     &:first-child {
@@ -1571,7 +1570,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       justify-content: center;
       flex-flow: column;
 
-      >div {
+      > div {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -1585,7 +1584,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
     &:last-child {
       width: 65%;
       // background: linear-gradient(30.64deg, #053F9A 0%, #1388B7 59.08%, #56C4C6 100%), // url(./assets/img/VRHeadset.png) top center no-repeat;
-      background: linear-gradient(90deg, rgba(5, 63, 154, 0.5), rgba(19, 136, 183, 0.5), rgba(86, 196, 198, 0.5)),
+      background: linear-gradient(
+          90deg,
+          rgba(5, 63, 154, 0.5),
+          rgba(19, 136, 183, 0.5),
+          rgba(86, 196, 198, 0.5)
+        ),
         url(https://c1.staticflickr.com/6/5519/14618288901_c90b66ea96_b.jpg) top center no-repeat;
       background-size: cover;
     }
@@ -1598,7 +1602,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   #bigImagePanel-title {
     height: 10%;
 
-    >div {
+    > div {
       @extend .cc;
       width: 70%;
       height: 100%;
@@ -1634,7 +1638,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
 
-    >div {
+    > div {
       @extend .cc;
       transition: 0s;
       flex-wrap: wrap;
@@ -1663,14 +1667,14 @@ $inputsFontSize: calc(0.45em+0.3vw);
   form {
     margin: auto;
 
-    >div {
+    > div {
       padding: 5% 0;
 
       &:last-child {
         text-align: center;
       }
 
-      >div {
+      > div {
         padding-bottom: 5%;
       }
     }
@@ -1701,7 +1705,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   background-color: #fff;
   height: calc(2vh + 40px);
 
-  >div {
+  > div {
     display: flex;
   }
 
@@ -1734,7 +1738,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 
   #campaign-select-buttons {
-    >div {
+    > div {
       padding-left: 15px;
 
       &:first-child {
@@ -1784,7 +1788,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
 // GROUPS ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
 #groups {
-
   svg,
   g,
   path {
@@ -1870,6 +1873,43 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 }
 
+#creatives {
+  #creative-panels {
+    display: flex;
+    flex-flow: column;
+
+    #creative-panels-toggle {
+      display: flex;
+
+      > div {
+        width: 33.33%;
+        text-align: center;
+        padding: 10px 0;
+        margin: 5px 0;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .creative-panel-active {
+        background: $blueAdmix;
+        color: white;
+      }
+    }
+
+    #creative-panel {
+    }
+  }
+}
+
+#creative-maker {
+  display: flex;
+  > div {
+    width: 50%;
+  }
+}
+
 // ----------------------------------------------------------------------------------------------------------
 // CUSTOM COMPONENTS ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
@@ -1882,7 +1922,8 @@ $ballSize: 20px;
   border: 0;
   background-color: #ffffff;
   border-radius: 50px;
-  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.10000000149011612), 0 0 1px 0 rgba(10, 31, 68, 0.07999999821186066);
+  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.10000000149011612),
+    0 0 1px 0 rgba(10, 31, 68, 0.07999999821186066);
   width: 180px;
   height: 48px;
   color: #0a1f44;
@@ -1932,7 +1973,6 @@ $ballSize: 20px;
 }
 
 .toggleBtn {
-
   *,
   *:before,
   *:after {
@@ -1962,7 +2002,7 @@ $ballSize: 20px;
     cursor: pointer;
 
     &::before {
-      content: "";
+      content: '';
       display: block;
       position: absolute;
       z-index: 1;
@@ -1979,11 +2019,11 @@ $ballSize: 20px;
     }
   }
 
-  .ios-toggle:checked+.checkbox-label {
+  .ios-toggle:checked + .checkbox-label {
     box-shadow: inset 0 0 0 20px #00d664, 0 0 0 2px #00d664;
   }
 
-  .ios-toggle:checked+.checkbox-label:before {
+  .ios-toggle:checked + .checkbox-label:before {
     // left: calc(100% - 20px);
     left: 25px;
     box-shadow: 0 0 0 2px transparent, 0 3px 3px rgba(0, 0, 0, 0.3);
@@ -2013,7 +2053,7 @@ $ballSize: 20px;
     border: solid black;
 
     &:after {
-      content: "";
+      content: '';
       width: 63%;
       height: 35%;
       position: absolute;
@@ -2032,10 +2072,10 @@ $ballSize: 20px;
     }
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     visibility: hidden;
 
-    &:checked+label:after {
+    &:checked + label:after {
       opacity: 1;
     }
   }
@@ -2055,7 +2095,7 @@ $ballSize: 20px;
     cursor: text;
   }
 
-  >div {
+  > div {
     width: 100%;
   }
 
@@ -2098,7 +2138,7 @@ $ballSize: 20px;
       height: 100%;
     }
 
-    >div {
+    > div {
       width: 90%;
     }
   }
@@ -2115,13 +2155,13 @@ $ballSize: 20px;
       cursor: pointer;
     }
 
-    >div {
+    > div {
       display: flex;
       align-items: center;
     }
 
     .input-svg-icon {
-      >div {
+      > div {
         display: flex;
         align-items: center;
       }
@@ -2248,7 +2288,7 @@ $ballSize: 20px;
   border-radius: 5px;
   box-shadow: 0 1px 3px #c9c9c9;
 
-  >div {
+  > div {
     display: flex;
     align-items: center;
 
@@ -2268,12 +2308,12 @@ $ballSize: 20px;
   }
 
   #admixCalc-impressions,
-  #admixCalc-impressions+div {
+  #admixCalc-impressions + div {
     margin-top: 20px;
   }
 
   #admixCalc-expected,
-  #admixCalc-expected+div {
+  #admixCalc-expected + div {
     background: #ccffcc;
   }
 }
@@ -2351,7 +2391,7 @@ $ballSize: 20px;
   border-radius: 5px;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: -10px;
     width: 0;
