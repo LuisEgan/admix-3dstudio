@@ -47,7 +47,9 @@
       "off",
       "windows"
     ],
-    "jsx-a11y/aria-role": "off"
+    "jsx-a11y/aria-role": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "globals": {
     "Promise": true,
@@ -59,6 +61,7 @@
   "plugins": [
     "react",
     "promise",
-    "prettier"
+    "prettier",
+    "react-hooks"
   ]
 }

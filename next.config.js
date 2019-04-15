@@ -1,8 +1,8 @@
-require("./services/logger")("Init logger");
-const withSass = require("@zeit/next-sass");
-const withImages = require("next-images");
-const Dotenv = require("dotenv-webpack");
-const path = require("path");
+require('./services/logger')('Init logger');
+const withSass = require('@zeit/next-sass');
+const withImages = require('next-images');
+const Dotenv = require('dotenv-webpack');
+const path = require('path');
 
 const nextConfig = withImages(
   withSass({
@@ -13,7 +13,7 @@ const nextConfig = withImages(
         ...config.plugins,
 
         new Dotenv({
-          path: path.join(__dirname, ".env"),
+          path: path.join(__dirname, '.env'),
           systemvars: true,
           safe: true,
         }),
@@ -24,4 +24,7 @@ const nextConfig = withImages(
   }),
 );
 
-module.exports = nextConfig;
+module.exports = {
+  target: 'serverless',
+  ...nextConfig,
+};
