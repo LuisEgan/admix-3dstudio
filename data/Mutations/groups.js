@@ -3,6 +3,13 @@ const { Types } = require('mongoose');
 const { GroupsType } = require('../Types');
 const GroupsModel = require('../Models/groups');
 const CreativeModel = require('../Models/creatives');
+const CampaignModel = require('../Models/campaigns');
+
+const AddGroupToCampaign = async (group, campaign) => {
+  return await CampaignModel.findByIdAndUpdate(campaign, {
+    $push: { groups: group },
+  });
+};
 
 const CleanCreativeByGroup = async (group, creative) =>
   await CreativeModel.updateMany(
@@ -22,31 +29,31 @@ module.exports = {
   createGroup: {
     type: GroupsType,
     args: {
-      user: { type: new GraphQLNonNull(GraphQLID) },
-      name: { type: new GraphQLNonNull(GraphQLString) },
       campaign: { type: new GraphQLNonNull(GraphQLID) },
+      name: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
     },
-    resolve: async (parentValue, args) => await GroupsModel.create({ ...args }),
+    resolve: async (_, args) => {
+      const group = await GroupsModel.create({ ...args });
+      await AddGroupToCampaign(group._id, args.campaign);
+      return group;
+    },
   },
   editGroup: {
     type: GroupsType,
     args: {
-      user: { type: new GraphQLNonNull(GraphQLID) },
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
       state: { type: GraphQLString },
       campaign: { type: GraphQLID },
       description: { type: GraphQLString },
     },
-    resolve: async (parentValue, args) => {
-      const { group, user } = args;
-      delete args.user;
+    resolve: async (_, args) => {
+      const { group } = args;
       delete args.group;
       return await GroupsModel.findOneAndUpdate(
         {
           _id: Types.ObjectId(group),
-          user: Types.ObjectId(user),
         },
         args,
         {
@@ -58,13 +65,11 @@ module.exports = {
   deleteGroup: {
     type: GraphQLID,
     args: {
-      user: { type: new GraphQLNonNull(GraphQLID) },
       group: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { group, user }) => {
+    resolve: async (_, { group }) => {
       const { creatives, _id } = await GroupsModel.findOneAndDelete({
         _id: Types.ObjectId(group),
-        user: Types.ObjectId(user),
       });
       await CleanCreativeByGroup(_id, creatives);
       return _id || null;

@@ -1,4 +1,4 @@
-const { GraphQLList, GraphQLID, GraphQLString } = require('graphql');
+const { GraphQLList, GraphQLID, GraphQLString, GraphQLNonNull } = require('graphql');
 const convert = require('xml-js');
 const fs = require('fs');
 const path = require('path');
@@ -36,7 +36,7 @@ module.exports = {
   campaignById: {
     type: CampaignsType,
     args: {
-      campaign: { type: GraphQLID },
+      campaign: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign),
   },

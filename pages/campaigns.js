@@ -1,37 +1,20 @@
-import React, { useReducer } from "react";
-import { connect } from "react-redux";
-import Router from "next/router";
+import React, { useReducer } from 'react';
+import { graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import Router from 'next/router';
+import queries from '../queries';
+import actions from '../lib/actions';
 
-import App from "../components/App";
-import NewCampaignPopup from "../components/Popups/NewCampaignPopup";
+import App from '../components/App';
+import NewCampaignPopup from '../components/Popups/NewCampaignPopup';
 
-import AdmixLoading from "../components/SVG/AdmixLoading";
-import SetupSVG from "../assets/svg/setup.svg";
-import InfoSVG from "../assets/svg/info.svg";
-import ReportSVG from "../assets/svg/report.svg";
+import AdmixLoading from '../components/SVG/AdmixLoading';
+import SetupSVG from '../assets/svg/setup.svg';
+import InfoSVG from '../assets/svg/info.svg';
+import ReportSVG from '../assets/svg/report.svg';
 
-const campaigns = {
-  as1209ejaw0s4jf3490: {
-    name: "NatGeo Mars Season 2",
-    status: "Live",
-    owner: "National Geographic",
-  },
-  dfb434tfg3qer5g345v: {
-    name: "NatGeo Mars Season 2",
-    status: "Live",
-    owner: "National Geographic",
-  },
-  "45y4ghbwwec3qervw34": {
-    name: "NatGeo Mars Season 2",
-    status: "Live",
-    owner: "National Geographic",
-  },
-  "4hy356ujh647uj456hw4": {
-    name: "NatGeo Mars Season 2",
-    status: "Live",
-    owner: "National Geographic",
-  },
-};
+const { campaigns: campaignsQuery } = queries;
+const { setSelected } = actions;
 
 const initialState = {
   showContent: true,
@@ -40,12 +23,18 @@ const initialState = {
 };
 
 let Campaigns = props => {
+  const {
+    data: { campaigns },
+  } = props;
+
   const [state, setState] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     initialState,
   );
 
-  const selectCampaign = ({ cid, redirectTo }) => {
+  const selectCampaign = ({ id, redirectTo }) => {
+    const { selectCampaign } = props;
+    selectCampaign(id);
     Router.push(redirectTo);
   };
 
@@ -56,19 +45,14 @@ let Campaigns = props => {
   };
 
   const renderCampaigns = () => {
-    const toRender = [];
+    return (campaigns || []).map(campaign => {
+      const { name, id } = campaign;
 
-    for (let cid in campaigns) {
-      const { name, status, owner } = campaigns[cid];
-
-      const itemToRender = (
-        <div className={`campaign-select-container mb`} key={cid}>
+      return (
+        <div className={`campaign-select-container mb`} key={id}>
           <div id="campaign-select-info" className="text-truncate">
             <div className="engine-logo">
-              <img
-                src="https://pbs.twimg.com/media/DxDZAEwWwAEM3C3.jpg"
-                alt="pic"
-              />
+              <img src="https://pbs.twimg.com/media/DxDZAEwWwAEM3C3.jpg" alt="pic" />
             </div>
             <div className="campaign-name">{name}</div>
           </div>
@@ -79,20 +63,14 @@ let Campaigns = props => {
 
             <div>
               <div className="campaign-buttons">
-                <button
-                  onClick={() => selectCampaign({ cid, redirectTo: "/groups" })}
-                >
+                <button onClick={() => selectCampaign({ id, redirectTo: '/groups' })}>
                   {<SetupSVG />}
                 </button>
-                <button
-                  onClick={() => selectCampaign({ cid, redirectTo: "/" })}
-                >
+                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
                   {<InfoSVG />}
                 </button>
 
-                <button
-                  onClick={() => selectCampaign({ cid, redirectTo: "/" })}
-                >
+                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
                   {<ReportSVG />}
                 </button>
               </div>
@@ -100,11 +78,7 @@ let Campaigns = props => {
           </div>
         </div>
       );
-
-      toRender.push(itemToRender);
-    }
-
-    return toRender;
+    });
   };
 
   const { showContent, showPopupNewCampaign } = state;
@@ -114,7 +88,7 @@ let Campaigns = props => {
       <div className="step-container" id="campaigns">
         <NewCampaignPopup
           show={showPopupNewCampaign}
-          togglePopup={() => togglePopup("showPopupNewCampaign")}
+          togglePopup={() => togglePopup('showPopupNewCampaign')}
         />
 
         <div id="apps-header" className="step-title">
@@ -126,9 +100,9 @@ let Campaigns = props => {
             id="filter"
             className="mb unselectable blue-btn"
             type="button"
-            onClick={() => togglePopup("showPopupNewCampaign")}
+            onClick={() => togglePopup('showPopupNewCampaign')}
           >
-            +<span>New campaign</span>
+            + &nbsp; <span>New campaign</span>
           </button>
         </div>
 
@@ -141,5 +115,16 @@ let Campaigns = props => {
 };
 
 const mapStateToProps = state => state;
+const mapDispatchToProps = dispatch => ({
+  selectCampaign: campaignId => {
+    dispatch(setSelected({ selectItem: 'campaign', value: campaignId }));
+  },
+});
 
-export default connect(mapStateToProps)(Campaigns);
+Campaigns = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Campaigns);
+Campaigns = graphql(campaignsQuery)(Campaigns);
+
+export default Campaigns;

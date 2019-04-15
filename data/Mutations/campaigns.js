@@ -7,6 +7,27 @@ const { CampaignsType } = require('../Types');
 const CampaignsModel = require('../Models/campaigns');
 const GroupsModel = require('../Models/groups');
 const CreativesModel = require('../Models/creatives');
+const UsersModel = require('../Models/users');
+
+const AddCampaignToUser = async (campaign, user) => {
+  const userModified = await UsersModel.findByIdAndUpdate(user, {
+    $push: { campaigns: campaign },
+  });
+
+  return userModified;
+};
+
+const RemoveCreativeFromGroup = async (creative, groups) => {
+  group = Array.isArray(group) ? group : [group];
+  return await GroupsModel.updateMany(
+    {
+      _id: { $in: groups },
+    },
+    {
+      $pull: { creatives: creative },
+    },
+  );
+};
 
 const storeFS = ({ stream, filename }) => {
   const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
@@ -57,13 +78,16 @@ module.exports = {
       startDate: { type: GraphQLString },
       endDate: { type: GraphQLString },
     },
-    resolve: async (parentValue, args) => await CampaignsModel.create({ ...args }),
+    resolve: async (_, args) => {
+      const campaign = await CampaignsModel.create({ ...args });
+      await AddCampaignToUser(campaign._id, args.user);
+      return campaign;
+    },
   },
   editCampaign: {
     type: CampaignsType,
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
-      user: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
       state: { type: GraphQLString },
       advertiser: { type: GraphQLString },
@@ -71,14 +95,12 @@ module.exports = {
       startDate: { type: GraphQLString },
       endDate: { type: GraphQLString },
     },
-    resolve: async (parentValue, args) => {
-      const { campaign, user } = args;
-      delete args.user;
+    resolve: async (_, args) => {
+      const { campaign } = args;
       delete args.campaign;
       return await CampaignsModel.findOneAndUpdate(
         {
           _id: Types.ObjectId(campaign),
-          user: Types.ObjectId(user),
         },
         args,
         { new: true },
@@ -89,12 +111,10 @@ module.exports = {
     type: GraphQLID,
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
-      user: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { campaign, user }) => {
+    resolve: async (_, { campaign }) => {
       const deletedCampaign = await CampaignsModel.findOneAndDelete({
         _id: Types.ObjectId(campaign),
-        user: Types.ObjectId(user),
       });
       await CleanByCampaign(deletedCampaign._id || null);
       return deletedCampaign._id || null;
