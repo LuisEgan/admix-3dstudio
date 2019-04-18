@@ -1,9 +1,9 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const { GraphQLNonNull, GraphQLString } = require("graphql");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { GraphQLNonNull, GraphQLString } = require('graphql');
 
-const { UsersType, JWTType } = require("../Types");
-const Users = require("../Models/users");
+const { UsersType, JWTType } = require('../Types');
+const Users = require('../Models/users');
 
 const SECRET = process.env.SERVER_TOKEN_SECRET;
 const TOKEN_EXPIRE = process.env.TOKEN_EXPIRE;
@@ -22,7 +22,7 @@ module.exports = {
     },
   },
   loginUser: {
-    type: JWTType,
+    type: UsersType,
     args: {
       email: { type: new GraphQLNonNull(GraphQLString) },
       password: { type: new GraphQLNonNull(GraphQLString) },
@@ -30,15 +30,13 @@ module.exports = {
     resolve: async (_, { email, password }) => {
       const user = await Users.findOne({ email });
       const samePasswords = await bcrypt.compare(password, user.password);
-      let token = null;
+      let accessToken = null;
       if (samePasswords) {
-        token = jwt.sign(
-          { id: user.id, email: user.email, name: user.name },
-          SECRET,
-          { expiresIn: TOKEN_EXPIRE },
-        );
+        accessToken = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET, {
+          expiresIn: TOKEN_EXPIRE,
+        });
       }
-      return { token };
+      return { accessToken, email, name: user.name };
     },
   },
 };
