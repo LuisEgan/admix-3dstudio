@@ -31,34 +31,21 @@ let Login = props => {
     );
   };
 
-  const validate = values => {
-    const errors = {};
-    const { email, password } = values;
-
-    if (!email || !isEmail(email)) {
-      errors.email = 'Invalid email';
-    }
-
-    if (!password) {
-      errors.password = 'Please enter a password';
-    }
-
-    return errors;
-  };
-
   const onSubmit = (values, mutation) => {
     mutation({
       variables: { ...values },
     });
   };
 
-  const doLogin = ({ accessToken, name }) => {
+  const doLogin = ({ accessToken, name, id }) => {
+    console.log('id: ', id);
+    console.log('accessToken: ', accessToken);
     if (!accessToken) {
       setError(name ? 'Invalid password!' : 'No user found!');
       return;
     }
 
-    login({ accessToken });
+    login({ accessToken, id });
   };
 
   if (isLoggedIn) {
@@ -71,10 +58,12 @@ let Login = props => {
       <BigImagePanel title="Login" footer={renderFooter()}>
         <Form
           initialValues={{ email: '', password: '' }}
-          validate={validate}
           onSubmit={onSubmit}
           mutation={loginUser}
-          onCompleted={({ loginUser }) => doLogin(loginUser)}
+          onCompleted={({ loginUser }) => {
+            console.log(loginUser);
+            doLogin(loginUser);
+          }}
           onError={e => console.log(e)}
         >
           <TextInput name="email" label="Email" />
@@ -99,7 +88,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(login({ email, password })),
+  login: ({ accessToken, id }) => dispatch(login({ accessToken, id })),
 });
 
 Login = connect(

@@ -7,6 +7,7 @@ export default {
         accessToken
         name
         email
+        id
       }
     }
   `,

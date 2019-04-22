@@ -11,7 +11,6 @@ const AddCreativeToGroup = async (creative, group) => {
 };
 
 const RemoveCreativeFromGroup = async (creative, groups) => {
-  group = Array.isArray(group) ? group : [group];
   return await GroupsModel.updateMany(
     {
       _id: { $in: groups },
@@ -113,6 +112,7 @@ module.exports = {
       const { groups, _id } = await CreativesModel.findOneAndDelete({
         _id: Types.ObjectId(creative),
       });
+      // TODO it doesn't work
       await RemoveCreativeFromGroup(_id, groups);
       return _id || null;
     },

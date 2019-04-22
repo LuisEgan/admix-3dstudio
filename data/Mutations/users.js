@@ -29,6 +29,7 @@ module.exports = {
     },
     resolve: async (_, { email, password }) => {
       const user = await Users.findOne({ email });
+      console.log('user: ', user);
       const samePasswords = await bcrypt.compare(password, user.password);
       let accessToken = null;
       if (samePasswords) {
@@ -36,7 +37,7 @@ module.exports = {
           expiresIn: TOKEN_EXPIRE,
         });
       }
-      return { accessToken, email, name: user.name };
+      return { accessToken, email, name: user.name, id: user.id };
     },
   },
 };

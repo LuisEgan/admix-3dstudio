@@ -15,53 +15,15 @@ import NewCreativePopup from '../components/Popups/NewCreativePopup';
 import CogSVG from '../assets/svg/cog.svg';
 import PlusSVG from '../assets/svg/cross.svg';
 
-const { groupById } = queries;
+const { groupsByCampaign } = queries;
 const { setSelected } = actions;
 
-const dbGroups = [
-  {
-    name: 'Group 1',
-    creatives: [
-      {
-        image:
-          'https://i.kinja-img.com/gawker-media/image/upload/s--1JGOVben--/c_scale,f_auto,fl_progressive,q_80,w_800/twe4zfllglsnvgopqmeg.png',
-        name: 'Creative 1',
-      },
-      {
-        image: 'https://media.mmo-champion.com/images/news/2013/november/Nagrand_Landscape.jpg',
-        name: 'Creativesaaaaaaaaaaa aaaaaa aaaaaaaaaaaaaaaa a2',
-      },
-      {
-        image:
-          'http://vgtribune.com/VGTribune/wp-content/uploads/2015/05/env-tuskarr-full-820x380.jpg',
-        name: 'Creative 3',
-      },
-    ],
-  },
-  {
-    name: 'Group 2',
-    creatives: [
-      {
-        image:
-          'https://cdna.artstation.com/p/assets/images/images/000/133/820/large/toby-lewin-paint-318-draenor.jpg?1405392736',
-        name: 'Creativesaaaaaa  aaaaaaaaaaaaaa a2',
-      },
-      {
-        image:
-          'https://i.kinja-img.com/gawker-media/image/upload/s--1JGOVben--/c_scale,f_auto,fl_progressive,q_80,w_800/twe4zfllglsnvgopqmeg.png',
-        name: 'Creative x',
-      },
-      {
-        image:
-          'http://vgtribune.com/VGTribune/wp-content/uploads/2015/05/env-tuskarr-full-820x380.jpg',
-        name: 'Creative 3234',
-      },
-      {
-        image: 'https://media.mmo-champion.com/images/news/2013/november/Nagrand_Landscape.jpg',
-        name: 'Creativesaaaaaaaa aaaaaa aaaaaaaaaaaaaaaaa a2',
-      },
-    ],
-  },
+const imagesBank = [
+  'https://i.kinja-img.com/gawker-media/image/upload/s--1JGOVben--/c_scale,f_auto,fl_progressive,q_80,w_800/twe4zfllglsnvgopqmeg.png',
+  'https://media.mmo-champion.com/images/news/2013/november/Nagrand_Landscape.jpg',
+  'http://vgtribune.com/VGTribune/wp-content/uploads/2015/05/env-tuskarr-full-820x380.jpg',
+  'https://cdna.artstation.com/p/assets/images/images/000/133/820/large/toby-lewin-paint-318-draenor.jpg?1405392736',
+  'https://i.kinja-img.com/gawker-media/image/upload/s--1JGOVben--/c_scale,f_auto,fl_progressive,q_80,w_800/twe4zfllglsnvgopqmeg.png',
 ];
 
 const initialState = {
@@ -73,10 +35,18 @@ const initialState = {
 };
 
 let Groups = props => {
-  // console.log('props: ', props);
   const {
-    data: { groups },
+    data: { groupsByCampaign: groups },
+    campaign,
   } = props;
+  console.log('groupsByCampaign: ', groups);
+
+  groups &&
+    groups.forEach(group => {
+      group.creatives.forEach((creative, i) => {
+        group.creatives[i].image = imagesBank[Math.floor(Math.random() * imagesBank.length)];
+      });
+    });
 
   const [state, setState] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -123,9 +93,6 @@ let Groups = props => {
           >
             <PlusSVG />
             <span>New creative</span>
-            <Link href="/about">
-              <a>here</a>
-            </Link>
           </div>
         </div>
       </div>
@@ -156,7 +123,11 @@ let Groups = props => {
         togglePopup={() => togglePopup('showEditGroup', { group: state.clickedGroup })}
         group={state.clickedGroup}
       />
-      <NewGroupPopup show={state.showNewGroup} togglePopup={() => togglePopup('showNewGroup')} />
+      <NewGroupPopup
+        show={state.showNewGroup}
+        togglePopup={() => togglePopup('showNewGroup')}
+        campaign={campaign}
+      />
       <EditCreativePopup
         show={state.showEditCreative}
         togglePopup={() => togglePopup('showEditCreative', { creative: state.clickedCreative })}
@@ -174,7 +145,7 @@ let Groups = props => {
         </div>
 
         <div id="groups-content">
-          {dbGroups.map(group => renderGroup(group))}
+          {groups && groups.map(group => renderGroup(group))}
           <button className="blue-btn mb" onClick={() => togglePopup('showNewGroup')}>
             <PlusSVG /> &nbsp; New group
           </button>
@@ -184,7 +155,13 @@ let Groups = props => {
   );
 };
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  const {
+    app: { selectedCampaign: campaign },
+  } = state;
+
+  return { campaign };
+};
 const mapDispatchToProps = dispatch => ({
   selectGroup: groupId => {
     dispatch(setSelected({ selectItem: 'group', value: groupId }));
@@ -193,17 +170,17 @@ const mapDispatchToProps = dispatch => ({
 
 const gqlOpts = {
   options: props => {
-    console.log('props: ', props);
+    const { campaign } = props;
     return {
-      // variables: { id },
+      variables: { campaign },
     };
   },
 };
 
+Groups = graphql(groupsByCampaign, gqlOpts)(Groups);
 Groups = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Groups);
-Groups = graphql(groupById, gqlOpts)(Groups);
 
 export default Groups;

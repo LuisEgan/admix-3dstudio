@@ -11,7 +11,7 @@ const { campaigns } = queries;
 
 const initialValues = { name: '', advertiser: '', description: '' };
 
-export default ({ show, togglePopup }) => {
+export default ({ show, togglePopup, userId }) => {
   const validate = values => {
     const errors = {};
 
@@ -26,7 +26,7 @@ export default ({ show, togglePopup }) => {
   const onSubmit = (values, mutation) => {
     mutation({
       variables: {
-        user: '5c903dd7ea674f2b443f6491',
+        user: userId,
         ...values,
       },
       refetchQueries: [{ query: campaigns }],

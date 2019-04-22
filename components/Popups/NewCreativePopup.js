@@ -6,7 +6,7 @@ import Form from '../Form';
 import TextInput from '../inputs/TextInput';
 import SelectInput from '../inputs/SelectInput';
 
-const { createUser } = mutations;
+const { createCreative } = mutations;
 
 const initialValues = {
   name: '',
@@ -14,6 +14,12 @@ const initialValues = {
   iab: '',
   size: '',
 };
+
+const sizeValues = [
+  { label: 'Small (fits in a 0.5 x 0.5 x 0.5)', value: 'small' },
+  { label: 'Medium (fits in a 1 x 1 x 1)', value: 'medium' },
+  { label: 'Large (size over 1 x 1 x 1)', value: 'large' },
+];
 
 export default ({ show, togglePopup }) => {
   const validate = values => {
@@ -29,9 +35,13 @@ export default ({ show, togglePopup }) => {
   };
 
   const onSubmit = (values, mutation) => {
-    console.log('mutation: ', mutation);
-    console.log('values: ', values);
-    mutation(values);
+    mutation({
+      variables: {
+        user: '5caeb59ffaefa83e7085dff1',
+        ...values,
+      },
+      // refetchQueries: [{ query: campaigns }],
+    });
   };
 
   return (
@@ -43,7 +53,7 @@ export default ({ show, togglePopup }) => {
             validate={validate}
             onSubmit={onSubmit}
             initialValues={initialValues}
-            mutation={createUser}
+            mutation={createCreative}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Creative name*" />
@@ -53,11 +63,7 @@ export default ({ show, togglePopup }) => {
               label="IAB"
               options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
             />
-            <SelectInput
-              name="size"
-              label="Creative size in the real world"
-              options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
-            />
+            <SelectInput name="size" label="Creative size in the real world" options={sizeValues} />
             <button type="submit" className="btn gradient-btn">
               Create
             </button>

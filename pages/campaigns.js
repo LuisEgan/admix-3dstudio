@@ -23,8 +23,10 @@ const initialState = {
 };
 
 let Campaigns = props => {
+  console.log('props: ', props);
   const {
     data: { campaigns },
+    userId,
   } = props;
 
   const [state, setState] = useReducer(
@@ -89,6 +91,7 @@ let Campaigns = props => {
         <NewCampaignPopup
           show={showPopupNewCampaign}
           togglePopup={() => togglePopup('showPopupNewCampaign')}
+          userId={userId}
         />
 
         <div id="apps-header" className="step-title">
@@ -114,7 +117,13 @@ let Campaigns = props => {
   );
 };
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  const {
+    auth: { userId },
+  } = state;
+
+  return { userId };
+};
 const mapDispatchToProps = dispatch => ({
   selectCampaign: campaignId => {
     dispatch(setSelected({ selectItem: 'campaign', value: campaignId }));

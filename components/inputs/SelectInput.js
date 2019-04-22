@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
+import Select from 'react-select';
 
-class Select extends React.Component {
+class AdmixSelect extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     rootstyle: PropTypes.object,
@@ -82,19 +83,33 @@ class Select extends React.Component {
           <div>
             <Field
               name={name}
-              component="select"
-              innerRef={i => {
-                this.input = i;
-              }}
+              component={() => (
+                <Select
+                  options={options}
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      border: '0 !important',
+                      boxShadow: '0 !important',
+                      '&:hover': {
+                        border: '0 !important',
+                      },
+                    }),
+                  }}
+                  ref={i => {
+                    this.input = i;
+                  }}
+                />
+              )}
             >
-              <option value="" />
+              {/* <option value="" />
               {options.map(opt => {
                 return (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>
                 );
-              })}
+              })} */}
             </Field>
           </div>
           {displayError && <span className="asyncError">{errors[name]}</span>}
@@ -107,4 +122,4 @@ class Select extends React.Component {
   }
 }
 
-export default Select;
+export default AdmixSelect;

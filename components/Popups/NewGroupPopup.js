@@ -1,18 +1,20 @@
 import React from 'react';
 import mutations from '../../mutations';
+import queries from '../../queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-const { createUser } = mutations;
+const { createGroup } = mutations;
+const { groupsByCampaign } = queries;
 
 const initialValues = {
   name: '',
-  description: ''
+  description: '',
 };
 
-export default ({ show, togglePopup }) => {
+export default ({ show, togglePopup, campaign }) => {
   const validate = values => {
     const errors = {};
 
@@ -26,9 +28,20 @@ export default ({ show, togglePopup }) => {
   };
 
   const onSubmit = (values, mutation) => {
-    console.log('mutation: ', mutation);
-    console.log('values: ', values);
-    // mutation(values);
+    mutation({
+      variables: {
+        campaign,
+        ...values,
+      },
+      refetchQueries: [
+        {
+          query: groupsByCampaign,
+          variables: { campaign },
+        },
+      ],
+      awaitRefetchQueries: true,
+    });
+    togglePopup();
   };
 
   return (
@@ -40,7 +53,7 @@ export default ({ show, togglePopup }) => {
             validate={validate}
             initialValues={initialValues}
             onSubmit={onSubmit}
-            mutation={createUser}
+            mutation={createGroup}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Group name*" />
