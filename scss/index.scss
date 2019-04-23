@@ -180,6 +180,18 @@ p {
   margin-top: 0;
 }
 
+input[type='file'] {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.file-label {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 // Fonts Assignment
 .ht {
   //header text
@@ -1898,7 +1910,34 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
 
-    #creative-panel {
+    .creative-panel {
+      > div {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 40vh;
+
+        > div,
+        button {
+          padding: 15px;
+        }
+      }
+    }
+
+    .creative-checks {
+      width: 70%;
+
+      > div {
+        margin-bottom: 15px;
+      }
+
+      .creative-checks-edit {
+        float: right;
+        &:hover {
+          cursor: pointer;
+        }
+      }
     }
   }
 }
