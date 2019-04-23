@@ -38,8 +38,6 @@ let Login = props => {
   };
 
   const doLogin = ({ accessToken, name, id }) => {
-    console.log('id: ', id);
-    console.log('accessToken: ', accessToken);
     if (!accessToken) {
       setError(name ? 'Invalid password!' : 'No user found!');
       return;
@@ -61,7 +59,6 @@ let Login = props => {
           onSubmit={onSubmit}
           mutation={loginUser}
           onCompleted={({ loginUser }) => {
-            console.log(loginUser);
             doLogin(loginUser);
           }}
           onError={e => console.log(e)}

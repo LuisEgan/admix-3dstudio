@@ -2,40 +2,31 @@ import { gql } from 'apollo-boost';
 
 export default {
   createCreative: gql`
-    mutation CreateCreative($user: ID!, $name: String!, $size: Int!, $groups: ID!) {
-      createCreative(user: $user, size: $size, name: $name, groups: $groups) {
+    mutation CreateCreative(
+      $group: ID!
+      $name: String!
+      $size: String!
+      $description: String
+      $iab: String
+    ) {
+      createCreative(
+        group: $group
+        name: $name
+        size: $size
+        description: $description
+        IAB: $iab
+      ) {
         id
         name
-        sourceURL
-        thumbURL
-        format
-        state
         size
+        description
         IAB
-        createdAt
-        updatedAt
-        user {
+        group {
           id
           name
-          company
-          email
-          accessGroups
-        }
-        groups {
-          id
-          name
-          state
-          description
-          createdAt
-          updatedAt
           campaign {
             id
             name
-            state
-            startDate
-            endDate
-            createdAt
-            updatedAt
           }
         }
       }

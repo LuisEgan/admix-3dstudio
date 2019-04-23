@@ -19,8 +19,10 @@ class AdmixSelect extends React.Component {
       focused: false,
       displayError: false,
       touched: false,
+      selectValue: '',
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.forceFocus = this.forceFocus.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
@@ -35,6 +37,11 @@ class AdmixSelect extends React.Component {
 
     return newState;
   }
+
+  handleChange = selectValue => {
+    const { name, setFieldValue } = this.props;
+    this.setState({ selectValue }, () => setFieldValue(name, selectValue.value));
+  };
 
   onFocus() {
     const { onFocus } = this.props;
@@ -56,7 +63,7 @@ class AdmixSelect extends React.Component {
 
   render() {
     const { label, icon, guideline, name, errors, options } = this.props;
-    const { focused, displayError, touched } = this.state;
+    const { focused, displayError, touched, selectValue } = this.state;
 
     if (!errors) return null;
 
@@ -85,7 +92,11 @@ class AdmixSelect extends React.Component {
               name={name}
               component={() => (
                 <Select
+                  isSearchable={false}
                   options={options}
+                  name={name}
+                  value={selectValue}
+                  onChange={this.handleChange}
                   styles={{
                     control: (base, state) => ({
                       ...base,
@@ -101,16 +112,7 @@ class AdmixSelect extends React.Component {
                   }}
                 />
               )}
-            >
-              {/* <option value="" />
-              {options.map(opt => {
-                return (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                );
-              })} */}
-            </Field>
+            />
           </div>
           {displayError && <span className="asyncError">{errors[name]}</span>}
         </div>

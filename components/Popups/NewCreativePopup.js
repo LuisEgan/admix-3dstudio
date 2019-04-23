@@ -1,11 +1,14 @@
 import React from 'react';
+import Router from 'next/router';
 import mutations from '../../mutations';
+import queries from '../../queries';
 
 import Popup from '../Popup';
 import Form from '../Form';
 import TextInput from '../inputs/TextInput';
 import SelectInput from '../inputs/SelectInput';
 
+const { groupsByCampaign } = queries;
 const { createCreative } = mutations;
 
 const initialValues = {
@@ -21,7 +24,7 @@ const sizeValues = [
   { label: 'Large (size over 1 x 1 x 1)', value: 'large' },
 ];
 
-export default ({ show, togglePopup }) => {
+export default ({ show, togglePopup, group, campaign, selectCreative }) => {
   const validate = values => {
     const errors = {};
 
@@ -37,11 +40,17 @@ export default ({ show, togglePopup }) => {
   const onSubmit = (values, mutation) => {
     mutation({
       variables: {
-        user: '5caeb59ffaefa83e7085dff1',
+        group,
         ...values,
       },
-      // refetchQueries: [{ query: campaigns }],
+      refetchQueries: [{ query: groupsByCampaign, variables: { campaign } }],
     });
+  };
+
+  const handleCompleted = ({ createCreative }) => {
+    const { id } = createCreative;
+    selectCreative(id);
+    Router.push('/creatives');
   };
 
   return (
@@ -54,6 +63,7 @@ export default ({ show, togglePopup }) => {
             onSubmit={onSubmit}
             initialValues={initialValues}
             mutation={createCreative}
+            onCompleted={handleCompleted}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Creative name*" />
@@ -61,7 +71,7 @@ export default ({ show, togglePopup }) => {
             <SelectInput
               name="iab"
               label="IAB"
-              options={[{ label: 'opt1', value: 1 }, { label: 'opt2', value: 2 }]}
+              options={[{ label: 'opt1', value: '1' }, { label: 'opt2', value: '2' }]}
             />
             <SelectInput name="size" label="Creative size in the real world" options={sizeValues} />
             <button type="submit" className="btn gradient-btn">

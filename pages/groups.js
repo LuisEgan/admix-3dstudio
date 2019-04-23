@@ -38,9 +38,10 @@ let Groups = props => {
   const {
     data: { groupsByCampaign: groups },
     campaign,
+    selectCreative,
   } = props;
-  console.log('groupsByCampaign: ', groups);
 
+  // TODO - add images to creatives (cloudinary links in db)
   groups &&
     groups.forEach(group => {
       group.creatives.forEach((creative, i) => {
@@ -63,7 +64,7 @@ let Groups = props => {
   };
 
   const renderGroup = group => {
-    const { name, creatives } = group;
+    const { name, creatives, id } = group;
 
     return (
       <div className="group" key={name}>
@@ -89,7 +90,7 @@ let Groups = props => {
 
           <div
             className="group-creative group-creative-new mb"
-            onClick={() => togglePopup('showNewCreative')}
+            onClick={() => togglePopup('showNewCreative', { group: id })}
           >
             <PlusSVG />
             <span>New creative</span>
@@ -136,6 +137,9 @@ let Groups = props => {
       <NewCreativePopup
         show={state.showNewCreative}
         togglePopup={() => togglePopup('showNewCreative')}
+        group={state.clickedGroup}
+        campaign={campaign}
+        selectCreative={selectCreative}
       />
 
       <div className="step-container" id="groups">
@@ -165,6 +169,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   selectGroup: groupId => {
     dispatch(setSelected({ selectItem: 'group', value: groupId }));
+  },
+  selectCreative: creativeId => {
+    dispatch(setSelected({ selectItem: 'creative', value: creativeId }));
   },
 });
 

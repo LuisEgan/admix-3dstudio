@@ -38,7 +38,6 @@ const Model = props => {
 
   const setMax = () => {
     if (!originalObjHeight) return 100;
-
     if (originalObjHeight <= 50) return 50;
     if (originalObjHeight <= 100) return 100;
 

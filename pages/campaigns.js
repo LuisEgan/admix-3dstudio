@@ -23,7 +23,6 @@ const initialState = {
 };
 
 let Campaigns = props => {
-  console.log('props: ', props);
   const {
     data: { campaigns },
     userId,

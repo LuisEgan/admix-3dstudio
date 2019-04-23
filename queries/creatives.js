@@ -21,7 +21,7 @@ export default {
     query CreateCreative(
       $group: ID!
       $name: String!
-      $size: Int!
+      $size: String!
       $description: String
       $iab: String
     ) {

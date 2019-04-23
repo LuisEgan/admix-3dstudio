@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
 import App from '../components/App';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -6,7 +7,10 @@ import CreativeMaker from '../components/creativeMaker';
 
 const fbx = '/static/models/fbx/SambaDancing.fbx';
 
-const Creatives = props => {
+let Creatives = props => {
+  const { creative } = props;
+  console.log('creative: ', creative);
+
   const setBreadcrumbs = () => {
     return [
       {
@@ -39,5 +43,29 @@ const Creatives = props => {
     </App>
   );
 };
+
+const mapStateToProps = state => {
+  const {
+    app: { selectedCreative: creative },
+  } = state;
+
+  return { creative };
+};
+const mapDispatchToProps = dispatch => ({});
+
+const gqlOpts = {
+  options: props => {
+    const { campaign } = props;
+    return {
+      variables: { campaign },
+    };
+  },
+};
+
+// Creatives = graphql(groupsByCampaign, gqlOpts)(Groups);
+Creatives = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Creatives);
 
 export default Creatives;

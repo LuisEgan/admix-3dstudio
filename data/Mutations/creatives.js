@@ -27,7 +27,7 @@ module.exports = {
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
-      size: { type: new GraphQLNonNull(GraphQLInt) },
+      size: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
       IAB: { type: GraphQLString },
     },
