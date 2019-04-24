@@ -1,8 +1,34 @@
-const { GraphQLString, GraphQLID, GraphQLList, GraphQLNonNull, GraphQLInt } = require('graphql');
+const {
+  GraphQLString,
+  GraphQLID,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLInt,
+  GraphQLBoolean,
+} = require('graphql');
+const { GraphQLUpload } = require('graphql-upload');
+const fs = require('fs');
+const path = require('path');
 const { Types } = require('mongoose');
 const { CreativesType } = require('../Types');
 const CreativesModel = require('../Models/creatives');
 const GroupsModel = require('../Models/groups');
+
+const storeFS = ({ stream, filename }) => {
+  const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
+  return new Promise((resolve, reject) =>
+    stream
+      .on('error', error => {
+        if (stream.truncated)
+          // Delete the truncated file.
+          fs.unlinkSync(filePath);
+        reject(error);
+      })
+      .pipe(fs.createWriteStream(filePath))
+      .on('error', error => reject(error))
+      .on('finish', () => resolve(filePath)),
+  );
+};
 
 const AddCreativeToGroup = async (creative, group) => {
   return await GroupsModel.findByIdAndUpdate(group, {
@@ -25,6 +51,8 @@ const RemoveCreativeFromGroup = async (creative, groups) => {
 module.exports = {
   createCreative: {
     type: CreativesType,
+    description:
+      'This mutation helps you to create new creative. You should to provide `GroupID`, `Name` and `Size` arguments to create this creative. Resolve new creative object.',
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
@@ -40,6 +68,8 @@ module.exports = {
   },
   editCreative: {
     type: CreativesType,
+    description:
+      'This mutation helps you to edit exist creative. You should to provide Creative argument with `Creative ID` that should to be edit. Other arguments are Not Required but should be provided for edit Creative. Resolve object with updated Creative.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
@@ -62,6 +92,8 @@ module.exports = {
   },
   addGroupsToCreative: {
     type: CreativesType,
+    description:
+      'This mutation helps you adding Group to existing Creative. You should to provide `CreativeID`, `UserID` and Array of `GroupsIDs` that should to be added in the Creative. Resolve object with added groups.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
       user: { type: new GraphQLNonNull(GraphQLID) },
@@ -84,6 +116,8 @@ module.exports = {
   },
   removeGroupsFromCreative: {
     type: CreativesType,
+    description:
+      'This mutation helps you remove Group from existing Creative. You should to provide `CreativeID`, `UserID` and Array of `GroupsIDs` that should to be removed from the Creative. Resolve object without removed groups.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
       user: { type: new GraphQLNonNull(GraphQLID) },
@@ -106,6 +140,8 @@ module.exports = {
   },
   deleteCreative: {
     type: GraphQLID,
+    description:
+      'This mutation helps you to delete creative. You should to provide `Creative ID` in arguments to delete creative. Resolve ID of deleted creative.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
@@ -115,6 +151,48 @@ module.exports = {
       });
       await RemoveCreativeFromGroup(_id, groups);
       return _id || null;
+    },
+  },
+  uploadModel: {
+    type: GraphQLBoolean,
+    description:
+      'This mutation helps you to upload new `Model` in the creative. Resolve `AWS ID` for replace/delete `Model`, if it will be needed.',
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { createReadStream, filename } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
+    },
+  },
+  uploadGaze: {
+    type: GraphQLBoolean,
+    description:
+      'This mutation helps you to upload new `Gaze` in the creative. Resolve `AWS ID` for replace/delete `Gaze`, if it will be needed.',
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { filename, createReadStream } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
+    },
+  },
+  uploadAction: {
+    type: GraphQLBoolean,
+    description:
+      'This mutation helps you to upload new `Action` in the creative. Resolve `AWS ID` for replace/delete `Action`, if it will be needed.',
+    args: {
+      model: { type: GraphQLUpload },
+    },
+    resolve: async (_, { model }) => {
+      const { filename, createReadStream } = await model;
+      const stream = createReadStream();
+      const pathFile = await storeFS({ stream, filename });
+      return !!pathFile;
     },
   },
 };

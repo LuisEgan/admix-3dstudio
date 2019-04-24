@@ -5,6 +5,7 @@ const UsersModel = require('../Models/users');
 module.exports = {
   userById: {
     type: UsersType,
+    description: 'Get User by provided ID. Required ID argument.',
     args: {
       user: { type: new GraphQLNonNull(GraphQLID) },
     },
@@ -12,6 +13,7 @@ module.exports = {
   },
   users: {
     type: new GraphQLList(UsersType),
+    description: 'Get all users of the application. No arguments required. Return array of users.',
     resolve: async () => await UsersModel.find({}),
   },
 };

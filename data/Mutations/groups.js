@@ -28,6 +28,8 @@ const CleanCreativeByGroup = async (group, creative) =>
 module.exports = {
   createGroup: {
     type: GroupsType,
+    description:
+      'This mutation helps you to create new group. You should to provide `CampaignID` and `Name` arguments to create group. Resolve new group object.',
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
@@ -41,6 +43,8 @@ module.exports = {
   },
   editGroup: {
     type: GroupsType,
+    description:
+      'This mutation helps you to edit exist group. You should to provide group argument with `Group ID` that should to be edit. Other arguments are Not Required but should be provided for editing group. Resolve object with updated group.',
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
@@ -64,6 +68,8 @@ module.exports = {
   },
   deleteGroup: {
     type: GraphQLID,
+    description:
+      'This mutation helps you to delete group. You should to provide `Group ID` in arguments to delete group. Resolve ID of deleted group.',
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
     },
