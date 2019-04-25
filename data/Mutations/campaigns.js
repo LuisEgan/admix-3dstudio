@@ -1,7 +1,4 @@
 const { GraphQLString, GraphQLID, GraphQLBoolean, GraphQLNonNull } = require('graphql');
-const { GraphQLUpload } = require('graphql-upload');
-const fs = require('fs');
-const path = require('path');
 const { Types } = require('mongoose');
 const { CampaignsType } = require('../Types');
 const CampaignsModel = require('../Models/campaigns');
@@ -9,41 +6,10 @@ const GroupsModel = require('../Models/groups');
 const CreativesModel = require('../Models/creatives');
 const UsersModel = require('../Models/users');
 
-const AddCampaignToUser = async (campaign, user) => {
-  const userModified = await UsersModel.findByIdAndUpdate(user, {
+const AddCampaignToUser = async (campaign, user) =>
+  await UsersModel.findByIdAndUpdate(user, {
     $push: { campaigns: campaign },
   });
-
-  return userModified;
-};
-
-const RemoveCreativeFromGroup = async (creative, groups) => {
-  group = Array.isArray(group) ? group : [group];
-  return await GroupsModel.updateMany(
-    {
-      _id: { $in: groups },
-    },
-    {
-      $pull: { creatives: creative },
-    },
-  );
-};
-
-const storeFS = ({ stream, filename }) => {
-  const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
-  return new Promise((resolve, reject) =>
-    stream
-      .on('error', error => {
-        if (stream.truncated)
-          // Delete the truncated file.
-          fs.unlinkSync(filePath);
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(filePath))
-      .on('error', error => reject(error))
-      .on('finish', () => resolve(filePath)),
-  );
-};
 
 const CleanByCampaign = async campaign => {
   if (!campaign) return null;
@@ -70,6 +36,8 @@ const CleanByCampaign = async campaign => {
 module.exports = {
   createCampaign: {
     type: CampaignsType,
+    description:
+      'This mutation helps you to create new campaign. You should to provide `UserID`, `Name` and `Advertiser` arguments to create this campaign. Resolve new campaign object.',
     args: {
       user: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
@@ -86,6 +54,8 @@ module.exports = {
   },
   editCampaign: {
     type: CampaignsType,
+    description:
+      'This mutation helps you to edit exist campaign. You should to provide Campaign argument with `Campaign ID` that should to be edit. Other arguments are Not Required but should be provided for edit Campaign. Resolve object with updated Campaign.',
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
@@ -109,6 +79,8 @@ module.exports = {
   },
   deleteCampaign: {
     type: GraphQLID,
+    description:
+      'This mutation helps you to delete campaign. You should to provide `Campaign ID` in arguments to delete campaign. Resolve ID of deleted campaign.',
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
     },
@@ -121,42 +93,6 @@ module.exports = {
       );
       //await CleanByCampaign(deletedCampaign._id || null);
       return deletedCampaign._id || null;
-    },
-  },
-  uploadModel: {
-    type: GraphQLBoolean,
-    args: {
-      model: { type: GraphQLUpload },
-    },
-    resolve: async (_, { model }) => {
-      const { createReadStream, filename } = await model;
-      const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
-    },
-  },
-  uploadGaze: {
-    type: GraphQLBoolean,
-    args: {
-      model: { type: GraphQLUpload },
-    },
-    resolve: async (_, { model }) => {
-      const { filename, createReadStream } = await model;
-      const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
-    },
-  },
-  uploadAction: {
-    type: GraphQLBoolean,
-    args: {
-      model: { type: GraphQLUpload },
-    },
-    resolve: async (_, { model }) => {
-      const { filename, createReadStream } = await model;
-      const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
     },
   },
 };
