@@ -8,10 +8,10 @@ module.exports = {
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { creative }) => await CreativesModel.findById(creative),
+    resolve: async (_, { creative }) => await CreativesModel.findById(creative, { deleted: 0 }),
   },
   creatives: {
     type: new GraphQLList(CreativesType),
-    resolve: async () => await CreativesModel.find({}),
+    resolve: async () => await CreativesModel.find({ deleted: false }, { deleted: 0 }),
   },
 };

@@ -22,6 +22,7 @@ const groupsSchema = new Schema(
     },
     name: String,
     description: String,
+    deleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
