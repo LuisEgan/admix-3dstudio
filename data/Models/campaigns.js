@@ -22,6 +22,7 @@ const campaignsSchema = new Schema(
     },
     name: String,
     advertiser: String,
+    deleted: { type: Boolean, default: false },
     description: String,
     startDate: { type: Date, default: null },
     endDate: { type: Date, default: null },

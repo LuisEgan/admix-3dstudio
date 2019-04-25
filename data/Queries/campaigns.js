@@ -39,7 +39,7 @@ module.exports = {
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign),
+    resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign, { deleted: 0 }),
   },
   // @TODO Need to more functionality
   campaignXML: {
@@ -63,6 +63,6 @@ module.exports = {
     description:
       'Get all campaigns of the application. No arguments required. Return array of campaigns.',
     type: new GraphQLList(CampaignsType),
-    resolve: async () => await CampaignsModel.find({}),
+    resolve: async () => await CampaignsModel.find({ deleted: false }, { deleted: 0 }),
   },
 };

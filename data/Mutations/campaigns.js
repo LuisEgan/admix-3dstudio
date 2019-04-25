@@ -85,10 +85,13 @@ module.exports = {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { campaign }) => {
-      const deletedCampaign = await CampaignsModel.findOneAndDelete({
-        _id: Types.ObjectId(campaign),
-      });
-      await CleanByCampaign(deletedCampaign._id || null);
+      const deletedCampaign = await CampaignsModel.findOneAndUpdate(
+        {
+          _id: Types.ObjectId(campaign),
+        },
+        { deleted: true },
+      );
+      //await CleanByCampaign(deletedCampaign._id || null);
       return deletedCampaign._id || null;
     },
   },

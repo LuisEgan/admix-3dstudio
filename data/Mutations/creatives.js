@@ -146,9 +146,12 @@ module.exports = {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { creative }) => {
-      const { groups, _id } = await CreativesModel.findOneAndDelete({
-        _id: Types.ObjectId(creative),
-      });
+      const { groups, _id } = await CreativesModel.findOneAndUpdate(
+        {
+          _id: Types.ObjectId(creative),
+        },
+        { deleted: true },
+      );
       await RemoveCreativeFromGroup(_id, groups);
       return _id || null;
     },
