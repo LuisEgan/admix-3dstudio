@@ -41,6 +41,14 @@ module.exports = {
     },
     resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign, { deleted: 0 }),
   },
+  campaignsByUser: {
+    type: new GraphQLList(CampaignsType),
+    description: 'Get Campaign by provided UserID. Required UserID argument.',
+    args: {
+      user: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    resolve: async (_, { user }) => await CampaignsModel.find({ user }, { deleted: 0 }),
+  },
   // @TODO Need to more functionality
   campaignXML: {
     type: GraphQLString,
