@@ -5,6 +5,7 @@ const CreativesModel = require('../Models/creatives');
 module.exports = {
   creativeById: {
     type: CreativesType,
+    description: 'Get creative by provided ID. Required argument ID. Return Creative object.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
@@ -12,6 +13,7 @@ module.exports = {
   },
   creatives: {
     type: new GraphQLList(CreativesType),
+    description: 'Get all creative of the app. No required arguments. Return array of creative.',
     resolve: async () => await CreativesModel.find({}),
   },
 };

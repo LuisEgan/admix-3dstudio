@@ -5,6 +5,7 @@ const GroupsModel = require('../Models/groups');
 module.exports = {
   groupById: {
     type: GroupsType,
+    description: 'Get Groups by provided ID. Required ID argument.',
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
     },
@@ -12,6 +13,8 @@ module.exports = {
   },
   groups: {
     type: new GraphQLList(GroupsType),
+    description:
+      'Get all groups of the application. No arguments required. Return array of groups.',
     resolve: async () => await GroupsModel.find({}),
   },
 };
