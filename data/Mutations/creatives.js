@@ -9,25 +9,33 @@ const {
 const { GraphQLUpload } = require('graphql-upload');
 const fs = require('fs');
 const path = require('path');
+const AWS = require('aws-sdk');
 const { Types } = require('mongoose');
 const { CreativesType } = require('../Types');
 const CreativesModel = require('../Models/creatives');
 const GroupsModel = require('../Models/groups');
 
-const storeFS = ({ stream, filename }) => {
-  const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
-  return new Promise((resolve, reject) =>
-    stream
-      .on('error', error => {
-        if (stream.truncated)
-          // Delete the truncated file.
-          fs.unlinkSync(filePath);
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(filePath))
-      .on('error', error => reject(error))
-      .on('finish', () => resolve(filePath)),
-  );
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
+const storeS3 = ({ stream, filename }) => {
+  const fileExt = path.extname(filename);
+  const { name } = path.parse(filename);
+
+  const params = {
+    Bucket: 'adv-studio-cstore',
+    Key: `public/${name}_${Date.now()}${fileExt}`,
+    Body: stream,
+  };
+
+  return new Promise((resolve, reject) => {
+    s3.upload(params, (err, data) => {
+      if (err) return reject(err);
+      return resolve(data);
+    });
+  });
 };
 
 const AddCreativeToGroup = async (creative, group) => {
@@ -146,9 +154,12 @@ module.exports = {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { creative }) => {
-      const { groups, _id } = await CreativesModel.findOneAndDelete({
-        _id: Types.ObjectId(creative),
-      });
+      const { groups, _id } = await CreativesModel.findOneAndUpdate(
+        {
+          _id: Types.ObjectId(creative),
+        },
+        { deleted: true },
+      );
       await RemoveCreativeFromGroup(_id, groups);
       return _id || null;
     },
@@ -163,7 +174,7 @@ module.exports = {
     resolve: async (_, { model }) => {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
+      const pathFile = await storeS3({ stream, filename });
       return !!pathFile;
     },
   },
@@ -177,7 +188,7 @@ module.exports = {
     resolve: async (_, { model }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
+      const pathFile = await storeS3({ stream, filename });
       return !!pathFile;
     },
   },
@@ -191,7 +202,7 @@ module.exports = {
     resolve: async (_, { model }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
+      const pathFile = await storeS3({ stream, filename });
       return !!pathFile;
     },
   },
