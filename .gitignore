@@ -134,6 +134,7 @@ typings/
 
 # User-specific stuff
 .idea/
+/uploads
 
 # Generated files
 .idea/**/contentModel.xml

@@ -6,6 +6,7 @@ const UsersQueries = require('./users');
 
 module.exports = new GraphQLObjectType({
   name: 'Query',
+  description: 'Queries allows you to get all info from database.',
   fields: {
     ...CampaignsQueries,
     ...CreativesQueries,

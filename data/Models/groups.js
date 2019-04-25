@@ -5,10 +5,6 @@ const Schema = mongoose.Schema;
 
 const groupsSchema = new Schema(
   {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
     campaign: {
       type: Schema.Types.ObjectId,
       ref: 'Campaign',
@@ -26,12 +22,33 @@ const groupsSchema = new Schema(
     },
     name: String,
     description: String,
+    deleted: { type: Boolean, default: false },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  },
 );
 
 groupsSchema.virtual('id').get(function idToString() {
   return this._id.toString();
 });
+
+groupsSchema.statics.getCampaign = async function(id) {
+  try {
+    const { campaign } = await this.findById(id).populate('campaign');
+    return campaign;
+  } catch (error) {
+    console.error('error: ', error);
+  }
+};
+
+groupsSchema.statics.getCreatives = async function(id) {
+  try {
+    const { creatives } = await this.findById(id).populate('creatives');
+    return creatives;
+  } catch (error) {
+    console.error('error: ', error);
+  }
+};
 
 module.exports = mongoose.model('Group', groupsSchema);

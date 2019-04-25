@@ -3,6 +3,16 @@ import { connect } from "react-redux";
 import Link from "next/link";
 import { withRouter } from "next/router";
 
+import actions from "../lib/actions";
+
+import logo from "../assets/img/logo-vertical.png";
+import ProfileSVG from "../assets/svg/profile.svg";
+import CampaignsSVG from "../assets/svg/campaigns.svg";
+import BellSVG from "../assets/svg/bell.svg";
+import DocumentationSVG from "../assets/svg/documentation.svg";
+
+const { logout } = actions;
+
 function openInNewTab(url) {
   const sideMenu = document.getElementById("sideMenu");
   const a = document.createElement("a");
@@ -15,22 +25,22 @@ function openInNewTab(url) {
 
 const sections = [
   {
-    icon: "Camps",
+    icon: <CampaignsSVG />,
     title: "My campaigns",
     pathname: "/campaigns",
   },
   {
-    icon: "Docs",
+    icon: <DocumentationSVG />,
     title: "Documentation",
     pathname: "https://docs.admix.in/",
   },
   {
-    icon: "Bell",
+    icon: <DocumentationSVG />,
     title: "Notifications",
     pathname: "/",
   },
   {
-    icon: "Prof",
+    icon: <ProfileSVG />,
     title: "My profile",
     pathname: "/",
   },
@@ -50,7 +60,6 @@ class SideMenu extends Component {
     if (pathname.indexOf("http") >= 0) {
       openInNewTab(pathname);
     }
-    // this.props.history.push(pathname);
   }
 
   renderSections() {
@@ -63,12 +72,16 @@ class SideMenu extends Component {
         {sections.map(section => {
           isSelected = section.pathname === pathname ? "selectedSection" : "";
           return (
-            <React.Fragment key={section.title}>
-              <div>{section.icon}</div>
+            <div key={section.title}>
               <Link prefetch href={section.pathname} key={section.title}>
-                <a>{section.title}</a>
+                <a
+                  target={section.title === "Documentation" ? "__blank" : null}
+                >
+                  <div>{section.icon}</div>
+                  {section.title}
+                </a>
               </Link>
-            </React.Fragment>
+            </div>
           );
         })}
       </div>
@@ -76,10 +89,14 @@ class SideMenu extends Component {
   }
 
   render() {
+    const { logout, isLoggedIn } = this.props;
+
+    if (!isLoggedIn) return null;
+
     return (
       <div id="sideMenu">
         <div id="sideMenu-header">
-          <img src={"logo"} alt="logo" />
+          <img src={logo} alt="logo" onClick={logout} />
         </div>
         {this.renderSections()}
       </div>
@@ -87,7 +104,22 @@ class SideMenu extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  const { auth } = state;
+
+  return {
+    ...auth,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  logout: () => dispatch(logout()),
+});
+
 SideMenu = withRouter(SideMenu);
-SideMenu = connect()(SideMenu);
+SideMenu = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SideMenu);
 
 export default SideMenu;
