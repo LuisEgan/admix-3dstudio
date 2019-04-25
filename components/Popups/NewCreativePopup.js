@@ -48,8 +48,7 @@ export default ({ show, togglePopup, group, campaign, selectCreative }) => {
   };
 
   const handleCompleted = ({ createCreative }) => {
-    const { id } = createCreative;
-    selectCreative(id);
+    selectCreative(createCreative);
     Router.push('/creatives');
   };
 

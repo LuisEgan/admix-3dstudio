@@ -299,7 +299,6 @@ class THREEScene extends React.Component {
     return (
       <div id={id}>
         <div
-          style={{ width: '65vh', height: '65vh', margin: 'auto' }}
           ref={mount => {
             this.mount = mount;
           }}

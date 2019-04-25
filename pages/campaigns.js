@@ -33,9 +33,9 @@ let Campaigns = props => {
     initialState,
   );
 
-  const selectCampaign = ({ id, redirectTo }) => {
+  const selectCampaign = ({ campaign, redirectTo }) => {
     const { selectCampaign } = props;
-    selectCampaign(id);
+    selectCampaign(campaign);
     Router.push(redirectTo);
   };
 
@@ -64,14 +64,14 @@ let Campaigns = props => {
 
             <div>
               <div className="campaign-buttons">
-                <button onClick={() => selectCampaign({ id, redirectTo: '/groups' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/groups' })}>
                   {<SetupSVG />}
                 </button>
-                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
                   {<InfoSVG />}
                 </button>
 
-                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
                   {<ReportSVG />}
                 </button>
               </div>
@@ -124,14 +124,13 @@ const mapStateToProps = state => {
   return { userId };
 };
 const mapDispatchToProps = dispatch => ({
-  selectCampaign: campaignId => {
-    dispatch(setSelected({ selectItem: 'campaign', value: campaignId }));
+  selectCampaign: campaign => {
+    dispatch(setSelected({ selectItem: 'campaign', value: campaign }));
   },
 });
 
 const gqlOpts = {
   options: props => {
-    console.log('props: ', props);
     const { userId: user } = props;
     return {
       variables: { user },

@@ -9,6 +9,7 @@ const fbx = '/static/models/fbx/SambaDancing.fbx';
 
 let Creatives = props => {
   const { creative } = props;
+  console.log('creative: ', creative);
 
   const setBreadcrumbs = () => {
     return [
@@ -17,12 +18,12 @@ let Creatives = props => {
         route: '/campaigns',
       },
       {
-        title: 'NatGeo Mars Season 2',
+        title: creative.group.name,
         route: '/groups',
       },
       {
-        title: 'Edit',
-        route: '/groups',
+        title: creative.name,
+        route: '/creatives',
       },
     ];
   };
@@ -32,11 +33,17 @@ let Creatives = props => {
       <div className="step-container" id="creatives">
         <div id="apps-header" className="step-title">
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
-          <h3 className="st sc-h3">Groups</h3>
+          <div id="creatives-title">
+            <h3 className="st sc-h3">{creative.name}</h3>
+            <div>
+              <div>Edit</div>
+              <div>Download</div>
+            </div>
+          </div>
         </div>
 
         <div id="creatives-content">
-          <CreativeMaker creative={creative} />
+          <CreativeMaker creative={creative.id} />
         </div>
       </div>
     </App>
@@ -52,16 +59,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({});
 
-const gqlOpts = {
-  options: props => {
-    const { campaign } = props;
-    return {
-      variables: { campaign },
-    };
-  },
-};
-
-// Creatives = graphql(groupsByCampaign, gqlOpts)(Groups);
 Creatives = connect(
   mapStateToProps,
   mapDispatchToProps,

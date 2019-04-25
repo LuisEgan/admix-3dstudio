@@ -22,7 +22,7 @@ const NextPanelPrompt = ({ setPanel, setActionPanel, actionFile, skipped }) => {
           <h3>{mainLabel()}</h3>
         </div>
         <div>
-          <input type="checkbox" checked={!!actionFile} readOnly />
+          <input type="checkbox" checked={!!actionFile && !skipped} readOnly />
           <span>{checkLabel()}</span>
           <span onClick={() => setActionPanel(0)} className="creative-checks-edit">
             edit

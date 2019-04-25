@@ -107,11 +107,7 @@ let Groups = props => {
         route: '/campaigns',
       },
       {
-        title: 'NatGeo Mars Season 2',
-        route: '/groups',
-      },
-      {
-        title: 'Edit',
+        title: campaign.name,
         route: '/groups',
       },
     ];
@@ -127,7 +123,7 @@ let Groups = props => {
       <NewGroupPopup
         show={state.showNewGroup}
         togglePopup={() => togglePopup('showNewGroup')}
-        campaign={campaign}
+        campaign={campaign.id}
       />
       <EditCreativePopup
         show={state.showEditCreative}
@@ -138,14 +134,14 @@ let Groups = props => {
         show={state.showNewCreative}
         togglePopup={() => togglePopup('showNewCreative')}
         group={state.clickedGroup}
-        campaign={campaign}
+        campaign={campaign.id}
         selectCreative={selectCreative}
       />
 
       <div className="step-container" id="groups">
         <div id="apps-header" className="step-title">
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
-          <h3 className="st sc-h3">Groups</h3>
+          <h3 className="st sc-h3">{campaign.name}</h3>
         </div>
 
         <div id="groups-content">
@@ -170,14 +166,16 @@ const mapDispatchToProps = dispatch => ({
   selectGroup: groupId => {
     dispatch(setSelected({ selectItem: 'group', value: groupId }));
   },
-  selectCreative: creativeId => {
-    dispatch(setSelected({ selectItem: 'creative', value: creativeId }));
+  selectCreative: creative => {
+    dispatch(setSelected({ selectItem: 'creative', value: creative }));
   },
 });
 
 const gqlOpts = {
   options: props => {
-    const { campaign } = props;
+    const {
+      campaign: { id: campaign },
+    } = props;
     return {
       variables: { campaign },
     };

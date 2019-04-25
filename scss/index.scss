@@ -1886,16 +1886,44 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
+  #apps-header {
+    div {
+      display: flex;
+    }
+    #creatives-title {
+      > div {
+        margin-left: 12%;
+        > div {
+          @extend .cc;
+          width: 7vw;
+          box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+          border: solid #f2f2f2;
+        }
+      }
+    }
+  }
   #creative-maker {
     > div {
       border: solid #f2f2f2;
       box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
     }
 
+    #creative-webgl {
+      width: 70%;
+      #creative-3d {
+        > div {
+          width: 65vh;
+          height: 65vh;
+          margin: auto;
+        }
+      }
+    }
+
     #creative-panels {
       display: flex;
       flex-flow: column;
       border-left: none;
+      width: 30%;
 
       #creative-panels-toggle {
         display: flex;
@@ -1928,37 +1956,36 @@ $inputsFontSize: calc(0.45em+0.3vw);
       #creative-panels-content {
         height: 90%;
 
-              .creative-panel {
-                height: 100%;
-                > div {
-                  display: flex;
-                  flex-flow: column;
-                  align-items: center;
-                  justify-content: space-evenly;
-                  height: 100%;
-        
-                  > div,
-                  button {
-                    padding: 15px;
-                  }
-                }
-              }
-        
-              .creative-checks {
-                width: 70%;
-        
-                > div {
-                  margin-bottom: 15px;
-                }
-        
-                .creative-checks-edit {
-                  float: right;
-                  &:hover {
-                    cursor: pointer;
-                  }
-                }
-              }
+        .creative-panel {
+          height: 100%;
+          > div {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-evenly;
+            height: 100%;
 
+            > div,
+            button {
+              padding: 15px;
+            }
+          }
+        }
+
+        .creative-checks {
+          width: 70%;
+
+          > div {
+            margin-bottom: 15px;
+          }
+
+          .creative-checks-edit {
+            float: right;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
       }
     }
   }

@@ -22,7 +22,7 @@ const NextPanelPrompt = ({ setPanel, setGazePanel, gazeFile, skipped }) => {
           <h3>{mainLabel()}</h3>
         </div>
         <div>
-          <input type="checkbox" checked={!!gazeFile} readOnly />
+          <input type="checkbox" checked={!!gazeFile && !skipped} readOnly />
           <span>{checkLabel()}</span>
           <span onClick={() => setGazePanel(0)} className="creative-checks-edit">
             edit
