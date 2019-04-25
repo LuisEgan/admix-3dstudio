@@ -165,45 +165,61 @@ module.exports = {
     },
   },
   uploadModel: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Model` in the creative. Resolve `AWS ID` for replace/delete `Model`, if it will be needed.',
+      'This mutation helps you to upload new `Model` in the creative. Resolve `CreativesType` all info of `Model`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
+      size: { type: GraphQLString },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative, size }) => {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
-      const pathFile = await storeS3({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await storeS3({ stream, filename });
+      return CreativesModel.findOneAndUpdate(
+        { id: creative },
+        { uploads: { model: { tag: ETag, url: Location, key: Key, size } } },
+        { new: true },
+      );
     },
   },
   uploadGaze: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Gaze` in the creative. Resolve `AWS ID` for replace/delete `Gaze`, if it will be needed.',
+      'This mutation helps you to upload new `Gaze` in the creative. Resolve `CreativesType` all info of `Gaze`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeS3({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await storeS3({ stream, filename });
+      return CreativesModel.findOneAndUpdate(
+        { id: creative },
+        { uploads: { gaze: { tag: ETag, url: Location, key: Key } } },
+        { new: true },
+      );
     },
   },
   uploadAction: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Action` in the creative. Resolve `AWS ID` for replace/delete `Action`, if it will be needed.',
+      'This mutation helps you to upload new `Action` in the creative. Resolve `CreativesType` all info of `Action`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeS3({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await storeS3({ stream, filename });
+      return CreativesModel.findOneAndUpdate(
+        { id: creative },
+        { uploads: { action: { tag: ETag, url: Location, key: Key } } },
+        { new: true },
+      );
     },
   },
 };
