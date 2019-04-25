@@ -13,7 +13,7 @@ import SetupSVG from '../assets/svg/setup.svg';
 import InfoSVG from '../assets/svg/info.svg';
 import ReportSVG from '../assets/svg/report.svg';
 
-const { campaigns: campaignsQuery } = queries;
+const { campaignsByUser } = queries;
 const { setSelected } = actions;
 
 const initialState = {
@@ -24,7 +24,7 @@ const initialState = {
 
 let Campaigns = props => {
   const {
-    data: { campaigns },
+    data: { campaignsByUser: campaigns },
     userId,
   } = props;
 
@@ -129,10 +129,20 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
+const gqlOpts = {
+  options: props => {
+    console.log('props: ', props);
+    const { userId: user } = props;
+    return {
+      variables: { user },
+    };
+  },
+};
+
+Campaigns = graphql(campaignsByUser, gqlOpts)(Campaigns);
 Campaigns = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Campaigns);
-Campaigns = graphql(campaignsQuery)(Campaigns);
 
 export default Campaigns;

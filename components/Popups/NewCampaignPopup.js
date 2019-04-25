@@ -7,7 +7,7 @@ import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
 const { createCampaign } = mutations;
-const { campaigns } = queries;
+const { campaignsByUser } = queries;
 
 const initialValues = { name: '', advertiser: '', description: '' };
 
@@ -29,8 +29,9 @@ export default ({ show, togglePopup, userId }) => {
         user: userId,
         ...values,
       },
-      refetchQueries: [{ query: campaigns }],
+      refetchQueries: [{ query: campaignsByUser, variables: { user: userId } }],
     });
+    togglePopup();
   };
 
   return (
