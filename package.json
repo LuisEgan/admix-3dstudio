@@ -50,6 +50,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.2.0",
+    "request": "^2.88.0",
     "three": "^0.103.0",
     "three-fbx-loader": "^1.0.3",
     "three-fbxloader-offical": "^1.0.0",
