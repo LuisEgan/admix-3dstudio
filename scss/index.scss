@@ -1886,57 +1886,79 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
-  #creative-panels {
-    display: flex;
-    flex-flow: column;
+  #creative-maker {
+    > div {
+      border: solid #f2f2f2;
+      box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+    }
 
-    #creative-panels-toggle {
+    #creative-panels {
       display: flex;
+      flex-flow: column;
+      border-left: none;
 
-      > div {
-        width: 33.33%;
-        text-align: center;
-        padding: 10px 0;
-        margin: 5px 0;
-
-        &:hover {
-          cursor: pointer;
-        }
-      }
-
-      .creative-panel-active {
-        background: $blueAdmix;
-        color: white;
-      }
-    }
-
-    .creative-panel {
-      > div {
+      #creative-panels-toggle {
         display: flex;
-        flex-flow: column;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 40vh;
+        height: 10%;
 
-        > div,
-        button {
-          padding: 15px;
+        > div {
+          @extend .cc;
+          width: 33.33%;
+          padding: 10px 0;
+          border-bottom: solid;
+          border-color: #f2f2f2;
+          // margin: 5px 0;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          &:not(:last-child) {
+            border-right: solid;
+            border-right-color: #f2f2f2;
+          }
+        }
+
+        .creative-panel-active {
+          background: $blueAdmix;
+          color: white;
         }
       }
-    }
 
-    .creative-checks {
-      width: 70%;
+      #creative-panels-content {
+        height: 90%;
 
-      > div {
-        margin-bottom: 15px;
-      }
+              .creative-panel {
+                height: 100%;
+                > div {
+                  display: flex;
+                  flex-flow: column;
+                  align-items: center;
+                  justify-content: space-evenly;
+                  height: 100%;
+        
+                  > div,
+                  button {
+                    padding: 15px;
+                  }
+                }
+              }
+        
+              .creative-checks {
+                width: 70%;
+        
+                > div {
+                  margin-bottom: 15px;
+                }
+        
+                .creative-checks-edit {
+                  float: right;
+                  &:hover {
+                    cursor: pointer;
+                  }
+                }
+              }
 
-      .creative-checks-edit {
-        float: right;
-        &:hover {
-          cursor: pointer;
-        }
       }
     }
   }
@@ -1955,14 +1977,14 @@ $inputsFontSize: calc(0.45em+0.3vw);
 $ballSize: 20px;
 
 .white-btn {
+  @extend .mb;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 0;
   background-color: #ffffff;
   border-radius: 50px;
-  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.10000000149011612),
-    0 0 1px 0 rgba(10, 31, 68, 0.07999999821186066);
+  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
   width: 180px;
   height: 48px;
   color: #0a1f44;

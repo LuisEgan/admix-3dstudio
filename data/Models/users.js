@@ -52,6 +52,7 @@ const userSchema = new Schema(
       required: true,
       validate: validator.password,
     },
+    deleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

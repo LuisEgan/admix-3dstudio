@@ -9,7 +9,6 @@ const fbx = '/static/models/fbx/SambaDancing.fbx';
 
 let Creatives = props => {
   const { creative } = props;
-  console.log('creative: ', creative);
 
   const setBreadcrumbs = () => {
     return [
@@ -37,7 +36,7 @@ let Creatives = props => {
         </div>
 
         <div id="creatives-content">
-          <CreativeMaker />
+          <CreativeMaker creative={creative} />
         </div>
       </div>
     </App>

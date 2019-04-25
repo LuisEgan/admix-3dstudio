@@ -33,17 +33,12 @@ export default {
     }
   `,
   editCreative: gql`
-    mutation EditCreative(
-      $user: ID!
-      $creative: ID!
-      $name: String
-      $state: String
-      $size: String
-    ) {
-      editCreative(user: $user, creative: $creative, name: $name, state: $state, size: $size) {
+    mutation EditCreative($creative: ID!, $name: String, $state: String, $size: String) {
+      editCreative(creative: $creative, name: $name, state: $state, size: $size) {
         id
         name
-        groups {
+        size
+        group {
           id
           name
         }
@@ -77,6 +72,11 @@ export default {
   deleteCreative: gql`
     mutation DeleteCreative($user: ID!, $creative: ID!) {
       deleteCreative(creative: $creative, user: $user)
+    }
+  `,
+  uploadModel: gql`
+    mutation UploadMode($model: Upload) {
+      uploadModel(model: $model)
     }
   `,
 };

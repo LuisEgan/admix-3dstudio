@@ -1,27 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Mutation, withApollo } from 'react-apollo';
 
-import mutations from '../../../mutations';
+import SetObjectPanel from './SetObjectPanel';
 
-const { editCreative } = mutations;
-
-const SetObjectPanel = ({ setModelPanel, handleFile }) => {
-  return (
-    <div>
-      <div>
-        <label htmlFor="3dfile" className="file-label blue-btn">
-          Select 3D model
-        </label>
-        <input id="3dfile" type="file" style={{ display: 'none' }} onChange={handleFile} />
-      </div>
-      <button className="blue-btn" onClick={() => setModelPanel(1)}>
-        Confirm model
-      </button>
-    </div>
-  );
-};
-
-const SetSizePanel = ({ setPanel, setModelPanel, reScale, objHeight, saveModel }) => {
+const SetSizePanel = ({ setPanel, setModelPanel, reScale, size, saveModel }) => {
   const [sizeSet, setSizeSet] = useState(false);
 
   const handleSave = () => {
@@ -40,7 +21,7 @@ const SetSizePanel = ({ setPanel, setModelPanel, reScale, objHeight, saveModel }
           </span>
         </div>
         <div>
-          <input type="checkbox" checked={sizeSet} />
+          <input type="checkbox" checked={sizeSet} readOnly />
           <span>Set size</span>
           <span onClick={() => setSizeSet(false)} className="creative-checks-edit">
             edit
@@ -50,11 +31,11 @@ const SetSizePanel = ({ setPanel, setModelPanel, reScale, objHeight, saveModel }
       {!sizeSet && (
         <React.Fragment>
           <div style={{ display: 'flex', flexFlow: 'column' }}>
-            <input type="range" min={1} max={300} onChange={reScale} value={objHeight} />
-            <input value={`${objHeight} cm`} readOnly={true} />
+            <input type="range" min={1} max={300} onChange={reScale} value={size} />
+            <input value={`${size} cm`} readOnly />
           </div>
           <div>
-            <button type="button" onClick={handleSave}>
+            <button type="button" className="blue-btn" onClick={handleSave}>
               Save size
             </button>
           </div>
@@ -65,7 +46,7 @@ const SetSizePanel = ({ setPanel, setModelPanel, reScale, objHeight, saveModel }
         <React.Fragment>
           <div>Your base model is ready to go. Now, set animated states.</div>
           <div>
-            <button type="button" onClick={() => setPanel(1)}>
+            <button type="button" className="blue-btn" onClick={() => setPanel(1)}>
               Next
             </button>
           </div>
@@ -75,42 +56,67 @@ const SetSizePanel = ({ setPanel, setModelPanel, reScale, objHeight, saveModel }
   );
 };
 
-const ModelPanels = [props => <SetObjectPanel {...props} />, props => <SetSizePanel {...props} />];
+const ModelPanels = [
+  props => <SetObjectPanel {...props} label={'Select 3D model'} />,
+  props => <SetSizePanel {...props} />,
+];
 
 const Model = props => {
-  const { setPanel, handleFile } = props;
+  const { creative, setPanel, loadFile, uploadModel, editCreative } = props;
 
+  const [modelFile, setModelFile] = useState(null);
   const [modelPanel, setModelPanel] = useState(0);
-  const [objHeight, setObjHeight] = useState(1);
+  const [size, setSize] = useState(1);
 
   const reScale = e => {
     const {
       target: { value },
     } = e;
-    setObjHeight(Math.round(value));
+    setSize(Math.round(value));
   };
 
-  const saveModel = mutation => () => {
-    console.log('saved!');
+  const handleFile = event => {
+    event.preventDefault();
+
+    const file = event.target.files[0];
+    if (file) {
+      setModelFile(file);
+    }
+    loadFile(event);
+  };
+
+  const saveModel = () => {
+    editCreative({
+      variables: {
+        creative,
+        size: `${size}`,
+      },
+    });
     // setPanel(1);
   };
 
+  const onConfirm = () => {
+    uploadModel({
+      variables: {
+        model: modelFile,
+      },
+    });
+    setModelPanel(1);
+  };
+
   return (
-    <Mutation mutation={editCreative}>
-      {(mutation, { error }) => (
-        <div className="creative-panel">
-          {ModelPanels[modelPanel]({
-            setModelPanel,
-            reScale,
-            handleFile,
-            setPanel,
-            objHeight,
-            saveModel: saveModel(mutation),
-          })}
-        </div>
-      )}
-    </Mutation>
+    <div className="creative-panel">
+      {ModelPanels[modelPanel]({
+        setModelPanel,
+        reScale,
+        handleFile,
+        setPanel,
+        size,
+        onConfirm,
+        saveModel,
+      })}
+    </div>
   );
 };
 
-export default withApollo(Model);
+export default Model;

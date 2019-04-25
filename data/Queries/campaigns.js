@@ -35,14 +35,28 @@ const ZIPFiles = () => {
 module.exports = {
   campaignById: {
     type: CampaignsType,
+    description: 'Get Campaign by provided ID. Required ID argument.',
     args: {
       campaign: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign),
+    resolve: async (_, { campaign }) => await CampaignsModel.findById(campaign, { deleted: 0 }),
+  },
+  campaignsByUser: {
+    type: new GraphQLList(CampaignsType),
+    description: 'Get Campaign by provided UserID. Required UserID argument.',
+    args: {
+      user: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    resolve: async (_, { user }) => await CampaignsModel.find({ user }, { deleted: 0 }),
   },
   // @TODO Need to more functionality
   campaignXML: {
     type: GraphQLString,
+    description:
+      'Get ZIP archive by provided campaign ID. Required ID argument. Response url to download archive.',
+    args: {
+      campaign: { type: new GraphQLNonNull(GraphQLID) },
+    },
     resolve: async () => {
       const firstJSON = await readFile('test.json');
       const secondJSON = await readFile('test2.json');
@@ -54,7 +68,9 @@ module.exports = {
     },
   },
   campaigns: {
+    description:
+      'Get all campaigns of the application. No arguments required. Return array of campaigns.',
     type: new GraphQLList(CampaignsType),
-    resolve: async () => await CampaignsModel.find({}),
+    resolve: async () => await CampaignsModel.find({ deleted: false }, { deleted: 0 }),
   },
 };

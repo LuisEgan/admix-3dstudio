@@ -14,6 +14,7 @@ const creativesSchema = new Schema(
     sourceURL: String,
     thumbURL: String,
     format: String,
+    deleted: { type: Boolean, default: false },
     state: {
       type: String,
       default: 'inactive',

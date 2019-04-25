@@ -6,14 +6,17 @@ const CampaignModel = require('../Models/campaigns');
 module.exports = {
   groupById: {
     type: GroupsType,
+    description: 'Get Groups by provided ID. Required ID argument.',
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async (_, { group }) => await GroupsModel.findById(group),
+    resolve: async (_, { group }) => await GroupsModel.findById(group, { deleted: 0 }),
   },
   groups: {
     type: new GraphQLList(GroupsType),
-    resolve: async () => await GroupsModel.find({}),
+    description:
+      'Get all groups of the application. No arguments required. Return array of groups.',
+    resolve: async () => await GroupsModel.find({ deleted: false }, { deleted: 0 }),
   },
   groupsByCampaign: {
     type: new GraphQLList(GroupsType),
