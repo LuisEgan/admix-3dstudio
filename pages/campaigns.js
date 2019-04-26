@@ -24,7 +24,7 @@ const initialState = {
 
 let Campaigns = props => {
   const {
-    data: { campaignsByUser: campaigns },
+    data: { loading, campaignsByUser: campaigns },
     userId,
   } = props;
 
@@ -46,6 +46,7 @@ let Campaigns = props => {
   };
 
   const renderCampaigns = () => {
+    if (loading) return <div>Loading...</div>;
     return (campaigns || []).map(campaign => {
       const { name, id } = campaign;
 

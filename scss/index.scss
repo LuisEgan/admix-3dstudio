@@ -1043,7 +1043,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
   margin-bottom: 20px;
 
   > div {
+    a {
+      padding: 5px 0;
+    }
+
     &:nth-child(2n) {
+      @extend .cc;
       transform: rotate(-90deg);
       padding: 0 10px;
     }
@@ -1886,6 +1891,33 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
+  .creative-panels-toggle {
+    display: flex;
+    height: 10%;
+
+    > div {
+      @extend .cc;
+      width: 33.33%;
+      padding: 10px 0;
+      border-bottom: solid;
+      border-color: #f2f2f2;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &:not(:last-child) {
+        border-right: solid;
+        border-right-color: #f2f2f2;
+      }
+    }
+
+    .creative-panel-active {
+      background: $blueAdmix;
+      color: white;
+    }
+  }
+
   #apps-header {
     div {
       display: flex;
@@ -1894,14 +1926,13 @@ $inputsFontSize: calc(0.45em+0.3vw);
       > div {
         margin-left: 12%;
         > div {
-          @extend .cc;
           width: 7vw;
           box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
-          border: solid #f2f2f2;
         }
       }
     }
   }
+
   #creative-maker {
     > div {
       border: solid #f2f2f2;
@@ -1910,12 +1941,18 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
     #creative-webgl {
       width: 70%;
+      position: relative;
       #creative-3d {
         > div {
           width: 65vh;
           height: 65vh;
           margin: auto;
         }
+      }
+      #creative-size {
+        position: absolute;
+        bottom: 20px;
+        right: 10vw;
       }
     }
 
@@ -1924,34 +1961,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
       flex-flow: column;
       border-left: none;
       width: 30%;
-
-      #creative-panels-toggle {
-        display: flex;
-        height: 10%;
-
-        > div {
-          @extend .cc;
-          width: 33.33%;
-          padding: 10px 0;
-          border-bottom: solid;
-          border-color: #f2f2f2;
-          // margin: 5px 0;
-
-          &:hover {
-            cursor: pointer;
-          }
-
-          &:not(:last-child) {
-            border-right: solid;
-            border-right-color: #f2f2f2;
-          }
-        }
-
-        .creative-panel-active {
-          background: $blueAdmix;
-          color: white;
-        }
-      }
 
       #creative-panels-content {
         height: 90%;
@@ -2055,6 +2064,7 @@ $ballSize: 20px;
 }
 
 .disabled-btn {
+  color: #d9d9d9;
   &:hover {
     cursor: not-allowed !important;
   }

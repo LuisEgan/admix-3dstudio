@@ -62,11 +62,10 @@ const ModelPanels = [
 ];
 
 const Model = props => {
-  const { creative, setPanel, loadFile, uploadModel, editCreative } = props;
+  const { creative, setPanel, loadFile, uploadModel, editCreative, size, setSize } = props;
 
   const [modelFile, setModelFile] = useState(null);
   const [modelPanel, setModelPanel] = useState(0);
-  const [size, setSize] = useState(1);
 
   const reScale = e => {
     const {

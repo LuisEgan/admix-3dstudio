@@ -36,7 +36,7 @@ const initialState = {
 
 let Groups = props => {
   const {
-    data: { groupsByCampaign: groups },
+    data: { loading, groupsByCampaign: groups },
     campaign,
     selectCreative,
   } = props;
@@ -145,6 +145,7 @@ let Groups = props => {
         </div>
 
         <div id="groups-content">
+          {loading && <div>Loading...</div>}
           {groups && groups.map(group => renderGroup(group))}
           <button className="blue-btn mb" onClick={() => togglePopup('showNewGroup')}>
             <PlusSVG /> &nbsp; New group

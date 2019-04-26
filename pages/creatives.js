@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import App from '../components/App';
@@ -9,7 +9,15 @@ const fbx = '/static/models/fbx/SambaDancing.fbx';
 
 let Creatives = props => {
   const { creative } = props;
-  console.log('creative: ', creative);
+
+  const [panel, setPanel] = useState(0);
+  const [reachedDownload, setReachedDownload] = useState(false);
+
+  useEffect(() => {
+    if (!reachedDownload && panel === 3) {
+      setReachedDownload(true);
+    }
+  });
 
   const setBreadcrumbs = () => {
     return [
@@ -35,15 +43,24 @@ let Creatives = props => {
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
           <div id="creatives-title">
             <h3 className="st sc-h3">{creative.name}</h3>
-            <div>
-              <div>Edit</div>
-              <div>Download</div>
+            <div className="creative-panels-toggle">
+              <div className={panel < 3 ? 'creative-panel-active' : ''} onClick={() => setPanel(0)}>
+                Edit
+              </div>
+              <div
+                className={
+                  panel === 3 ? 'creative-panel-active' : reachedDownload ? '' : 'disabled-btn'
+                }
+                onClick={() => (reachedDownload ? setPanel(3) : null)}
+              >
+                Download
+              </div>
             </div>
           </div>
         </div>
 
         <div id="creatives-content">
-          <CreativeMaker creative={creative.id} />
+          <CreativeMaker creative={creative} panel={panel} setPanel={setPanel} />
         </div>
       </div>
     </App>

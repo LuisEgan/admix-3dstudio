@@ -1,9 +1,7 @@
 import React from 'react';
 
 const DownloadXML = props => {
-  const handleDownload = () => {
-    console.log(':p');
-  };
+  const handleDownload = () => {};
 
   return (
     <div className="creative-panel">
@@ -26,9 +24,9 @@ const DownloadXML = props => {
           </div>
         </div>
         <div>
-          <button className="blue-btn" onClick={handleDownload}>
+          <a className="blue-btn" href="/static/xml/3D_Ad.zip">
             Download XML
-          </button>
+          </a>
         </div>
       </div>
     </div>

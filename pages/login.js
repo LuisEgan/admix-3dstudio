@@ -64,7 +64,7 @@ let Login = props => {
           onError={e => console.log(e)}
         >
           <TextInput name="email" label="Email" />
-          <TextInput name="password" label="Password" />
+          <TextInput name="password" label="Password" type="password" />
           <button type="submit" className="btn gradient-btn">
             Submit
           </button>

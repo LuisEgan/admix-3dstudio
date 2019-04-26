@@ -20,10 +20,18 @@ const Panels = [
 
 const { editCreative, uploadModel } = mutations;
 
-const CreativeMaker = ({ creative }) => {
-  const [panel, setPanel] = useState(0);
+const CreativeMaker = ({ creative, panel, setPanel }) => {
+  let initialSize = 125;
+
+  if (creative.size === 'small') {
+    initialSize = 25;
+  } else if (creative.size === 'medium') {
+    initialSize = 75;
+  }
+
   const [source, setSource] = useState(null);
   const [fileType, setFileType] = useState(null);
+  const [size, setSize] = useState(initialSize);
 
   const loadFile = event => {
     event.preventDefault();
@@ -36,6 +44,17 @@ const CreativeMaker = ({ creative }) => {
       const userImageURL = URL.createObjectURL(file);
       setSource(userImageURL);
     }
+  };
+
+  const renderSize = () => {
+    let sizeText = 'large';
+    if (size < 50) {
+      sizeText = 'small';
+    } else if (size < 100) {
+      sizeText = 'medium';
+    }
+
+    return `Scale size: ${sizeText}`;
   };
 
   const renderPanelToggles = () => {
@@ -65,18 +84,23 @@ const CreativeMaker = ({ creative }) => {
             <div id="creative-maker">
               <div id="creative-webgl">
                 <THREEScene id="creative-3d" source={source} fileType={fileType} panel={panel} />
+                <div id="creative-size" className="sst">
+                  {renderSize()}
+                </div>
               </div>
 
               <div id="creative-panels">
-                <div id="creative-panels-toggle">{renderPanelToggles()}</div>
+                <div className="creative-panels-toggle">{renderPanelToggles()}</div>
 
                 <div id="creative-panels-content">
                   {Panels[panel]({
-                    creative,
+                    creative: creative.id,
                     setPanel,
                     loadFile,
                     uploadModel,
                     editCreative,
+                    size,
+                    setSize,
                   })}
                 </div>
               </div>
