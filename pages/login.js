@@ -1,18 +1,17 @@
-import React, { Component } from "react";
-import Router from "next/router";
-import { connect } from "react-redux";
-import { Formik, Form } from "formik";
-import isEmail from "validator/lib/isEmail";
-import actions from "../lib/actions";
+import React, { Component } from 'react';
+import Router from 'next/router';
+import { connect } from 'react-redux';
+import { Formik, Form } from 'formik';
+import isEmail from 'validator/lib/isEmail';
+import actions from '../lib/actions';
 
-import App from "../components/App";
-import BigImagePanel from "../components/BigImagePanel";
-import TextInput from "../components/inputs/TextInput";
+import App from '../components/App';
+import BigImagePanel from '../components/BigImagePanel';
+import TextInput from '../components/inputs/TextInput';
 
 const { login } = actions;
 
 let Login = ({ login, isLoggedIn }) => {
-
   const renderFooter = () => {
     return (
       <div>
@@ -26,11 +25,11 @@ let Login = ({ login, isLoggedIn }) => {
     const { email, password } = values;
 
     if (!email || !isEmail(email)) {
-      errors.email = "Invalid email";
+      errors.email = 'Invalid email';
     }
 
     if (!password) {
-      errors.password = "Please enter a password";
+      errors.password = 'Please enter a password';
     }
 
     return errors;
@@ -41,29 +40,20 @@ let Login = ({ login, isLoggedIn }) => {
     login(email, password);
   };
 
-
   if (isLoggedIn) {
-    Router.push("/campaigns");
+    Router.push('/campaigns');
     return null;
   }
 
   return (
     <App>
       <BigImagePanel title="Login" footer={renderFooter()}>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validate={validate}
-          onSubmit={onSubmit}
-        >
+        <Formik initialValues={{ email: '', password: '' }} validate={validate} onSubmit={onSubmit}>
           {formProps => (
             <Form>
               <TextInput name="email" label="Email" {...formProps} />
               <TextInput name="password" label="Password" {...formProps} />
-              <button
-                type="submit"
-                className="btn gradient-btn"
-                disabled={formProps.isSubmitting}
-              >
+              <button type="submit" className="btn gradient-btn" disabled={formProps.isSubmitting}>
                 Submit
               </button>
             </Form>
