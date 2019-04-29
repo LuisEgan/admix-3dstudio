@@ -7,31 +7,36 @@ const request = require('request');
 
 const sendToUnityServer = body =>
   new Promise((resolve, reject) => {
-    return request.post({ url: '54.161.80.239:5050', form: body }, function(error, response, body) {
-      console.log('error:', error);
-      console.log('statusCode:', response && response.statusCode);
-      console.log('body:', body);
-      if (error) reject(err);
-      return resolve(response);
-    });
+    return request.post(
+      { url: 'http://54.161.80.239:5050/', form: body },
+      (error, response, body) => {
+        if (error) return reject(error);
+        return resolve(body);
+      },
+    );
   });
 
 const { CreativesType } = require('../Types');
 const CreativesModel = require('../Models/creatives');
 
 const zip = new JSZip();
-const options = { compact: true, ignoreComment: true, spaces: 4 };
 
-const readFile = name =>
+const createXMLFiles = serverData =>
   new Promise((resolve, reject) => {
-    fs.readFile(path.join(__dirname, name), 'utf8', (err, data) => {
+    const options = { compact: true, ignoreComment: true, spaces: 4 };
+    fs.readFile(path.join(__dirname, 'behavior.xml'), 'utf8', (err, xml) => {
       if (err) reject(err);
-      resolve(data);
+      const convertedXMLTemplate = convert.xml2js(xml, options);
+      for (item in serverData) {
+        convertedXMLTemplate.XRAID.Unit.BundleUrl = serverData[item].url;
+        zip.file(`${item}.xml`, convert.js2xml(convertedXMLTemplate, options));
+      }
+      resolve(true);
     });
   });
 
 const ZIPFiles = () => {
-  const filePath = path.join(__dirname, '..', '..', 'uploads', 'output.zip');
+  const filePath = path.join(__dirname, '..', '..', 'uploads', 'bundle.zip');
   return new Promise((resolve, reject) => {
     zip
       .generateNodeStream({ streamFiles: true })
@@ -62,17 +67,12 @@ module.exports = {
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
-    resolve: async ({ creative }) => {
-      // @TODO Need response from Unity server
+    resolve: async (_, { creative }) => {
+      // @TODO Need to test and sync
 
-      const { uploads } = CreativesModel.findById(creative);
+      const { uploads } = await CreativesModel.findById(creative);
       const data = await sendToUnityServer(uploads);
-      // const firstJSON = await readFile('test.json');
-      // const secondJSON = await readFile('test2.json');
-
-      // zip.file("test1.xml", convert.json2xml(firstJSON, options));
-      // zip.file("test2.xml", convert.json2xml(secondJSON, options));
-
+      await createXMLFiles(data);
       return await ZIPFiles();
     },
   },
