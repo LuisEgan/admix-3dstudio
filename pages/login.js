@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Form from '../components/Form';
 import mutations from '../mutations';
 
-import isEmail from 'validator/lib/isEmail';
 import actions from '../lib/actions';
 
 import App from '../components/App';
