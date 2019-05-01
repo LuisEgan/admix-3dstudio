@@ -73,7 +73,6 @@ class THREEScene extends React.Component {
     // this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     // this.controls.target.set(0, 100, 0);
     // this.controls.update();
-    // this.scene.add(this.controls);
 
     //LIGHT
     let light = new THREE.HemisphereLight(0xffffff, 0x444444);
@@ -243,8 +242,8 @@ class THREEScene extends React.Component {
         }
       });
 
-      const box = new THREE.Box3().setFromObject(object);
-      panel === 0 && setObjSize(box.getSize());
+      // const box = new THREE.Box3().setFromObject(object);
+      // panel === 0 && setObjSize(box.getSize());
 
       this.scene.add(object);
     }.bind(this);
@@ -300,7 +299,6 @@ class THREEScene extends React.Component {
     return (
       <div id={id}>
         <div
-          style={{ width: '400px', height: '400px' }}
           ref={mount => {
             this.mount = mount;
           }}

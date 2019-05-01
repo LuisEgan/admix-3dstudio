@@ -180,6 +180,18 @@ p {
   margin-top: 0;
 }
 
+input[type='file'] {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.file-label {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 // Fonts Assignment
 .ht {
   //header text
@@ -1031,7 +1043,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
   margin-bottom: 20px;
 
   > div {
+    a {
+      padding: 5px 0;
+    }
+
     &:nth-child(2n) {
+      @extend .cc;
       transform: rotate(-90deg);
       padding: 0 10px;
     }
@@ -1874,31 +1891,111 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
-  #creative-panels {
+  .creative-panels-toggle {
     display: flex;
-    flex-flow: column;
+    height: 10%;
 
-    #creative-panels-toggle {
-      display: flex;
+    > div {
+      @extend .cc;
+      width: 33.33%;
+      padding: 10px 0;
+      border-bottom: solid;
+      border-color: #f2f2f2;
 
-      > div {
-        width: 33.33%;
-        text-align: center;
-        padding: 10px 0;
-        margin: 5px 0;
-
-        &:hover {
-          cursor: pointer;
-        }
+      &:hover {
+        cursor: pointer;
       }
 
-      .creative-panel-active {
-        background: $blueAdmix;
-        color: white;
+      &:not(:last-child) {
+        border-right: solid;
+        border-right-color: #f2f2f2;
       }
     }
 
-    #creative-panel {
+    .creative-panel-active {
+      background: $blueAdmix;
+      color: white;
+    }
+  }
+
+  #apps-header {
+    div {
+      display: flex;
+    }
+    #creatives-title {
+      > div {
+        margin-left: 12%;
+        > div {
+          width: 7vw;
+          box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+        }
+      }
+    }
+  }
+
+  #creative-maker {
+    > div {
+      border: solid #f2f2f2;
+      box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+    }
+
+    #creative-webgl {
+      width: 70%;
+      position: relative;
+      #creative-3d {
+        > div {
+          width: 65vh;
+          height: 65vh;
+          margin: auto;
+        }
+      }
+      #creative-size {
+        position: absolute;
+        bottom: 20px;
+        right: 10vw;
+      }
+    }
+
+    #creative-panels {
+      display: flex;
+      flex-flow: column;
+      border-left: none;
+      width: 30%;
+
+      #creative-panels-content {
+        height: 90%;
+
+        .creative-panel {
+          height: 100%;
+          > div {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            justify-content: space-evenly;
+            height: 100%;
+
+            > div,
+            button {
+              padding: 15px;
+            }
+          }
+        }
+
+        .creative-checks {
+          width: 70%;
+
+          > div {
+            margin-bottom: 15px;
+          }
+
+          .creative-checks-edit {
+            float: right;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -1916,14 +2013,14 @@ $inputsFontSize: calc(0.45em+0.3vw);
 $ballSize: 20px;
 
 .white-btn {
+  @extend .mb;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 0;
   background-color: #ffffff;
   border-radius: 50px;
-  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.10000000149011612),
-    0 0 1px 0 rgba(10, 31, 68, 0.07999999821186066);
+  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
   width: 180px;
   height: 48px;
   color: #0a1f44;
@@ -1967,6 +2064,7 @@ $ballSize: 20px;
 }
 
 .disabled-btn {
+  color: #d9d9d9;
   &:hover {
     cursor: not-allowed !important;
   }
