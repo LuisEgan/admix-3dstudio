@@ -24,7 +24,7 @@ module.exports = {
     },
   },
   loginUser: {
-    type: JWTType,
+    type: UsersType,
     description:
       'This mutation helps you to login existing user. You should to provide `Email` and `Password` arguments to login user. Resolve JWT token.',
     args: {
@@ -33,14 +33,15 @@ module.exports = {
     },
     resolve: async (_, { email, password }) => {
       const user = await Users.findOne({ email });
+      console.log('user: ', user);
       const samePasswords = await bcrypt.compare(password, user.password);
-      let token = null;
+      let accessToken = null;
       if (samePasswords) {
-        token = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET, {
+        accessToken = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET, {
           expiresIn: TOKEN_EXPIRE,
         });
       }
-      return { token };
+      return { accessToken, email, name: user.name, id: user.id };
     },
   },
 };

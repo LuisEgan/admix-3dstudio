@@ -1,12 +1,12 @@
-import React from "react";
-import Link from "next/link";
-import cookie from "cookie";
+import React from 'react';
+import Link from 'next/link';
+import cookie from 'cookie';
 
-import mutations from "../mutations";
+import mutations from '../mutations';
 
-import redirect from "../lib/redirect";
-import checkLoggedIn from "../lib/checkLoggedIn";
-import { Mutation, withApollo } from "react-apollo";
+import redirect from '../lib/redirect';
+import checkLoggedIn from '../lib/checkLoggedIn';
+import { Mutation, withApollo } from 'react-apollo';
 
 const { loginUser } = mutations;
 
@@ -15,7 +15,7 @@ class Signin extends React.Component {
     const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
     if (loggedInUser.user) {
-      redirect(context, "/");
+      redirect(context, '/');
     }
 
     return {};
@@ -33,11 +33,11 @@ class Signin extends React.Component {
       <Mutation
         mutation={loginUser}
         onCompleted={({ loginUser: { token } }) => {
-          document.cookie = cookie.serialize("token", token, {
+          document.cookie = cookie.serialize('token', token, {
             maxAge: 30 * 24 * 60 * 60,
           });
           client.cache.reset().then(() => {
-            redirect({}, "/");
+            redirect({}, '/');
           });
         }}
         onError={error => console.log(error)}
@@ -45,16 +45,13 @@ class Signin extends React.Component {
         {(loginUser, { error }) => {
           return (
             <React.Fragment>
-              <form
-                name="login"
-                onSubmit={e => this.handleSubmit(e, loginUser)}
-              >
+              <form name="login" onSubmit={e => this.handleSubmit(e, loginUser)}>
                 <input name="email" type="email" placeholder="Email" />
                 <input name="password" type="password" placeholder="Password" />
                 <button type="submit">Login</button>
               </form>
               <hr />
-              New?{" "}
+              New?{' '}
               <Link prefetch href="/register">
                 <a>Create account</a>
               </Link>

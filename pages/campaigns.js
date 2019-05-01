@@ -13,7 +13,7 @@ import SetupSVG from '../assets/svg/setup.svg';
 import InfoSVG from '../assets/svg/info.svg';
 import ReportSVG from '../assets/svg/report.svg';
 
-const { campaigns: campaignsQuery } = queries;
+const { campaignsByUser } = queries;
 const { setSelected } = actions;
 
 const initialState = {
@@ -24,7 +24,8 @@ const initialState = {
 
 let Campaigns = props => {
   const {
-    data: { campaigns },
+    data: { loading, campaignsByUser: campaigns },
+    userId,
   } = props;
 
   const [state, setState] = useReducer(
@@ -32,9 +33,9 @@ let Campaigns = props => {
     initialState,
   );
 
-  const selectCampaign = ({ id, redirectTo }) => {
+  const selectCampaign = ({ campaign, redirectTo }) => {
     const { selectCampaign } = props;
-    selectCampaign(id);
+    selectCampaign(campaign);
     Router.push(redirectTo);
   };
 
@@ -45,6 +46,7 @@ let Campaigns = props => {
   };
 
   const renderCampaigns = () => {
+    if (loading) return <div>Loading...</div>;
     return (campaigns || []).map(campaign => {
       const { name, id } = campaign;
 
@@ -63,14 +65,14 @@ let Campaigns = props => {
 
             <div>
               <div className="campaign-buttons">
-                <button onClick={() => selectCampaign({ id, redirectTo: '/groups' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/groups' })}>
                   {<SetupSVG />}
                 </button>
-                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
                   {<InfoSVG />}
                 </button>
 
-                <button onClick={() => selectCampaign({ id, redirectTo: '/' })}>
+                <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
                   {<ReportSVG />}
                 </button>
               </div>
@@ -89,6 +91,7 @@ let Campaigns = props => {
         <NewCampaignPopup
           show={showPopupNewCampaign}
           togglePopup={() => togglePopup('showPopupNewCampaign')}
+          userId={userId}
         />
 
         <div id="apps-header" className="step-title">
@@ -114,17 +117,32 @@ let Campaigns = props => {
   );
 };
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  const {
+    auth: { userId },
+  } = state;
+
+  return { userId };
+};
 const mapDispatchToProps = dispatch => ({
-  selectCampaign: campaignId => {
-    dispatch(setSelected({ selectItem: 'campaign', value: campaignId }));
+  selectCampaign: campaign => {
+    dispatch(setSelected({ selectItem: 'campaign', value: campaign }));
   },
 });
 
+const gqlOpts = {
+  options: props => {
+    const { userId: user } = props;
+    return {
+      variables: { user },
+    };
+  },
+};
+
+Campaigns = graphql(campaignsByUser, gqlOpts)(Campaigns);
 Campaigns = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Campaigns);
-Campaigns = graphql(campaignsQuery)(Campaigns);
 
 export default Campaigns;

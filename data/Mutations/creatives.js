@@ -45,7 +45,6 @@ const AddCreativeToGroup = async (creative, group) => {
 };
 
 const RemoveCreativeFromGroup = async (creative, groups) => {
-  group = Array.isArray(group) ? group : [group];
   return await GroupsModel.updateMany(
     {
       _id: { $in: groups },
@@ -64,7 +63,7 @@ module.exports = {
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
-      size: { type: new GraphQLNonNull(GraphQLInt) },
+      size: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
       IAB: { type: GraphQLString },
     },
