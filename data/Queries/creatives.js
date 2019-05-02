@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
 const request = require('request');
+const s3Upload = require('../Utils/aws');
 
 const sendToUnityServer = body =>
   new Promise((resolve, reject) => {
@@ -19,32 +20,39 @@ const sendToUnityServer = body =>
 const { CreativesType } = require('../Types');
 const CreativesModel = require('../Models/creatives');
 
-const zip = new JSZip();
+// const zip = new JSZip();
+const options = { compact: true, ignoreComment: true, spaces: 4 };
 
-const createXMLFiles = serverData =>
+const createXRAIDFile = awsResponse =>
   new Promise((resolve, reject) => {
-    const options = { compact: true, ignoreComment: true, spaces: 4 };
-    fs.readFile(path.join(__dirname, 'behavior.xml'), 'utf8', (err, xml) => {
-      if (err) reject(err);
-      const convertedXMLTemplate = convert.xml2js(xml, options);
-      for (item in serverData) {
-        convertedXMLTemplate.XRAID.Unit.BundleUrl = serverData[item].url;
-        zip.file(`${item}.xml`, convert.js2xml(convertedXMLTemplate, options));
-      }
-      resolve(true);
+    fs.readFile(path.join(__dirname, 'xraid.xml'), 'utf8', (err, xml) => {
+      if (err) return reject(err);
+      const convertedXMLXRAID = convert.xml2js(xml, options);
+      const { XRAIDFiles } = convertedXMLXRAID.XRAID.Ad.InLine.Creatives.Creative;
+      XRAIDFiles.XRAIDFile._attributes.id = awsResponse.ETag.split('"').join('');
+      XRAIDFiles.XRAIDFile._text = awsResponse.Location;
+      const xraidXML = convert.js2xml(convertedXMLXRAID, options);
+      resolve({
+        xml: xraidXML,
+        folder: path.parse(path.parse(awsResponse.key).dir).base,
+      });
     });
   });
 
-const ZIPFiles = () => {
-  const filePath = path.join(__dirname, '..', '..', 'uploads', 'bundle.zip');
-  return new Promise((resolve, reject) => {
-    zip
-      .generateNodeStream({ streamFiles: true })
-      .pipe(fs.createWriteStream(filePath))
-      .on('error', error => reject(error))
-      .on('finish', () => resolve(filePath));
+const createXMLFiles = serverData =>
+  new Promise((resolve, reject) => {
+    fs.readFile(path.join(__dirname, 'behavior.xml'), 'utf8', (err, xml) => {
+      if (err) reject(err);
+      const convertedXMLTemplate = convert.xml2js(xml, options);
+      convertedXMLTemplate.XRAID.Unit.BundleUrl = serverData.model_bundle.url;
+      const behaviorXML = convert.js2xml(convertedXMLTemplate, options);
+      s3Upload({ filename: 'behavior.xml', stream: behaviorXML })
+        .then(res => createXRAIDFile(res))
+        .then(res => s3Upload({ filename: 'xraid.xml', stream: res.xml, folder: res.folder }))
+        .then(res => resolve(res.Location))
+        .catch(err => reject(err));
+    });
   });
-};
 
 module.exports = {
   creativeById: {
@@ -72,8 +80,7 @@ module.exports = {
 
       const { uploads } = await CreativesModel.findById(creative);
       const data = await sendToUnityServer(uploads);
-      await createXMLFiles(data);
-      return await ZIPFiles();
+      return await createXMLFiles(data);
     },
   },
 };

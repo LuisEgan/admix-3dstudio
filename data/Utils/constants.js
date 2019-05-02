@@ -1,4 +1,4 @@
 module.exports = {
-    accessGroups: ["admin", "admin-ad-studio", "user", "guest"],
-    states: ["inactive", "active", "deleted"]
-}
+  accessGroups: ['admin', 'admin-ad-studio', 'user', 'guest'],
+  states: ['inactive', 'active', 'deleted'],
+};

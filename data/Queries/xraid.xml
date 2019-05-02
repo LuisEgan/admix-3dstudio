@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XRAID version="2.0">
+    <Ad id="12391khjhb233y1i23y19804">
+        <InLine>
+            <AdSystem>Admix SandBox</AdSystem>
+            <AdTitle>3d Object ad</AdTitle>
+            <Error><![CDATA[URL]]></Error>
+            <Impression><![CDATA[ URL]]></Impression>
+            <Creatives>
+                <Creative id="12391khjhb233y1i23y19804">
+                    <Duration>00:00:00</Duration>
+                    <TrackingEvents>
+                        <Tracking event="gaze"><![CDATA[]]></Tracking>
+                        <Tracking event="rotate"><![CDATA[]]></Tracking>
+                        <Tracking event="open"><![CDATA[]]></Tracking>
+                    </TrackingEvents>
+                    <ObjectClicks>
+                        <ClickThrough><![CDATA[]]></ClickThrough>
+                    </ObjectClicks>
+                    <XRAIDFiles>
+                        <XRAIDFile id="1" type="" width="" height="" depth=""><![CDATA[]]></XRAIDFile>
+                    </XRAIDFiles>
+                </Creative>
+            </Creatives>
+        </InLine>
+    </Ad>
+</XRAID>
