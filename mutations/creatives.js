@@ -75,8 +75,11 @@ export default {
     }
   `,
   uploadModel: gql`
-    mutation UploadMode($model: Upload) {
-      uploadModel(model: $model)
+    mutation UploadModel($creative: ID!, $size: String, $model: Upload) {
+      uploadModel(creative: $creative, size: $size, model: $model) {
+        id
+        name
+      }
     }
   `,
 };

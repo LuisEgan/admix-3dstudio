@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import STR from '../../../lib/utils/strFuncs';
+import actions from '../panelActions';
 
 import SetObjectPanel from './SetObjectPanel';
 
-const SetSizePanel = ({ setPanel, setModelPanel, reScale, size, saveModel }) => {
+const SetSizePanel = ({ dispatch, setModelPanel, reScale, size, saveModel }) => {
   const [sizeSet, setSizeSet] = useState(false);
 
   const handleSave = () => {
@@ -46,7 +48,11 @@ const SetSizePanel = ({ setPanel, setModelPanel, reScale, size, saveModel }) => 
         <React.Fragment>
           <div>Your base model is ready to go. Now, set animated states.</div>
           <div>
-            <button type="button" className="blue-btn" onClick={() => setPanel(1)}>
+            <button
+              type="button"
+              className="blue-btn"
+              onClick={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: 1 })}
+            >
               Next
             </button>
           </div>
@@ -62,10 +68,32 @@ const ModelPanels = [
 ];
 
 const Model = props => {
-  const { creative, setPanel, loadFile, uploadModel, editCreative, size, setSize } = props;
+  const {
+    uploadModel,
+    editCreative,
+    loading,
+    creative,
+    loadFile,
+    size,
+    setSize,
+    dispatch,
+    reducerState: {
+      file: { model: modelFile },
+    },
+  } = props;
 
-  const [modelFile, setModelFile] = useState(null);
-  const [modelPanel, setModelPanel] = useState(0);
+  const [modelPanel, setModelPanel] = useState(modelFile ? 1 : 0);
+
+  const onConfirm = () => {
+    uploadModel({
+      variables: {
+        creative,
+        size: STR.parseSize(size),
+        model: modelFile,
+      },
+    });
+    setModelPanel(1);
+  };
 
   const reScale = e => {
     const {
@@ -74,42 +102,23 @@ const Model = props => {
     setSize(Math.round(value));
   };
 
-  const handleFile = event => {
-    event.preventDefault();
-
-    const file = event.target.files[0];
-    if (file) {
-      setModelFile(file);
-    }
-    loadFile(event);
-  };
-
   const saveModel = () => {
     editCreative({
       variables: {
         creative,
-        size: `${size}`,
+        size: STR.parseSize(size),
       },
     });
-    // setPanel(1);
-  };
-
-  const onConfirm = () => {
-    uploadModel({
-      variables: {
-        model: modelFile,
-      },
-    });
-    setModelPanel(1);
   };
 
   return (
     <div className="creative-panel">
       {ModelPanels[modelPanel]({
+        file: modelFile,
+        loadFile,
         setModelPanel,
         reScale,
-        handleFile,
-        setPanel,
+        dispatch,
         size,
         onConfirm,
         saveModel,
