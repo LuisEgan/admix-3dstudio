@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useState, useReducer } from 'react';
 import THREEScene from '../3DScene';
-import { Mutation, withApollo } from 'react-apollo';
+import { Mutation, withApollo, Query } from 'react-apollo';
 import mutations from '../../mutations';
 
 import Model from './panels/Model';
@@ -21,7 +21,7 @@ const Panels = [
   props => <DownloadXML {...props} />,
 ];
 
-const { editCreative, uploadModel } = mutations;
+const { editCreative, uploadModel, creativeXML } = mutations;
 
 const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;

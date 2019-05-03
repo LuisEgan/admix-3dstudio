@@ -74,9 +74,26 @@ export default {
       deleteCreative(creative: $creative, user: $user)
     }
   `,
+
   uploadModel: gql`
     mutation UploadModel($creative: ID!, $size: String, $model: Upload) {
       uploadModel(creative: $creative, size: $size, model: $model) {
+        id
+        name
+      }
+    }
+  `,
+  uploadGaze: gql`
+    mutation UploadGaze($creative: ID!, $model: Upload) {
+      uploadModel(creative: $creative, model: $model) {
+        id
+        name
+      }
+    }
+  `,
+  uploadAction: gql`
+    mutation UploadAction($creative: ID!, $model: Upload) {
+      uploadModel(creative: $creative, model: $model) {
         id
         name
       }

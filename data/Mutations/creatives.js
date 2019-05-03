@@ -151,7 +151,7 @@ module.exports = {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return CreativesModel.findOneAndUpdate(
+      return await CreativesModel.findOneAndUpdate(
         { id: creative },
         { uploads: { model: { tag: ETag, url: Location, key: Key, size } } },
         { new: true },

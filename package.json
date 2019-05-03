@@ -5,7 +5,6 @@
   "version": "1.0.0",
   "scripts": {
     "front-dev": "next",
-    "predev": "rm -rf uploads && mkdir uploads",
     "dev": "node index.js",
     "build": "next build",
     "now-build": "next build",
