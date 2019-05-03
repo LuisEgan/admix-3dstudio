@@ -25,6 +25,6 @@ const nextConfig = withImages(
 );
 
 module.exports = {
-  target: 'serverless',
+  // target: 'serverless',
   ...nextConfig,
 };

@@ -17,4 +17,13 @@ export default {
       }
     }
   `,
+  campaignsByUser: gql`
+    query GetCampaignsByUser($user: ID!) {
+      campaignsByUser(user: $user) {
+        id
+        state
+        name
+      }
+    }
+  `,
 };

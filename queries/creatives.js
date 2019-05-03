@@ -17,4 +17,18 @@ export default {
       }
     }
   `,
+  createCreative: gql`
+    query CreateCreative(
+      $group: ID!
+      $name: String!
+      $size: String!
+      $description: String
+      $iab: String
+    ) {
+      createCreative(creative: $creative) {
+        id
+        name
+      }
+    }
+  `,
 };

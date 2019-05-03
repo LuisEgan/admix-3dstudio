@@ -2,10 +2,12 @@ import { gql } from 'apollo-boost';
 
 export default {
   createGroup: gql`
-    mutation CreateGroup($user: ID!, $name: String!, $campaign: ID!) {
-      createGroup(user: $user, name: $name, campaign: $campaign) {
+    mutation CreateGroup($campaign: ID!, $name: String!, $description: String) {
+      createGroup(campaign: $campaign, name: $name, description: $description) {
         id
+        state
         name
+        description
         campaign {
           id
           name

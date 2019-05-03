@@ -1,0 +1,45 @@
+<XRAID version="1.0">
+    <Unit id="39e2f4ec_2018070410400212731MtVO33JkyLPPVdbjwY">
+        <BundleUrl>https://drive.google.com/uc?export=download&amp;id=10zGheyPyQfj9xx9jbjLcfxKo5lYHvq1j</BundleUrl>
+        <RootName>DragonRed</RootName>
+        <Behaviour>
+            <Setup>
+                <Position>0,0,0</Position>
+                <Rotation>0,0,0</Rotation>
+            </Setup>
+            <States>
+                <Idle>
+                    <Enter>
+                        <AnimatorParam paramType="bool" paramName="Fly Idle">False</AnimatorParam>
+                    </Enter>
+                    <Update></Update>
+                    <LeaveConditions></LeaveConditions>
+                    <Leave></Leave>
+                </Idle>
+                <Gazed>
+                    <Enter>
+                        <AnimatorParam paramType="bool" paramName="Fly Idle">True</AnimatorParam>
+                    </Enter>
+                    <Update></Update>
+                    <LeaveConditions></LeaveConditions>
+                    <Leave></Leave>
+                </Gazed>
+                <Action>
+                    <Enter>
+                        <AnimatorParam paramType="trigger" paramName="Fly Fire Breath Attack High"></AnimatorParam>
+                    </Enter>
+                    <Update></Update>
+                    <LeaveConditions>
+                        <TimeLimit>1.5</TimeLimit>
+                    </LeaveConditions>
+                    <Leave></Leave>
+                </Action>
+            </States>
+            <AnimationEvents>
+                <Event key="keyFire">
+                    <ParticlesToggle key="FlamethrowerPointyYellow">True</ParticlesToggle>
+                </Event>
+            </AnimationEvents>
+        </Behaviour>
+    </Unit>
+</XRAID>

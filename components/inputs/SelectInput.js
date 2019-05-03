@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
+import Select from 'react-select';
 
-class Select extends React.Component {
+class AdmixSelect extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     rootstyle: PropTypes.object,
@@ -18,8 +19,10 @@ class Select extends React.Component {
       focused: false,
       displayError: false,
       touched: false,
+      selectValue: '',
     };
 
+    this.handleChange = this.handleChange.bind(this);
     this.forceFocus = this.forceFocus.bind(this);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
@@ -34,6 +37,11 @@ class Select extends React.Component {
 
     return newState;
   }
+
+  handleChange = selectValue => {
+    const { name, setFieldValue } = this.props;
+    this.setState({ selectValue }, () => setFieldValue(name, selectValue.value));
+  };
 
   onFocus() {
     const { onFocus } = this.props;
@@ -55,7 +63,7 @@ class Select extends React.Component {
 
   render() {
     const { label, icon, guideline, name, errors, options } = this.props;
-    const { focused, displayError, touched } = this.state;
+    const { focused, displayError, touched, selectValue } = this.state;
 
     if (!errors) return null;
 
@@ -82,20 +90,29 @@ class Select extends React.Component {
           <div>
             <Field
               name={name}
-              component="select"
-              innerRef={i => {
-                this.input = i;
-              }}
-            >
-              <option value="" />
-              {options.map(opt => {
-                return (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                );
-              })}
-            </Field>
+              component={() => (
+                <Select
+                  isSearchable={false}
+                  options={options}
+                  name={name}
+                  value={selectValue}
+                  onChange={this.handleChange}
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      border: '0 !important',
+                      boxShadow: '0 !important',
+                      '&:hover': {
+                        border: '0 !important',
+                      },
+                    }),
+                  }}
+                  ref={i => {
+                    this.input = i;
+                  }}
+                />
+              )}
+            />
           </div>
           {displayError && <span className="asyncError">{errors[name]}</span>}
         </div>
@@ -107,4 +124,4 @@ class Select extends React.Component {
   }
 }
 
-export default Select;
+export default AdmixSelect;

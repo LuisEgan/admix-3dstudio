@@ -3,6 +3,25 @@ const states = require('../Utils/constants').states;
 
 const Schema = mongoose.Schema;
 
+const FBXSchema = new Schema({
+  tag: { type: String },
+  url: { type: String },
+  key: { type: String },
+});
+
+const FBXSchemaModel = new Schema({
+  tag: { type: String },
+  url: { type: String },
+  key: { type: String },
+  size: { type: String },
+});
+
+const UploadsSchema = new Schema({
+  model: { type: FBXSchemaModel },
+  gaze: { type: FBXSchema },
+  action: { type: FBXSchema },
+});
+
 const creativesSchema = new Schema(
   {
     group: {
@@ -10,6 +29,7 @@ const creativesSchema = new Schema(
       ref: 'Group',
     },
     name: String,
+    description: String,
     sourceURL: String,
     thumbURL: String,
     format: String,
@@ -19,8 +39,9 @@ const creativesSchema = new Schema(
       default: 'inactive',
       enum: states,
     },
-    size: Number,
+    size: String,
     IAB: String,
+    uploads: UploadsSchema,
   },
   { timestamps: true },
 );

@@ -17,6 +17,8 @@ module.exports = new GraphQLObjectType({
     company: { type: GraphQLString },
     isVerified: { type: GraphQLBoolean },
     email: { type: new GraphQLNonNull(GraphQLString) },
+    password: { type: new GraphQLNonNull(GraphQLString) },
+    accessToken: { type: GraphQLString },
     accessGroups: { type: GraphQLString },
     campaigns: {
       type: new GraphQLList(require('./campaigns')),

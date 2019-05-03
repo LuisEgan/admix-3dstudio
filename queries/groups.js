@@ -17,4 +17,18 @@ export default {
       }
     }
   `,
+  groupsByCampaign: gql`
+    query GetGroupsByCampaign($campaign: ID!) {
+      groupsByCampaign(campaign: $campaign) {
+        id
+        state
+        name
+        description
+        creatives {
+          id
+          name
+        }
+      }
+    }
+  `,
 };
