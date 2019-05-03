@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Mutation, withApollo } from 'react-apollo';
 import actions from '../panelActions';
+import mutations from '../../../mutations';
 
 import SetObjectPanel from './SetObjectPanel';
+
+const { uploadGaze } = mutations;
 
 const NextPanelPrompt = ({ dispatch, setGazePanel, file, skipped }) => {
   const mainLabel = () => {
@@ -56,7 +60,6 @@ const GazePanels = [
 const Gaze = props => {
   const {
     loadFile,
-    uploadModel,
     loading,
     creative,
     dispatch,
@@ -68,9 +71,9 @@ const Gaze = props => {
   const [gazePanel, setGazePanel] = useState(gazeFile ? 1 : 0);
   const [skipped, setSkipped] = useState(false);
 
-  const onConfirm = () => {
+  const onConfirm = uploadGaze => () => {
     if (gazeFile) {
-      uploadModel({
+      uploadGaze({
         variables: {
           creative,
           model: gazeFile,
@@ -88,18 +91,22 @@ const Gaze = props => {
   };
 
   return (
-    <div className="creative-panel">
-      {GazePanels[gazePanel]({
-        file: gazeFile,
-        loadFile,
-        dispatch,
-        setGazePanel,
-        onConfirm,
-        onSkip,
-        skipped,
-      })}
-    </div>
+    <Mutation mutation={uploadGaze} onCompleted={() => console.log('size saved!')}>
+      {(uploadGaze, { loading }) => (
+        <div className="creative-panel">
+          {GazePanels[gazePanel]({
+            file: gazeFile,
+            loadFile,
+            dispatch,
+            setGazePanel,
+            onConfirm: onConfirm(uploadGaze),
+            onSkip,
+            skipped,
+          })}
+        </div>
+      )}
+    </Mutation>
   );
 };
 
-export default Gaze;
+export default withApollo(Gaze);

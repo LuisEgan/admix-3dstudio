@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Mutation, withApollo } from 'react-apollo';
 import STR from '../../../lib/utils/strFuncs';
 import actions from '../panelActions';
+import mutations from '../../../mutations';
 
 import SetObjectPanel from './SetObjectPanel';
+
+const { uploadModel } = mutations;
 
 const SetSizePanel = ({ dispatch, setModelPanel, reScale, size, saveModel }) => {
   const [sizeSet, setSizeSet] = useState(false);
@@ -69,7 +73,6 @@ const ModelPanels = [
 
 const Model = props => {
   const {
-    uploadModel,
     editCreative,
     loading,
     creative,
@@ -84,7 +87,7 @@ const Model = props => {
 
   const [modelPanel, setModelPanel] = useState(modelFile ? 1 : 0);
 
-  const onConfirm = () => {
+  const onConfirm = uploadModel => () => {
     uploadModel({
       variables: {
         creative,
@@ -112,19 +115,23 @@ const Model = props => {
   };
 
   return (
-    <div className="creative-panel">
-      {ModelPanels[modelPanel]({
-        file: modelFile,
-        loadFile,
-        setModelPanel,
-        reScale,
-        dispatch,
-        size,
-        onConfirm,
-        saveModel,
-      })}
-    </div>
+    <Mutation mutation={uploadModel} onCompleted={() => console.log('size saved!')}>
+      {(uploadModel, { loading }) => (
+        <div className="creative-panel">
+          {ModelPanels[modelPanel]({
+            file: modelFile,
+            loadFile,
+            setModelPanel,
+            reScale,
+            dispatch,
+            size,
+            saveModel,
+            onConfirm: onConfirm(uploadModel),
+          })}
+        </div>
+      )}
+    </Mutation>
   );
 };
 
-export default Model;
+export default withApollo(Model);

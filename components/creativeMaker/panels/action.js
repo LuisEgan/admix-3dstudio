@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
+import { Mutation, withApollo, Query } from 'react-apollo';
 import actions from '../panelActions';
+import mutations from '../../../mutations';
+import queries from '../../../queries';
 
 import SetObjectPanel from './SetObjectPanel';
 
-const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped }) => {
+const { uploadAction } = mutations;
+const { creativeXML } = queries;
+
+const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped, genXML, XMLloading }) => {
   const mainLabel = () => {
     if (file && !skipped) return 'Animation uploaded';
 
@@ -16,7 +22,9 @@ const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped }) => {
     return 'no file';
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    await genXML();
+
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: 3 });
     if (skipped) {
       dispatch({ type: actions.SET_FILE, payload: { panelName: 'action', panelFile: null } });
@@ -41,7 +49,7 @@ const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped }) => {
       <div>You'll be able to preview your animated model at the end</div>
       <div>
         <button type="button" className="blue-btn" onClick={handleNext}>
-          Next
+          {XMLloading ? 'Loading...' : 'Next'}
         </button>
       </div>
     </div>
@@ -55,11 +63,12 @@ const ActionPanels = [
 
 const Action = props => {
   const {
+    client,
     loadFile,
-    uploadModel,
     loading,
     creative,
     dispatch,
+    setXMLurl,
     reducerState: {
       file: { action: actionFile },
     },
@@ -67,10 +76,12 @@ const Action = props => {
 
   const [actionPanel, setActionPanel] = useState(actionFile ? 1 : 0);
   const [skipped, setSkipped] = useState(false);
+  const [XMLloading, setXMLloading] = useState(false);
+  console.log('XMLloading: ', XMLloading);
 
-  const onConfirm = () => {
+  const onConfirm = uploadAction => () => {
     if (actionFile) {
-      uploadModel({
+      uploadAction({
         variables: {
           creative,
           model: actionFile,
@@ -86,19 +97,45 @@ const Action = props => {
     setActionPanel(1);
   };
 
+  const genXML = async () => {
+    setXMLloading(true);
+    try {
+      const res = await client.query({
+        query: creativeXML,
+        variables: { creative },
+      });
+      const url = res.data.creativeXML;
+      setXMLurl(url);
+    } catch (error) {
+      console.error('error: ', error);
+    } finally {
+      setXMLloading(false);
+    }
+  };
+
   return (
-    <div className="creative-panel">
-      {ActionPanels[actionPanel]({
-        file: actionFile,
-        loadFile,
-        dispatch,
-        setActionPanel,
-        onConfirm,
-        onSkip,
-        skipped,
-      })}
-    </div>
+    // <Query query={creativeXML} onCompleted={() => console.log('size saved!')}>
+    //   {(creativeXML, { loading }) => (
+    <Mutation mutation={uploadAction} onCompleted={() => console.log('size saved!')}>
+      {(uploadAction, { loading }) => (
+        <div className="creative-panel">
+          {ActionPanels[actionPanel]({
+            file: actionFile,
+            loadFile,
+            dispatch,
+            setActionPanel,
+            onConfirm: onConfirm(uploadAction),
+            onSkip,
+            skipped,
+            genXML,
+            XMLloading,
+          })}
+        </div>
+      )}
+    </Mutation>
+    //   )}
+    // </Query>
   );
 };
 
-export default Action;
+export default withApollo(Action);

@@ -21,7 +21,7 @@ const initialState = {
 
 const reducer = (state, action) => {
   const { type, payload } = action;
-  console.warn('type: ', type);
+  // console.warn('type: ', type);
   switch (type) {
     case actions.SET_CURRENT_PANEL:
       const { currentPanel, farthestPanel } = state;
@@ -49,7 +49,6 @@ let Creatives = props => {
   const { campaign, creative } = props;
 
   const [reducerState, dispatch] = useReducer(reducer, initialState);
-  console.log('reducerState: ', reducerState);
 
   const { currentPanel, farthestPanel } = reducerState;
 
@@ -64,7 +63,7 @@ let Creatives = props => {
         route: '/groups',
       },
       {
-        title: creative.group.name,
+        title: creative.group && creative.group.name,
         route: '/groups',
       },
       {

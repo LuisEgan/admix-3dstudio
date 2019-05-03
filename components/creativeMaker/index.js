@@ -3,7 +3,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useState, useReducer } from 'react';
 import THREEScene from '../3DScene';
-import { Mutation, withApollo, Query } from 'react-apollo';
+import { Mutation, withApollo } from 'react-apollo';
 import mutations from '../../mutations';
 
 import Model from './panels/Model';
@@ -21,7 +21,7 @@ const Panels = [
   props => <DownloadXML {...props} />,
 ];
 
-const { editCreative, uploadModel, creativeXML } = mutations;
+const { editCreative, uploadModel } = mutations;
 
 const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;
@@ -38,6 +38,7 @@ const CreativeMaker = props => {
   const [source, setSource] = useState(null);
   const [fileType, setFileType] = useState(null);
   const [size, setSize] = useState(initialSize);
+  const [XMLurl, setXMLurl] = useState('');
 
   const loadFile = event => {
     event.preventDefault();
@@ -113,6 +114,8 @@ const CreativeMaker = props => {
                     size,
                     setSize,
                     loading: { uploadModelLoading, editCreativeLoading },
+                    setXMLurl,
+                    XMLurl,
                   })}
                 </div>
               </div>
