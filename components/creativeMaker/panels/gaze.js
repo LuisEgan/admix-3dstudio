@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import actions from '../panelActions';
 
 import SetObjectPanel from './SetObjectPanel';
 
-const NextPanelPrompt = ({ setPanel, setGazePanel, gazeFile, skipped }) => {
+const NextPanelPrompt = ({ dispatch, setGazePanel, file, skipped }) => {
   const mainLabel = () => {
-    if (gazeFile && !skipped) return 'Animation uploaded';
+    if (file && !skipped) return 'Animation uploaded';
 
     return 'No animation uploaded';
   };
 
   const checkLabel = () => {
-    if (gazeFile && !skipped) return gazeFile.name;
+    if (file && !skipped) return file.name;
 
     return 'no file';
+  };
+
+  const handleNext = () => {
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: 2 });
+    if (skipped) {
+      dispatch({ type: actions.SET_FILE, payload: { panelName: 'gaze', panelFile: null } });
+    }
   };
 
   return (
@@ -22,7 +30,7 @@ const NextPanelPrompt = ({ setPanel, setGazePanel, gazeFile, skipped }) => {
           <h3>{mainLabel()}</h3>
         </div>
         <div>
-          <input type="checkbox" checked={!!gazeFile && !skipped} readOnly />
+          <input type="checkbox" checked={!!file && !skipped} readOnly />
           <span>{checkLabel()}</span>
           <span onClick={() => setGazePanel(0)} className="creative-checks-edit">
             edit
@@ -32,7 +40,7 @@ const NextPanelPrompt = ({ setPanel, setGazePanel, gazeFile, skipped }) => {
 
       <div>You'll be able to preview your animated model at the end</div>
       <div>
-        <button type="button" className="blue-btn" onClick={() => setPanel(2)}>
+        <button type="button" className="blue-btn" onClick={handleNext}>
           Next
         </button>
       </div>
@@ -46,16 +54,25 @@ const GazePanels = [
 ];
 
 const Gaze = props => {
-  const { setPanel, loadFile, uploadModel, editCreative } = props;
+  const {
+    loadFile,
+    uploadModel,
+    loading,
+    creative,
+    dispatch,
+    reducerState: {
+      file: { gaze: gazeFile },
+    },
+  } = props;
 
-  const [gazePanel, setGazePanel] = useState(0);
+  const [gazePanel, setGazePanel] = useState(gazeFile ? 1 : 0);
   const [skipped, setSkipped] = useState(false);
-  const [gazeFile, setGazeFile] = useState(null);
 
   const onConfirm = () => {
     if (gazeFile) {
       uploadModel({
         variables: {
+          creative,
           model: gazeFile,
         },
       });
@@ -70,26 +87,16 @@ const Gaze = props => {
     setGazePanel(1);
   };
 
-  const handleFile = event => {
-    event.preventDefault();
-
-    const file = event.target.files[0];
-    if (file) {
-      setGazeFile(file);
-    }
-    loadFile(event);
-  };
-
   return (
     <div className="creative-panel">
       {GazePanels[gazePanel]({
-        setPanel,
-        handleFile,
+        file: gazeFile,
+        loadFile,
+        dispatch,
         setGazePanel,
         onConfirm,
         onSkip,
         skipped,
-        gazeFile,
       })}
     </div>
   );

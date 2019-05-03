@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
+import Router from 'next/router';
 import queries from '../queries';
 import actions from '../lib/actions';
 import Link from 'next/link';
@@ -54,6 +55,11 @@ let Groups = props => {
     initialState,
   );
 
+  const handleSelectCreative = creative => () => {
+    selectCreative(creative);
+    Router.push('/creatives');
+  };
+
   const togglePopup = (popup, clickedOn) => {
     const { group, creative } = clickedOn || {};
     setState({
@@ -74,11 +80,13 @@ let Groups = props => {
         <div className="group-creatives">
           {creatives.map(creative => {
             const { image, name } = creative;
+            creative.group = { name: group.name, id: group.id };
             return (
               <div
                 className="group-creative"
                 key={name}
                 style={{ backgroundImage: `url(${image})` }}
+                onClick={handleSelectCreative(creative)}
               >
                 <div className="creative-title">
                   <span>{name}</span>

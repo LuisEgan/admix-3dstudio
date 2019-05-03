@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import THREEScene from '../3DScene';
 import { Mutation, withApollo } from 'react-apollo';
 import mutations from '../../mutations';
@@ -10,6 +10,9 @@ import Model from './panels/Model';
 import Gaze from './panels/Gaze';
 import Action from './panels/Action';
 import DownloadXML from './panels/DownloadXML';
+
+import STR from '../../lib/utils/strFuncs';
+import actions from './panelActions';
 
 const Panels = [
   props => <Model {...props} />,
@@ -20,7 +23,10 @@ const Panels = [
 
 const { editCreative, uploadModel } = mutations;
 
-const CreativeMaker = ({ creative, panel, setPanel }) => {
+const CreativeMaker = props => {
+  const { dispatch, creative, reducerState } = props;
+  const { currentPanelName, currentPanel, farthestPanel } = reducerState;
+
   let initialSize = 125;
 
   if (creative.size === 'small') {
@@ -38,6 +44,11 @@ const CreativeMaker = ({ creative, panel, setPanel }) => {
 
     const file = event.target.files[0];
     if (file) {
+      dispatch({
+        type: actions.SET_FILE,
+        payload: { panelName: currentPanelName, panelFile: file },
+      });
+
       const type = file.name.substring(file.name.lastIndexOf('.') + 1);
       setFileType(type);
 
@@ -46,29 +57,23 @@ const CreativeMaker = ({ creative, panel, setPanel }) => {
     }
   };
 
-  const renderSize = () => {
-    let sizeText = 'large';
-    if (size < 50) {
-      sizeText = 'small';
-    } else if (size < 100) {
-      sizeText = 'medium';
-    }
-
-    return `Scale size: ${sizeText}`;
-  };
-
   const renderPanelToggles = () => {
-    if (panel > 2) return;
+    if (currentPanel > 2) return;
 
     const toggles = ['Model', 'Gaze', 'Action'];
 
     return toggles.map((toggle, i) => {
+      const panelReached = i <= farthestPanel;
       return (
         <div
           key={toggle}
           role="panel-toggle"
-          className={panel === i ? 'creative-panel-active' : ''}
-          onClick={() => setPanel(i)}
+          className={
+            currentPanel === i ? 'creative-panel-active' : panelReached ? '' : 'disabled-btn'
+          }
+          onClick={() =>
+            panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: i }) : null
+          }
         >
           {toggle}
         </div>
@@ -78,14 +83,19 @@ const CreativeMaker = ({ creative, panel, setPanel }) => {
 
   return (
     <Mutation mutation={uploadModel} onCompleted={() => console.log('size saved!')}>
-      {(uploadModel, { error }) => (
+      {(uploadModel, { loading: uploadModelLoading }) => (
         <Mutation mutation={editCreative} onCompleted={() => console.log('size saved!')}>
-          {(editCreative, { error }) => (
+          {(editCreative, { loading: editCreativeLoading }) => (
             <div id="creative-maker">
               <div id="creative-webgl">
-                <THREEScene id="creative-3d" source={source} fileType={fileType} panel={panel} />
+                <THREEScene
+                  id="creative-3d"
+                  source={source}
+                  fileType={fileType}
+                  panel={currentPanel}
+                />
                 <div id="creative-size" className="sst">
-                  {renderSize()}
+                  {`Scale size: ${STR.parseSize(size)}`}
                 </div>
               </div>
 
@@ -93,14 +103,16 @@ const CreativeMaker = ({ creative, panel, setPanel }) => {
                 <div className="creative-panels-toggle">{renderPanelToggles()}</div>
 
                 <div id="creative-panels-content">
-                  {Panels[panel]({
+                  {Panels[currentPanel]({
+                    reducerState,
+                    dispatch,
                     creative: creative.id,
-                    setPanel,
                     loadFile,
                     uploadModel,
                     editCreative,
                     size,
                     setSize,
+                    loading: { uploadModelLoading, editCreativeLoading },
                   })}
                 </div>
               </div>
