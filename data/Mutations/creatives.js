@@ -170,7 +170,7 @@ module.exports = {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return CreativesModel.findOneAndUpdate(
+      return await CreativesModel.findOneAndUpdate(
         { id: creative },
         { uploads: { gaze: { tag: ETag, url: Location, key: Key } } },
         { new: true },
@@ -189,7 +189,7 @@ module.exports = {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return CreativesModel.findOneAndUpdate(
+      return await CreativesModel.findOneAndUpdate(
         { id: creative },
         { uploads: { action: { tag: ETag, url: Location, key: Key } } },
         { new: true },
