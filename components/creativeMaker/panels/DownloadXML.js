@@ -27,7 +27,7 @@ const DownloadXML = props => {
           </div>
         </div>
         <div>
-          <a className="blue-btn" href={XMLurl}>
+          <a className="blue-btn" href={XMLurl} target="_blank">
             Download XML
           </a>
         </div>
