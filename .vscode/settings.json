@@ -1,0 +1,10 @@
+{
+    "search.exclude": {
+        "**/node_modules": false,
+        "**/nodemodules": true
+    },
+    "files.watcherExclude": {
+        "**/node_modules/*/**": false,
+        "**/nodemodules/*/**": true
+    }
+}

@@ -4,7 +4,8 @@ import GLTFLoader from 'three-gltf-loader';
 import GLTFExporter from 'three-gltf-exporter';
 import TransformControls from 'three-transform-ctrls';
 import OrbitControls from 'three-orbitcontrols';
-import FBXLoader from 'three-fbxloader-offical';
+import { FBXLoader } from '../lib/three.modules/FBXLoader';
+// import FBXLoader from 'three-fbxloader-offical';
 // import FBXLoader from 'three-fbx-loader';
 // import OBJLoader from 'three/examples/jsm/loaders/OBJLoader';
 import isEqual from 'lodash/isEqual';
@@ -258,6 +259,7 @@ class THREEScene extends React.Component {
 
     // const loader = new FBXLoader(this.threeLoadingManager());
     const loader = new FBXLoader();
+    console.log('FBXLoader: ', FBXLoader);
     loader.load(source, onLoad, onLoading, onLoaderError);
   };
 
