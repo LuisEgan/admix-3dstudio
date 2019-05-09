@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import actions from '../../../lib/actions';
+import { PANELS } from '../../../lib/utils/constants';
 
 const { resetSelected } = actions;
 
 let DownloadXML = props => {
-  const { resetSelected, XMLurl } = props;
+  const { resetSelected, XMLurl, reducerState } = props;
+  const { farthestPanel } = reducerState;
+
   let link;
 
   useEffect(() => {
-    XMLurl && link.click();
+    XMLurl && PANELS.DOWNLOAD !== farthestPanel && link.click();
   }, []);
 
   const handleGoToCampaigns = () => {
