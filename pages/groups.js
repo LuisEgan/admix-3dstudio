@@ -43,6 +43,7 @@ let Groups = props => {
   } = props;
 
   // TODO - add images to creatives (cloudinary links in db)
+  console.log('groups: ', groups);
   groups &&
     groups.forEach(group => {
       group.creatives.forEach((creative, i) => {
@@ -127,6 +128,7 @@ let Groups = props => {
         show={state.showEditGroup}
         togglePopup={() => togglePopup('showEditGroup', { group: state.clickedGroup })}
         group={state.clickedGroup}
+        campaign={campaign.id}
       />
       <NewGroupPopup
         show={state.showNewGroup}

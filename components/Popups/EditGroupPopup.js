@@ -1,22 +1,24 @@
 import React from 'react';
-import { graphql } from 'react-apollo';
 import mutations from '../../mutations';
+import queries from '../../queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-const { createUser, loginUser } = mutations;
+const { editGroup } = mutations;
+const { groupsByCampaign } = queries;
 
-const initialValues = {
-  name: '',
-  description: ''
-};
+export default props => {
+  const { show, togglePopup, group, campaign } = props;
+  console.log('group: ', group);
 
-export default graphql(loginUser)(props => {
-  const { show, togglePopup, group } = props;
+  const { id, name, description } = group || {};
 
-  const { name, description } = group || {};
+  const initialValues = {
+    name,
+    description: description || '',
+  };
 
   const validate = values => {
     const errors = {};
@@ -30,10 +32,21 @@ export default graphql(loginUser)(props => {
     return errors;
   };
 
-  const onSubmit = (values, mutation) => {
-    console.log('mutation: ', mutation);
-    console.log('values: ', values);
-    // mutation(values);
+  const onSubmit = (values, editGroup) => {
+    editGroup({
+      variables: {
+        group: id,
+        ...values,
+      },
+      refetchQueries: [
+        {
+          query: groupsByCampaign,
+          variables: { campaign },
+        },
+      ],
+      awaitRefetchQueries: true,
+    });
+    togglePopup();
   };
 
   const onDelete = async id => {
@@ -51,7 +64,7 @@ export default graphql(loginUser)(props => {
         <span className="popup-title">Edit group details</span>
         <div id="campaign-new-popup-btns">
           <Form
-            mutation={createUser}
+            mutation={editGroup}
             onError={e => console.log(e)}
             initialValues={initialValues}
             validate={validate}
@@ -63,7 +76,7 @@ export default graphql(loginUser)(props => {
               style={{
                 display: 'flex',
                 justifyContent: 'space-evenly',
-                padding: '20px'
+                padding: '20px',
               }}
             >
               <button type="submit" className="btn gradient-btn" style={{ width: '40%' }}>
@@ -83,4 +96,4 @@ export default graphql(loginUser)(props => {
       </div>
     </Popup>
   );
-});
+};
