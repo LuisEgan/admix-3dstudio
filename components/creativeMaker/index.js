@@ -12,6 +12,7 @@ import Action from './panels/Action';
 import DownloadXML from './panels/DownloadXML';
 
 import STR from '../../lib/utils/strFuncs';
+import { PANELS } from '../../lib/utils/constants';
 import actions from './panelActions';
 
 const Panels = [
@@ -25,7 +26,8 @@ const { editCreative, uploadModel } = mutations;
 
 const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;
-  const { currentPanelName, currentPanel, farthestPanel } = reducerState;
+  const { currentPanelName, currentPanel, farthestPanel, panelPreview3D } = reducerState;
+  const panelsNames = ['Model', 'Gaze', 'Action'];
 
   let initialSize = 125;
 
@@ -61,9 +63,7 @@ const CreativeMaker = props => {
   const renderPanelToggles = () => {
     if (currentPanel > 2) return;
 
-    const toggles = ['Model', 'Gaze', 'Action'];
-
-    return toggles.map((toggle, i) => {
+    return panelsNames.map((toggle, i) => {
       const panelReached = i <= farthestPanel;
       return (
         <div
@@ -94,9 +94,28 @@ const CreativeMaker = props => {
                   source={source}
                   fileType={fileType}
                   panel={currentPanel}
+                  panelPreview3D={panelPreview3D}
                 />
                 <div id="creative-size" className="sst">
-                  {`Scale size: ${STR.parseSize(size)}`}
+                  {currentPanel !== 3 ? (
+                    <div id="creative-size-text" className="mb">{`Scale size: ${STR.parseSize(
+                      size,
+                    )}`}</div>
+                  ) : (
+                    <React.Fragment>
+                      {panelsNames.map((panel, i) => {
+                        return (
+                          <button
+                            key={panel}
+                            onClick={() => dispatch({ type: actions.SET_PREVIEW_3D, payload: i })}
+                            className={panelPreview3D === i ? 'blue-btn' : 'white-btn'}
+                          >
+                            {`Preview ${panel}`}
+                          </button>
+                        );
+                      })}
+                    </React.Fragment>
+                  )}
                 </div>
               </div>
 

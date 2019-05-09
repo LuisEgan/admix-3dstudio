@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
+import Router from 'next/router';
 import { connect } from 'react-redux';
 
 import App from '../components/App';
@@ -9,12 +10,13 @@ import actions from '../components/creativeMaker/panelActions';
 
 const panelNames = ['model', 'gaze', 'action', 'download'];
 
+const initialPanel = 0;
 const initialState = {
-  currentPanel: 0,
-  currentPanelName: panelNames[0],
-  farthestPanel: 0,
-  lastPanel: 0,
-  panelPreview3D: 0,
+  currentPanel: initialPanel,
+  currentPanelName: panelNames[initialPanel],
+  farthestPanel: initialPanel,
+  lastPanel: initialPanel,
+  panelPreview3D: initialPanel,
   visited: { model: true, gaze: false, action: false, download: false },
   file: { model: null, gaze: null, action: null },
 };
@@ -49,8 +51,18 @@ let Creatives = props => {
   const { campaign, creative } = props;
 
   const [reducerState, dispatch] = useReducer(reducer, initialState);
-
   const { currentPanel, farthestPanel } = reducerState;
+
+  let returnToCampaigns = false;
+  if (!Object.entries(campaign).length) {
+    returnToCampaigns = true;
+  }
+
+  useEffect(() => {
+    if (returnToCampaigns) {
+      Router.push('/campaigns');
+    }
+  }, []);
 
   const setBreadcrumbs = () => {
     return [
@@ -73,6 +85,7 @@ let Creatives = props => {
     ];
   };
 
+  if (returnToCampaigns) return null;
   return (
     <App>
       <div className="step-container" id="creatives">

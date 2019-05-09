@@ -1107,7 +1107,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .step-container {
-  padding: 2% $sidesPadding calc(2% + 64px);
+  padding: 2% $sidesPadding calc(2% + 40px);
   width: 100%;
   overflow: auto;
 
@@ -1210,13 +1210,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
     a {
       padding: 4.5px;
     }
-  }
-}
-
-.WebGLScene {
-  canvas {
-    position: absolute;
-    top: 0;
   }
 }
 
@@ -1422,10 +1415,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
   box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1);
   padding-top: 1%;
   margin-top: 1%;
-
-  canvas {
-    // padding: 4%;
-  }
 
   .graph-title {
     padding: 2% 7%;
@@ -1944,15 +1933,34 @@ $inputsFontSize: calc(0.45em+0.3vw);
       position: relative;
       #creative-3d {
         > div {
-          width: 65vh;
-          height: 65vh;
+          width: 100%;
+          height: 55vh;
           margin: auto;
+        }
+        canvas {
+          margin: auto;
+        }
+        .fullscreen-canvas {
+          canvas {
+            width: 90% !important;
+            height: 90% !important;
+          }
+        }
+        .medium-canvas {
+          canvas {
+            width: 75% !important;
+            height: 75% !important;
+          }
         }
       }
       #creative-size {
-        position: absolute;
-        bottom: 20px;
-        right: 10vw;
+        display: flex;
+        justify-content: space-evenly;
+        padding: 15px 0;
+        #creative-size-text {
+          text-align: right;
+          width: 90%;
+        }
       }
     }
 
