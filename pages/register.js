@@ -20,7 +20,7 @@ let Register = props => {
   const [error, setError] = useState(null);
   let messageContainer;
 
-  const { login, isLoggedIn, client } = props;
+  const { isLoggedIn } = props;
 
   if (isLoggedIn) {
     Router.push('/campaigns');
