@@ -49,7 +49,7 @@ const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped, genXML, XMLl
       <div>You'll be able to preview your animated model at the end</div>
       <div>
         <button type="button" className="blue-btn" onClick={handleNext}>
-          {XMLloading ? 'Loading...' : 'Next'}
+          {XMLloading ? 'Loading...' : 'Generate XML'}
         </button>
       </div>
     </div>
@@ -103,14 +103,15 @@ const Action = props => {
     setXMLloading(true);
     setCheckListDone(5);
     try {
-      // const res = await client.query({
-      //   query: creativeXML,
-      //   variables: { creative }
-      // });
-      // const url = res.data.creativeXML;
-      setXMLurl(
-        'https://admix.in/wp-content/uploads/2019/04/Admix.Unity_Rev1.7.1_RC1.unitypackage',
-      );
+      const res = await client.query({
+        query: creativeXML,
+        variables: { creative },
+      });
+      const url = res.data.creativeXML;
+      // setXMLurl(
+      //   'https://admix.in/wp-content/uploads/2019/04/Admix.Unity_Rev1.7.1_RC1.unitypackage',
+      // );
+      setXMLurl(url);
     } catch (error) {
       console.error('error: ', error);
     } finally {

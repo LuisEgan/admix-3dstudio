@@ -15,7 +15,7 @@ const { loginUser } = mutations;
 
 const { login } = actions;
 
-let Login = props => {
+export const Login = props => {
   const [error, setError] = useState(null);
 
   const { login, isLoggedIn, client } = props;
@@ -87,9 +87,9 @@ const mapDispatchToProps = dispatch => ({
   login: ({ accessToken, id }) => dispatch(login({ accessToken, id })),
 });
 
-Login = connect(
+const LoginConnected = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Login);
 
-export default Login;
+export default LoginConnected;
