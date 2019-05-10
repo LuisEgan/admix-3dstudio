@@ -95,30 +95,6 @@ let Creatives = props => {
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
           <div id="creatives-title">
             <h3 className="st sc-h3">{creative.name}</h3>
-            <div className="creative-panels-toggle">
-              <div
-                className={currentPanel < 3 ? 'creative-panel-active' : ''}
-                onClick={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: 0 })}
-              >
-                Edit
-              </div>
-              <div
-                className={
-                  currentPanel === 3
-                    ? 'creative-panel-active'
-                    : farthestPanel === 3
-                    ? ''
-                    : 'disabled-btn'
-                }
-                onClick={() =>
-                  farthestPanel === 3
-                    ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: 3 })
-                    : null
-                }
-              >
-                Download
-              </div>
-            </div>
           </div>
         </div>
 
