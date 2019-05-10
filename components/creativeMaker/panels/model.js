@@ -8,7 +8,9 @@ import SetObjectPanel from './SetObjectPanel';
 
 const { uploadModel } = mutations;
 
-const SetSizePanel = ({ dispatch, setModelPanel, reScale, size, saveModel }) => {
+const SetSizePanel = props => {
+  const { dispatch, setModelPanel, reScale, size, saveModel } = props;
+
   const [sizeSet, setSizeSet] = useState(false);
 
   const handleSave = () => {
@@ -80,6 +82,7 @@ const Model = props => {
     size,
     setSize,
     dispatch,
+    setCheckListDone,
     reducerState: {
       file: { model: modelFile },
     },
@@ -96,6 +99,7 @@ const Model = props => {
       },
     });
     setModelPanel(1);
+    setCheckListDone(1);
   };
 
   const reScale = e => {
@@ -112,6 +116,7 @@ const Model = props => {
         size: STR.parseSize(size),
       },
     });
+    setCheckListDone(2);
   };
 
   return (

@@ -4,8 +4,10 @@
 
 $mobileBreakpoint: 830px;
 $blueAdmix: #157cc1;
-$grey-border: #eee;
-$grey-text: #aaa;
+$greyBorder: #eee;
+$greyText: #aaa;
+$greyDisabled: #cccccc;
+$greyDisabledText: #808080;
 $black: #000;
 $white: #fff;
 $successGreen: #2eb82e;
@@ -1752,7 +1754,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     .campaign-status {
       min-width: 200px;
       justify-content: left;
-      color: $grey-text;
+      color: $greyText;
     }
   }
 
@@ -1890,24 +1892,19 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
-  .creative-panels-toggle {
+  .creative-panels-headers {
     display: flex;
-    height: 10%;
+    border-bottom: solid 2px $greyBorder;
+    height: 12%;
 
     > div {
       @extend .cc;
       width: 33.33%;
       padding: 10px 0;
-      border-bottom: solid;
-      border-color: #f2f2f2;
+      position: relative;
 
       &:hover {
         cursor: pointer;
-      }
-
-      &:not(:last-child) {
-        border-right: solid;
-        border-right-color: #f2f2f2;
       }
     }
 
@@ -1933,13 +1930,19 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 
   #creative-maker {
+    display: flex;
+    height: 65vh;
+    justify-content: space-between;
     > div {
       border: solid #f2f2f2;
       box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+      width: 50%;
+      height: 100%;
+      border-radius: 10px;
     }
 
     #creative-webgl {
-      width: 70%;
+      width: 50%;
       position: relative;
       #creative-3d {
         > div {
@@ -1977,12 +1980,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
     #creative-panels {
       display: flex;
       flex-flow: column;
-      border-left: none;
-      width: 30%;
+      // border-left: none;
+      width: 25%;
 
       #creative-panels-content {
-        height: 90%;
-
         .creative-panel {
           height: 100%;
           > div {
@@ -2015,13 +2016,38 @@ $inputsFontSize: calc(0.45em+0.3vw);
         }
       }
     }
-  }
-}
 
-#creative-maker {
-  display: flex;
-  > div {
-    width: 50%;
+    #creatives-panels-checklist {
+      --parentHeight: 100%;
+      width: 20%;
+      height: var(--parentHeight);
+
+      .RSPBprogressBar {
+        @extend .mbs;
+        transform: rotate(90deg);
+        transform-origin: 0;
+        margin-top: 15%;
+        margin-left: 15%;
+        width: calc(var(--parentHeight) + 15vh);
+
+        /* Steps */
+        .step {
+          transform: rotate(-90deg);
+
+          div {
+            position: absolute;
+            left: 150%;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+          }
+
+          button {
+            margin-left: 45%;
+          }
+        }
+      }
+    }
   }
 }
 
@@ -2078,11 +2104,12 @@ $ballSize: 20px;
   border: 0;
   background: transparent;
   padding: 0.375rem 0.75rem;
-  color: $grey-text;
+  color: $greyText;
 }
 
 .disabled-btn {
-  color: #d9d9d9;
+  color: $greyDisabledText;
+  background-color: $greyDisabled;
   &:hover {
     cursor: not-allowed !important;
   }

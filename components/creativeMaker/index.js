@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import THREEScene from '../3DScene';
 import { Mutation, withApollo } from 'react-apollo';
+import { ProgressBar, Step } from 'react-step-progress-bar';
 import mutations from '../../mutations';
 
 import Model from './panels/Model';
@@ -14,6 +15,7 @@ import DownloadXML from './panels/DownloadXML';
 import STR from '../../lib/utils/strFuncs';
 import { PANELS } from '../../lib/utils/constants';
 import actions from './panelActions';
+import CheckList from '../Checklist';
 
 const Panels = [
   props => <Model {...props} />,
@@ -24,10 +26,21 @@ const Panels = [
 
 const { editCreative, uploadModel } = mutations;
 
+const checklistSteps = [
+  'campaign setup',
+  'base model uploaded',
+  'model size set',
+  'gaze animation set',
+  'action animation set',
+  'ad generated',
+];
+
 const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;
   const { currentPanelName, currentPanel, farthestPanel, panelPreview3D } = reducerState;
   const panelsNames = ['Model', 'Gaze', 'Action'];
+  const totalChecklistSteps = checklistSteps.length + 1;
+  const stepPositions = [...checklistSteps.map((s, i) => (100 / totalChecklistSteps) * i), 100];
 
   let initialSize = 125;
 
@@ -41,6 +54,7 @@ const CreativeMaker = props => {
   const [fileType, setFileType] = useState(null);
   const [size, setSize] = useState(initialSize);
   const [XMLurl, setXMLurl] = useState('');
+  const [checkListDone, setCheckListDone] = useState(0);
 
   const loadFile = event => {
     event.preventDefault();
@@ -69,9 +83,7 @@ const CreativeMaker = props => {
         <div
           key={toggle}
           role="panel-toggle"
-          className={
-            currentPanel === i ? 'creative-panel-active' : panelReached ? '' : 'disabled-btn'
-          }
+          className={currentPanel === i ? 'creative-panel-active' : ''}
           onClick={() =>
             panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: i }) : null
           }
@@ -80,6 +92,43 @@ const CreativeMaker = props => {
         </div>
       );
     });
+  };
+
+  const renderChecklistSteps = () => {
+    let steps = checklistSteps.map((step, i) => {
+      return (
+        <Step transition="scale" key={step} position={(100 / totalChecklistSteps) * i}>
+          {({ accomplished }) => (
+            <div className="step">
+              <img
+                style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
+                width="30"
+                src="https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851"
+              />
+              <div>{step}</div>
+            </div>
+          )}
+        </Step>
+      );
+    });
+
+    steps = [
+      ...steps,
+      <Step transition="scale">
+        {({ accomplished }) => (
+          <div className="step">
+            <button
+              className={`blue-btn ${checkListDone < 7 && 'disabled-btn'}`}
+              disabled={checkListDone !== 7}
+            >
+              Download XML
+            </button>
+          </div>
+        )}
+      </Step>,
+    ];
+
+    return steps;
   };
 
   return (
@@ -120,7 +169,7 @@ const CreativeMaker = props => {
               </div>
 
               <div id="creative-panels">
-                <div className="creative-panels-toggle">{renderPanelToggles()}</div>
+                <div className="creative-panels-headers">{renderPanelToggles()}</div>
 
                 <div id="creative-panels-content">
                   {Panels[currentPanel]({
@@ -135,8 +184,23 @@ const CreativeMaker = props => {
                     loading: { uploadModelLoading, editCreativeLoading },
                     setXMLurl,
                     XMLurl,
+                    setCheckListDone,
                   })}
                 </div>
+              </div>
+
+              <div id="creatives-panels-checklist">
+                <div className="creative-panels-headers sst cc">Checklist</div>
+
+                <ProgressBar
+                  percent={(100 / totalChecklistSteps) * checkListDone}
+                  filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
+                  className="progressBar"
+                  stepPositions={stepPositions}
+                  height={2} // height because the bar is rotated 90deg
+                >
+                  {renderChecklistSteps()}
+                </ProgressBar>
               </div>
             </div>
           )}

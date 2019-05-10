@@ -63,6 +63,7 @@ const Gaze = props => {
     loading,
     creative,
     dispatch,
+    setCheckListDone,
     reducerState: {
       file: { gaze: gazeFile },
     },
@@ -82,11 +83,13 @@ const Gaze = props => {
     }
 
     setSkipped(false);
+    setCheckListDone(3);
     setGazePanel(1);
   };
 
   const onSkip = () => {
     setSkipped(true);
+    setCheckListDone(3);
     setGazePanel(1);
   };
 

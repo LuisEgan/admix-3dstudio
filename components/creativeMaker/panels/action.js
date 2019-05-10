@@ -69,6 +69,7 @@ const Action = props => {
     creative,
     dispatch,
     setXMLurl,
+    setCheckListDone,
     reducerState: {
       file: { action: actionFile },
     },
@@ -88,16 +89,19 @@ const Action = props => {
       });
     }
     setSkipped(false);
+    setCheckListDone(4);
     setActionPanel(1);
   };
 
   const onSkip = () => {
     setSkipped(true);
+    setCheckListDone(4);
     setActionPanel(1);
   };
 
   const genXML = async () => {
     setXMLloading(true);
+    setCheckListDone(5);
     try {
       // const res = await client.query({
       //   query: creativeXML,
@@ -111,6 +115,7 @@ const Action = props => {
       console.error('error: ', error);
     } finally {
       setXMLloading(false);
+      setCheckListDone(6);
     }
   };
 
