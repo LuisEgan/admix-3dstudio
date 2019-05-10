@@ -13,9 +13,7 @@ import Action from './panels/Action';
 import DownloadXML from './panels/DownloadXML';
 
 import STR from '../../lib/utils/strFuncs';
-import { PANELS } from '../../lib/utils/constants';
 import actions from './panelActions';
-import CheckList from '../Checklist';
 
 const Panels = [
   props => <Model {...props} />,

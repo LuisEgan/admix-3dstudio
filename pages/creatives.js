@@ -53,7 +53,6 @@ let Creatives = props => {
   const { campaign, creative } = props;
 
   const [reducerState, dispatch] = useReducer(reducer, initialState);
-  const { currentPanel, farthestPanel } = reducerState;
 
   let returnToCampaigns = false;
   if (!Object.entries(campaign).length) {
