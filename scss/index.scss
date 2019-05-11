@@ -8,6 +8,7 @@ $grey-border: #eee;
 $grey-text: #aaa;
 $black: #000;
 $white: #fff;
+$successGreen: #2eb82e;
 $tableBorder: rgba(179, 179, 179, 0.1);
 $boxShadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
 
@@ -1405,6 +1406,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
   color: red;
 }
 
+.asyncSuccess {
+  color: $successGreen;
+}
+
 .asyncData {
   color: #14b9be;
 }
@@ -1574,7 +1579,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     &:first-child {
       width: 35%;
       display: flex;
-      justify-content: center;
+      // justify-content: center;
       flex-flow: column;
 
       > div {
@@ -1621,7 +1626,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     transition: 0s;
     position: relative;
     flex-flow: column;
-    height: 60%;
+    // height: 60%;
     overflow: auto;
 
     #register-feedback {

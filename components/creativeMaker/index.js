@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import THREEScene from '../3DScene';
 import { Mutation, withApollo } from 'react-apollo';
 import mutations from '../../mutations';
