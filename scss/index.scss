@@ -8,7 +8,9 @@ $grey-border: #eee;
 $grey-text: #aaa;
 $black: #000;
 $white: #fff;
+$successGreen: #2eb82e;
 $tableBorder: rgba(179, 179, 179, 0.1);
+$boxShadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
 
 * {
   font-family: 'Montserrat';
@@ -1107,7 +1109,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .step-container {
-  padding: 2% $sidesPadding calc(2% + 64px);
+  padding: 2% $sidesPadding calc(2% + 40px);
   width: 100%;
   overflow: auto;
 
@@ -1210,13 +1212,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
     a {
       padding: 4.5px;
     }
-  }
-}
-
-.WebGLScene {
-  canvas {
-    position: absolute;
-    top: 0;
   }
 }
 
@@ -1411,6 +1406,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
   color: red;
 }
 
+.asyncSuccess {
+  color: $successGreen;
+}
+
 .asyncData {
   color: #14b9be;
 }
@@ -1422,10 +1421,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
   box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1);
   padding-top: 1%;
   margin-top: 1%;
-
-  canvas {
-    // padding: 4%;
-  }
 
   .graph-title {
     padding: 2% 7%;
@@ -1584,7 +1579,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     &:first-child {
       width: 35%;
       display: flex;
-      justify-content: center;
+      // justify-content: center;
       flex-flow: column;
 
       > div {
@@ -1631,7 +1626,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     transition: 0s;
     position: relative;
     flex-flow: column;
-    height: 60%;
+    // height: 60%;
     overflow: auto;
 
     #register-feedback {
@@ -1751,6 +1746,13 @@ $inputsFontSize: calc(0.45em+0.3vw);
       align-items: center;
       padding: 0;
       margin-left: 35px;
+      width: 50%;
+    }
+
+    .campaign-status {
+      min-width: 200px;
+      justify-content: left;
+      color: $grey-text;
     }
   }
 
@@ -1769,21 +1771,18 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
 
-    .campaign-status {
-      height: 80%;
-      min-width: 200px;
-    }
-
     .campaign-buttons {
       display: flex;
       position: relative;
       padding: 1% 0;
 
       button {
-        background-color: #ffffff;
+        background-color: $blueAdmix;
+        color: white;
         border: none;
-        border-radius: 50px;
-        padding: 0;
+        border-radius: 5px;
+        padding: 7px 2.5vw;
+        box-shadow: $boxShadow;
 
         &:not(:first-of-type) {
           margin-left: 8px;
@@ -1944,15 +1943,34 @@ $inputsFontSize: calc(0.45em+0.3vw);
       position: relative;
       #creative-3d {
         > div {
-          width: 65vh;
-          height: 65vh;
+          width: 100%;
+          height: 55vh;
           margin: auto;
+        }
+        canvas {
+          margin: auto;
+        }
+        .fullscreen-canvas {
+          canvas {
+            width: 90% !important;
+            height: 90% !important;
+          }
+        }
+        .medium-canvas {
+          canvas {
+            width: 75% !important;
+            height: 75% !important;
+          }
         }
       }
       #creative-size {
-        position: absolute;
-        bottom: 20px;
-        right: 10vw;
+        display: flex;
+        justify-content: space-evenly;
+        padding: 15px 0;
+        #creative-size-text {
+          text-align: right;
+          width: 90%;
+        }
       }
     }
 

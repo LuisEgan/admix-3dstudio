@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mutation, withApollo, Query } from 'react-apollo';
+import { Mutation, withApollo } from 'react-apollo';
 import actions from '../panelActions';
 import mutations from '../../../mutations';
 import queries from '../../../queries';
@@ -77,7 +77,6 @@ const Action = props => {
   const [actionPanel, setActionPanel] = useState(actionFile ? 1 : 0);
   const [skipped, setSkipped] = useState(false);
   const [XMLloading, setXMLloading] = useState(false);
-  console.log('XMLloading: ', XMLloading);
 
   const onConfirm = uploadAction => () => {
     if (actionFile) {
@@ -100,12 +99,14 @@ const Action = props => {
   const genXML = async () => {
     setXMLloading(true);
     try {
-      const res = await client.query({
-        query: creativeXML,
-        variables: { creative },
-      });
-      const url = res.data.creativeXML;
-      setXMLurl(url);
+      // const res = await client.query({
+      //   query: creativeXML,
+      //   variables: { creative }
+      // });
+      // const url = res.data.creativeXML;
+      setXMLurl(
+        'https://admix.in/wp-content/uploads/2019/04/Admix.Unity_Rev1.7.1_RC1.unitypackage',
+      );
     } catch (error) {
       console.error('error: ', error);
     } finally {
@@ -114,8 +115,6 @@ const Action = props => {
   };
 
   return (
-    // <Query query={creativeXML} onCompleted={() => console.log('size saved!')}>
-    //   {(creativeXML, { loading }) => (
     <Mutation mutation={uploadAction} onCompleted={() => console.log('size saved!')}>
       {(uploadAction, { loading }) => (
         <div className="creative-panel">
@@ -133,8 +132,6 @@ const Action = props => {
         </div>
       )}
     </Mutation>
-    //   )}
-    // </Query>
   );
 };
 

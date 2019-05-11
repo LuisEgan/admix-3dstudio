@@ -5,10 +5,8 @@ import GLTFExporter from 'three-gltf-exporter';
 import TransformControls from 'three-transform-ctrls';
 import OrbitControls from 'three-orbitcontrols';
 import { FBXLoader } from '../lib/three.modules/FBXLoader';
-// import FBXLoader from 'three-fbxloader-offical';
-// import FBXLoader from 'three-fbx-loader';
-// import OBJLoader from 'three/examples/jsm/loaders/OBJLoader';
 import isEqual from 'lodash/isEqual';
+import { PANELS } from '../lib/utils/constants';
 
 class THREEScene extends React.Component {
   constructor(props) {
@@ -32,7 +30,7 @@ class THREEScene extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { source, objectScale, panel } = this.props;
+    const { source, objectScale, panel, panelPreview3D } = this.props;
 
     if (source !== prevProps.source) {
       this.loadObject();
@@ -42,14 +40,40 @@ class THREEScene extends React.Component {
       this.reScaleObject(objectScale);
     }
 
-    if (panel !== prevProps.panel) {
-      const currentObj = this.scene.getObjectByName(`ad_${prevProps.panel}`);
+    if (panel !== prevProps.panel || panelPreview3D !== prevProps.panelPreview3D) {
+      const panelChanged = panel !== prevProps.panel;
+
+      // * Destroy the preview according to the panel that changed
+      let destroyObjOfPanel = panelChanged ? prevProps.panel : prevProps.panelPreview3D;
+      let showObjOfPanel = panel;
+
+      // * Always show panelPreview3D when at the DOWNLOAD panel
+      if (panel === PANELS.DOWNLOAD) {
+        showObjOfPanel = panelPreview3D;
+      }
+
+      // * When leaving the DOWNLOAD panel
+      if (panelChanged && prevProps.panel === PANELS.DOWNLOAD) {
+        destroyObjOfPanel = panelPreview3D;
+      }
+
+      const currentObj = this.scene.getObjectByName(`ad_${destroyObjOfPanel}`);
       currentObj && this.toggleObject({ obj: currentObj, show: false });
 
-      const newObj = this.scene.getObjectByName(`ad_${panel}`);
+      const newObj = this.scene.getObjectByName(`ad_${showObjOfPanel}`);
       newObj && this.toggleObject({ obj: newObj, show: true });
     }
   }
+
+  onWindowResize = () => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer && this.renderer.setSize(width, height);
+  };
 
   threeSetup = () => {
     const width = this.mount.clientWidth;
@@ -104,6 +128,8 @@ class THREEScene extends React.Component {
     this.scene.add(grid);
 
     this.clock = new THREE.Clock();
+
+    window.addEventListener('resize', this.onWindowResize, false);
   };
 
   threeLoadingManager = () => {
@@ -195,7 +221,6 @@ class THREEScene extends React.Component {
         output = JSON.stringify(result, null, 2);
         const blob = new Blob([output], { type: 'text/plain' });
         output = URL.createObjectURL(blob);
-        console.log('PARSE - output: ', output);
         this.loadGTLF(output);
       }.bind(this),
       options,
@@ -259,7 +284,6 @@ class THREEScene extends React.Component {
 
     // const loader = new FBXLoader(this.threeLoadingManager());
     const loader = new FBXLoader();
-    console.log('FBXLoader: ', FBXLoader);
     loader.load(source, onLoad, onLoading, onLoaderError);
   };
 
@@ -292,18 +316,19 @@ class THREEScene extends React.Component {
     if (object) {
       object.scale.set(newScale, newScale, newScale);
       const box = new THREE.Box3().setFromObject(object);
-      console.log('box.getSize(): ', box.getSize());
     }
   };
 
   render() {
-    const { id } = this.props;
+    const { id, panel } = this.props;
     return (
       <div id={id}>
         <div
           ref={mount => {
             this.mount = mount;
           }}
+          style={{ display: 'flex' }}
+          className={panel !== 3 ? 'fullscreen-canvas' : 'medium-canvas'}
         />
       </div>
     );

@@ -5,6 +5,7 @@ import Form from '../components/Form';
 import mutations from '../mutations';
 
 import isEmail from 'validator/lib/isEmail';
+import { parseErrors } from '../lib/utils/parsers';
 
 import App from '../components/App';
 import BigImagePanel from '../components/BigImagePanel';
@@ -15,9 +16,16 @@ const { createUser } = mutations;
 const initialValues = { name: '', email: '', password: '' };
 
 let Register = props => {
+  const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+  let messageContainer;
 
-  const { login, isLoggedIn, client } = props;
+  const { isLoggedIn } = props;
+
+  if (isLoggedIn) {
+    Router.push('/campaigns');
+    return null;
+  }
 
   const renderFooter = () => {
     return (
@@ -58,12 +66,17 @@ let Register = props => {
         ...values,
       },
     });
+    // messageContainer.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
+    messageContainer.scrollTop = messageContainer.scrollHeight;
   };
 
-  if (isLoggedIn) {
-    Router.push('/campaigns');
-    return null;
-  }
+  const handleOnCompleted = res => {
+    console.log('createUser: ', createUser);
+    const {
+      createUser: { id },
+    } = res;
+    if (id) setMessage('User created!');
+  };
 
   return (
     <App>
@@ -73,22 +86,27 @@ let Register = props => {
           validate={validate}
           onSubmit={onSubmit}
           mutation={createUser}
-          onCompleted={e => console.log(e)}
-          onError={e => setError(e.graphQLErrors[0].message)}
+          onCompleted={handleOnCompleted}
+          onError={e => {
+            setMessage(e.graphQLErrors[0].message);
+            setError(true);
+          }}
         >
           <TextInput name="name" label="Name" />
           <TextInput name="email" label="Email" />
           <TextInput name="password" label="Password" />
           <TextInput name="password2" label="Repeat password" />
+          <div
+            ref={i => (messageContainer = i)}
+            className={`mbs ${error ? 'asyncError' : 'asyncSuccess'}`}
+            style={{ textAlign: 'center', margin: '10px 0' }}
+          >
+            {message && parseErrors(message)}
+          </div>
           <button type="submit" className="btn gradient-btn">
             Submit
           </button>
         </Form>
-        {error && (
-          <div className="mbs asyncError" style={{ textAlign: 'center', width: '70%' }}>
-            {error}
-          </div>
-        )}
       </BigImagePanel>
     </App>
   );

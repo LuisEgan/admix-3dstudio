@@ -23,6 +23,7 @@ export default {
         id
         state
         name
+        advertiser
       }
     }
   `,

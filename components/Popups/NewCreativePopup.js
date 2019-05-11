@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Router from 'next/router';
 import mutations from '../../mutations';
 import queries from '../../queries';
@@ -7,6 +7,8 @@ import Popup from '../Popup';
 import Form from '../Form';
 import TextInput from '../inputs/TextInput';
 import SelectInput from '../inputs/SelectInput';
+
+import { checkNonEmptyValues } from '../../lib/utils/validation';
 
 const { groupsByCampaign } = queries;
 const { createCreative } = mutations;
@@ -25,25 +27,24 @@ const sizeValues = [
 ];
 
 export default ({ show, togglePopup, group, campaign, selectCreative }) => {
-  const validate = values => {
-    const errors = {};
+  const [loading, setLoading] = useState(false);
 
-    for (let input in initialValues) {
-      if (values[input] === '') {
-        errors[input] = 'We need this';
-      }
-    }
+  const validate = values => {
+    let errors = {};
+
+    errors = checkNonEmptyValues({ values, exceptions: ['description'] });
 
     return errors;
   };
 
   const onSubmit = (values, mutation) => {
+    setLoading(true);
     mutation({
       variables: {
         group,
         ...values,
       },
-      refetchQueries: [{ query: groupsByCampaign, variables: { campaign } }],
+      // refetchQueries: [{ query: groupsByCampaign, variables: { campaign } }]
     });
   };
 
@@ -73,8 +74,8 @@ export default ({ show, togglePopup, group, campaign, selectCreative }) => {
               options={[{ label: 'opt1', value: '1' }, { label: 'opt2', value: '2' }]}
             />
             <SelectInput name="size" label="Creative size in the real world" options={sizeValues} />
-            <button type="submit" className="btn gradient-btn">
-              Create
+            <button type="submit" className="btn gradient-btn" disabled={loading}>
+              {loading ? 'Loading...' : 'Create'}
             </button>
           </Form>
         </div>

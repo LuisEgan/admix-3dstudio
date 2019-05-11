@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
+import { connect } from 'react-redux';
+import actions from '../../../lib/actions';
 
-const DownloadXML = props => {
-  const { XMLurl } = props;
-  console.log('XMLurl: ', XMLurl);
+const { resetSelected } = actions;
 
-  const handleDownload = () => {};
+let DownloadXML = props => {
+  const { resetSelected, XMLurl, reducerState } = props;
+  const { hadBeenVisited } = reducerState;
+
+  let link;
+
+  useEffect(() => {
+    XMLurl && !hadBeenVisited.download && link.click();
+  }, []);
+
+  const handleGoToCampaigns = () => {
+    resetSelected();
+    Router.push('/campaigns');
+  };
 
   return (
     <div className="creative-panel">
@@ -27,13 +41,31 @@ const DownloadXML = props => {
           </div>
         </div>
         <div>
-          <a className="blue-btn" href={XMLurl} target="_blank">
-            Download XML
+          <a ref={i => (link = i)} className="blue-btn" href={XMLurl} target="_blank">
+            Download XML again
           </a>
+
+          <br />
+          <br />
+
+          <button className="white-btn" onClick={handleGoToCampaigns}>
+            My campaigns
+          </button>
         </div>
       </div>
     </div>
   );
 };
+
+const mapDispatchToProps = dispatch => ({
+  resetSelected: () => {
+    dispatch(resetSelected());
+  },
+});
+
+DownloadXML = connect(
+  null,
+  mapDispatchToProps,
+)(DownloadXML);
 
 export default DownloadXML;
