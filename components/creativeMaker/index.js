@@ -112,7 +112,7 @@ const CreativeMaker = props => {
 
     steps = [
       ...steps,
-      <Step transition="scale">
+      <Step transition="scale" position={100}>
         {({ accomplished }) => (
           <div className="step">
             <button
