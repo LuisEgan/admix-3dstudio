@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import mutations from '../../mutations';
 import queries from '../../queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
+
+import { checkNonEmptyValues } from '../../lib/utils/validation';
 
 const { createGroup } = mutations;
 const { groupsByCampaign } = queries;
@@ -15,19 +17,18 @@ const initialValues = {
 };
 
 export default ({ show, togglePopup, campaign }) => {
-  const validate = values => {
-    const errors = {};
+  const [loading, setLoading] = useState(false);
 
-    for (let input in values) {
-      if (!values[input] || values[input] === '') {
-        errors[input] = 'We need this';
-      }
-    }
+  const validate = values => {
+    let errors = {};
+
+    errors = checkNonEmptyValues({ values, exceptions: ['description'] });
 
     return errors;
   };
 
   const onSubmit = (values, mutation) => {
+    setLoading(true);
     mutation({
       variables: {
         campaign,
@@ -41,6 +42,10 @@ export default ({ show, togglePopup, campaign }) => {
       ],
       awaitRefetchQueries: true,
     });
+  };
+
+  const handleCompleted = ({ createCampaign }) => {
+    setLoading(false);
     togglePopup();
   };
 
@@ -54,12 +59,13 @@ export default ({ show, togglePopup, campaign }) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             mutation={createGroup}
+            onCompleted={handleCompleted}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Group name*" />
             <TextInput name="description" label="Description*" />
-            <button type="submit" className="btn gradient-btn">
-              Create
+            <button type="submit" className="btn gradient-btn" disabled={loading}>
+              {loading ? 'Loading...' : 'Create'}
             </button>
           </Form>
         </div>

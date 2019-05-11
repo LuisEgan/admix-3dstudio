@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Mutation, withApollo } from 'react-apollo';
 import STR from '../../../lib/utils/strFuncs';
 import actions from '../panelActions';

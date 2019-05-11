@@ -17,7 +17,6 @@ export default {
   `,
   editGroup: gql`
     mutation EditGroup(
-      $user: ID!
       $group: ID!
       $name: String
       $state: String
@@ -25,7 +24,6 @@ export default {
       $description: String
     ) {
       editGroup(
-        user: $user
         group: $group
         name: $name
         state: $state
@@ -34,6 +32,7 @@ export default {
       ) {
         id
         name
+        description
         campaign {
           id
           name
