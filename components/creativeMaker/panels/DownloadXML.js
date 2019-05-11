@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import { connect } from 'react-redux';
 import actions from '../../../lib/actions';
@@ -6,11 +6,13 @@ import actions from '../../../lib/actions';
 const { resetSelected } = actions;
 
 let DownloadXML = props => {
-  const { resetSelected, XMLurl } = props;
+  const { resetSelected, XMLurl, reducerState } = props;
+  const { hadBeenVisited } = reducerState;
+
   let link;
 
   useEffect(() => {
-    XMLurl && link.click();
+    XMLurl && !hadBeenVisited.download && link.click();
   }, []);
 
   const handleGoToCampaigns = () => {

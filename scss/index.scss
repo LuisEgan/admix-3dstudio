@@ -8,7 +8,9 @@ $grey-border: #eee;
 $grey-text: #aaa;
 $black: #000;
 $white: #fff;
+$successGreen: #2eb82e;
 $tableBorder: rgba(179, 179, 179, 0.1);
+$boxShadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
 
 * {
   font-family: 'Montserrat';
@@ -1404,6 +1406,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
   color: red;
 }
 
+.asyncSuccess {
+  color: $successGreen;
+}
+
 .asyncData {
   color: #14b9be;
 }
@@ -1573,7 +1579,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     &:first-child {
       width: 35%;
       display: flex;
-      justify-content: center;
+      // justify-content: center;
       flex-flow: column;
 
       > div {
@@ -1620,7 +1626,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     transition: 0s;
     position: relative;
     flex-flow: column;
-    height: 60%;
+    // height: 60%;
     overflow: auto;
 
     #register-feedback {
@@ -1740,6 +1746,13 @@ $inputsFontSize: calc(0.45em+0.3vw);
       align-items: center;
       padding: 0;
       margin-left: 35px;
+      width: 50%;
+    }
+
+    .campaign-status {
+      min-width: 200px;
+      justify-content: left;
+      color: $grey-text;
     }
   }
 
@@ -1758,21 +1771,18 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
 
-    .campaign-status {
-      height: 80%;
-      min-width: 200px;
-    }
-
     .campaign-buttons {
       display: flex;
       position: relative;
       padding: 1% 0;
 
       button {
-        background-color: #ffffff;
+        background-color: $blueAdmix;
+        color: white;
         border: none;
-        border-radius: 50px;
-        padding: 0;
+        border-radius: 5px;
+        padding: 7px 2.5vw;
+        box-shadow: $boxShadow;
 
         &:not(:first-of-type) {
           margin-left: 8px;

@@ -18,11 +18,13 @@ const initialState = {
   lastPanel: initialPanel,
   panelPreview3D: initialPanel,
   visited: { model: true, gaze: false, action: false, download: false },
+  hadBeenVisited: { model: true, gaze: false, action: false, download: false },
   file: { model: null, gaze: null, action: null },
 };
 
 const reducer = (state, action) => {
   const { type, payload } = action;
+  const { panelName, panelFile } = payload;
   // console.warn('type: ', type);
   switch (type) {
     case actions.SET_CURRENT_PANEL:
@@ -34,13 +36,13 @@ const reducer = (state, action) => {
         lastPanel: currentPanel,
         farthestPanel: payload > farthestPanel ? payload : farthestPanel,
         visited: { ...state.visited, [panelNames[payload]]: true },
+        hadBeenVisited: { ...state.visited, [panelNames[state.lastPanel]]: true },
       };
 
     case actions.SET_PREVIEW_3D:
       return { ...state, panelPreview3D: payload };
 
     case actions.SET_FILE:
-      const { panelName, panelFile } = payload;
       return { ...state, file: { ...state.file, [panelName]: panelFile } };
 
     default:
