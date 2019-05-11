@@ -90,7 +90,12 @@ let Groups = props => {
               >
                 <div className="creative-title">
                   <span>{name}</span>
-                  <CogSVG onClick={() => togglePopup('showEditCreative', { creative })} />
+                  <CogSVG
+                    onClick={e => {
+                      e.stopPropagation();
+                      togglePopup('showEditCreative', { creative });
+                    }}
+                  />
                 </div>
               </div>
             );
@@ -127,6 +132,7 @@ let Groups = props => {
         show={state.showEditGroup}
         togglePopup={() => togglePopup('showEditGroup', { group: state.clickedGroup })}
         group={state.clickedGroup}
+        campaign={campaign.id}
       />
       <NewGroupPopup
         show={state.showNewGroup}
@@ -137,6 +143,7 @@ let Groups = props => {
         show={state.showEditCreative}
         togglePopup={() => togglePopup('showEditCreative', { creative: state.clickedCreative })}
         creative={state.clickedCreative}
+        campaign={campaign.id}
       />
       <NewCreativePopup
         show={state.showNewCreative}

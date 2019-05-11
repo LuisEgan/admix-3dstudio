@@ -48,7 +48,7 @@ let Campaigns = props => {
   const renderCampaigns = () => {
     if (loading) return <div>Loading...</div>;
     return (campaigns || []).map(campaign => {
-      const { name, id } = campaign;
+      const { id, name, advertiser } = campaign;
 
       return (
         <div className={`campaign-select-container mb`} key={id}>
@@ -57,15 +57,17 @@ let Campaigns = props => {
               <img src="https://pbs.twimg.com/media/DxDZAEwWwAEM3C3.jpg" alt="pic" />
             </div>
             <div className="campaign-name">{name}</div>
+            <div className="campaign-status mb cc">{advertiser}</div>
           </div>
           <div id="campaign-select-buttons">
-            <div>
-              <div className="campaign-status mb" />
-            </div>
+            <div />
 
             <div>
               <div className="campaign-buttons">
                 <button onClick={() => selectCampaign({ campaign, redirectTo: '/groups' })}>
+                  Edit
+                </button>
+                {/* <button onClick={() => selectCampaign({ campaign, redirectTo: '/groups' })}>
                   {<SetupSVG />}
                 </button>
                 <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
@@ -74,7 +76,7 @@ let Campaigns = props => {
 
                 <button onClick={() => selectCampaign({ campaign, redirectTo: '/' })}>
                   {<ReportSVG />}
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
