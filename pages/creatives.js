@@ -14,6 +14,7 @@ const initialPanel = 0;
 const initialState = {
   currentPanel: initialPanel,
   currentPanelName: panelNames[initialPanel],
+  currentChecklistItem: 1,
   farthestPanel: initialPanel,
   lastPanel: initialPanel,
   panelPreview3D: initialPanel,
@@ -41,6 +42,9 @@ const reducer = (state, action) => {
 
     case actions.SET_PREVIEW_3D:
       return { ...state, panelPreview3D: payload };
+
+    case actions.SET_CURRENT_CHECKLIST_ITEM:
+      return { ...state, currentChecklistItem: payload };
 
     case actions.SET_FILE:
       return { ...state, file: { ...state.file, [panelName]: panelFile } };
@@ -92,12 +96,12 @@ let Creatives = props => {
       <div className="step-container" id="creatives">
         <div id="apps-header" className="step-title">
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
-          <div id="creatives-title">
+          <div id="creative-title">
             <h3 className="st sc-h3">{creative.name}</h3>
           </div>
         </div>
 
-        <div id="creatives-content">
+        <div id="creative-content">
           <CreativeMaker reducerState={reducerState} dispatch={dispatch} creative={creative} />
         </div>
       </div>

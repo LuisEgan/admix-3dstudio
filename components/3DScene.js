@@ -245,7 +245,8 @@ class THREEScene extends React.Component {
   };
 
   loadFBX = source => {
-    const { setObjSize, panel } = this.props;
+    const { setObjSize, panel, setLoading3Dmodel } = this.props;
+    setLoading3Dmodel(true);
 
     const objAlreadyExists = this.scene.getObjectByName(`ad_${panel}`);
     if (objAlreadyExists) this.scene.remove(objAlreadyExists);
@@ -272,6 +273,7 @@ class THREEScene extends React.Component {
       // panel === 0 && setObjSize(box.getSize());
 
       this.scene.add(object);
+      setLoading3Dmodel(false);
     }.bind(this);
 
     const onLoading = xhr => {
@@ -280,6 +282,7 @@ class THREEScene extends React.Component {
 
     const onLoaderError = error => {
       console.error(error);
+      setLoading3Dmodel(false);
     };
 
     // const loader = new FBXLoader(this.threeLoadingManager());

@@ -15,6 +15,8 @@ import DownloadXML from './panels/DownloadXML';
 import STR from '../../lib/utils/strFuncs';
 import actions from './panelActions';
 
+import admixLogo from '../../assets/img/isologo.png';
+
 const Panels = [
   props => <Model {...props} />,
   props => <Gaze {...props} />,
@@ -22,7 +24,7 @@ const Panels = [
   props => <DownloadXML {...props} />,
 ];
 
-const { editCreative, uploadModel } = mutations;
+const { editCreative } = mutations;
 
 const checklistSteps = [
   'campaign setup',
@@ -37,7 +39,7 @@ const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;
   const { currentPanelName, currentPanel, farthestPanel, panelPreview3D } = reducerState;
   const panelsNames = ['Model', 'Gaze', 'Action'];
-  const totalChecklistSteps = checklistSteps.length + 1;
+  const totalChecklistSteps = checklistSteps.length;
   const stepPositions = [...checklistSteps.map((s, i) => (100 / totalChecklistSteps) * i), 100];
 
   let initialSize = 125;
@@ -53,6 +55,8 @@ const CreativeMaker = props => {
   const [size, setSize] = useState(initialSize);
   const [XMLurl, setXMLurl] = useState('');
   const [checkListDone, setCheckListDone] = useState(0);
+  const [checkListCurrent, setCheckListCurrent] = useState(1);
+  const [loading3Dmodel, setLoading3Dmodel] = useState(false);
 
   const loadFile = event => {
     event.preventDefault();
@@ -70,10 +74,20 @@ const CreativeMaker = props => {
       const userImageURL = URL.createObjectURL(file);
       setSource(userImageURL);
     }
+    return file;
+  };
+
+  const triggerDownload = () => {
+    let a = document.createElement('a');
+    a.href = XMLurl;
+    a.download = XMLurl;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const renderPanelToggles = () => {
-    if (currentPanel > 2) return;
+    // if (currentPanel > 2) return;
 
     return panelsNames.map((toggle, i) => {
       const panelReached = i <= farthestPanel;
@@ -96,113 +110,132 @@ const CreativeMaker = props => {
     let steps = checklistSteps.map((step, i) => {
       return (
         <Step transition="scale" key={step} position={(100 / totalChecklistSteps) * i}>
-          {({ accomplished }) => (
-            <div className="step">
-              <img
-                style={{ filter: `grayscale(${accomplished ? 0 : 80}%)` }}
-                width="30"
-                src="https://vignette.wikia.nocookie.net/pkmnshuffle/images/9/9d/Pichu.png/revision/latest?cb=20170407222851"
-              />
-              <div>{step}</div>
-            </div>
-          )}
+          {stepData => {
+            const { accomplished } = stepData;
+
+            return (
+              <div className="step clickable" onClick={() => console.log(step)}>
+                <img
+                  style={{ opacity: accomplished ? 1 : 0.3 }}
+                  width="30"
+                  src={admixLogo}
+                  className={checkListCurrent === i ? 'current-item' : ''}
+                />
+                <div>{step}</div>
+              </div>
+            );
+          }}
         </Step>
       );
     });
 
     steps = [
       ...steps,
-      <Step transition="scale" position={100}>
-        {({ accomplished }) => (
-          <div className="step">
-            <button
-              className={`blue-btn ${checkListDone < 7 && 'disabled-btn'}`}
-              disabled={checkListDone !== 7}
-            >
-              Download XML
-            </button>
-          </div>
-        )}
+      <Step transition="scale" position={100} key="final">
+        {stepData => {
+          const { accomplished } = stepData;
+          return (
+            <div className="step">
+              <button
+                className={`blue-btn ${!accomplished && 'disabled-btn'}`}
+                disabled={!accomplished}
+                onClick={triggerDownload}
+              >
+                Download XML
+              </button>
+            </div>
+          );
+        }}
       </Step>,
     ];
 
     return steps;
   };
 
+  const handleEditCreativeOnCompleted = callback => {
+    callback && callback();
+  };
+
   return (
-    <Mutation mutation={uploadModel} onCompleted={() => console.log('size saved!')}>
-      {(uploadModel, { loading: uploadModelLoading }) => (
-        <Mutation mutation={editCreative} onCompleted={() => console.log('size saved!')}>
-          {(editCreative, { loading: editCreativeLoading }) => (
-            <div id="creative-maker">
-              <div id="creative-webgl">
-                <THREEScene
-                  id="creative-3d"
-                  source={source}
-                  fileType={fileType}
-                  panel={currentPanel}
-                  panelPreview3D={panelPreview3D}
-                />
-                <div id="creative-size" className="sst">
-                  {currentPanel !== 3 ? (
-                    <div id="creative-size-text" className="mb">{`Scale size: ${STR.parseSize(
-                      size,
-                    )}`}</div>
-                  ) : (
-                    <React.Fragment>
-                      {panelsNames.map((panel, i) => {
-                        return (
-                          <button
-                            key={panel}
-                            onClick={() => dispatch({ type: actions.SET_PREVIEW_3D, payload: i })}
-                            className={panelPreview3D === i ? 'blue-btn' : 'white-btn'}
-                          >
-                            {`Preview ${panel}`}
-                          </button>
-                        );
-                      })}
-                    </React.Fragment>
-                  )}
-                </div>
-              </div>
-
-              <div id="creative-panels">
-                <div className="creative-panels-headers">{renderPanelToggles()}</div>
-
-                <div id="creative-panels-content">
-                  {Panels[currentPanel]({
-                    reducerState,
-                    dispatch,
-                    creative: creative.id,
-                    loadFile,
-                    uploadModel,
-                    editCreative,
-                    size,
-                    setSize,
-                    loading: { uploadModelLoading, editCreativeLoading },
-                    setXMLurl,
-                    XMLurl,
-                    setCheckListDone,
+    <Mutation mutation={editCreative} onCompleted={() => handleEditCreativeOnCompleted()}>
+      {(editCreative, { loading: editCreativeLoading }) => (
+        <div id="creative-maker">
+          <div id="creative-webgl">
+            <THREEScene
+              id="creative-3d"
+              source={source}
+              fileType={fileType}
+              panel={currentPanel}
+              panelPreview3D={panelPreview3D}
+              setLoading3Dmodel={setLoading3Dmodel}
+            />
+            <div id="creative-size" className="sst">
+              {currentPanel !== 3 ? (
+                <div id="creative-size-text" className="mb">{`Scale size: ${STR.parseSize(
+                  size,
+                )}`}</div>
+              ) : (
+                <React.Fragment>
+                  {panelsNames.map((panel, i) => {
+                    return (
+                      <button
+                        key={`${panel} - ${i}`}
+                        onClick={() => dispatch({ type: actions.SET_PREVIEW_3D, payload: i })}
+                        className={panelPreview3D === i ? 'blue-btn' : 'white-btn'}
+                      >
+                        {`Preview ${panel}`}
+                      </button>
+                    );
                   })}
-                </div>
-              </div>
-
-              <div id="creatives-panels-checklist">
-                <div className="creative-panels-headers sst cc">Checklist</div>
-
-                <ProgressBar
-                  percent={(100 / totalChecklistSteps) * checkListDone}
-                  filledBackground="linear-gradient(to right, #fefb72, #f0bb31)"
-                  className="progressBar"
-                  stepPositions={stepPositions}
-                  height={2} // height because the bar is rotated 90deg
-                >
-                  {renderChecklistSteps()}
-                </ProgressBar>
-              </div>
+                </React.Fragment>
+              )}
             </div>
-          )}
-        </Mutation>
+          </div>
+
+          <div id="creative-panels">
+            <div className="creative-panels-headers">{renderPanelToggles()}</div>
+
+            <div id="creative-panels-content">
+              {Panels[currentPanel]({
+                // * General creative maker state
+                reducerState,
+                dispatch,
+
+                // * Handle 3D model
+                loadFile,
+                loading3Dmodel,
+
+                // * Edit creative
+                creative: creative.id,
+                editCreative,
+                editCreativeLoading,
+                handleEditCreativeOnCompleted,
+
+                // * Handle size, url and checklist
+                size,
+                setSize,
+                setXMLurl,
+                XMLurl,
+                setCheckListDone,
+                setCheckListCurrent,
+              })}
+            </div>
+          </div>
+
+          <div id="creative-panels-checklist">
+            <div className="creative-panels-headers sst cc">Checklist</div>
+
+            <ProgressBar
+              percent={(100 / totalChecklistSteps) * checkListDone}
+              filledBackground="linear-gradient(to right, #a3d4f5, #157cc1)"
+              className="progressBar"
+              stepPositions={stepPositions}
+              height={2} // height because the bar is rotated 90deg
+            >
+              {renderChecklistSteps()}
+            </ProgressBar>
+          </div>
+        </div>
       )}
     </Mutation>
   );

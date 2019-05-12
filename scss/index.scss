@@ -4,6 +4,7 @@
 
 $mobileBreakpoint: 830px;
 $blueAdmix: #157cc1;
+$bluePaleAdmix: #d1eafa;
 $greyBorder: #eee;
 $greyText: #aaa;
 $greyDisabled: #cccccc;
@@ -136,6 +137,12 @@ img {
 .forbidden-cursor {
   &:hover {
     cursor: no-drop;
+  }
+}
+
+.clickable {
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -1892,33 +1899,11 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 #creatives {
-  .creative-panels-headers {
-    display: flex;
-    border-bottom: solid 2px $greyBorder;
-    height: 12%;
-
-    > div {
-      @extend .cc;
-      width: 33.33%;
-      padding: 10px 0;
-      position: relative;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-
-    .creative-panel-active {
-      background: $blueAdmix;
-      color: white;
-    }
-  }
-
   #apps-header {
     div {
       display: flex;
     }
-    #creatives-title {
+    #creative-title {
       > div {
         margin-left: 12%;
         > div {
@@ -1941,8 +1926,30 @@ $inputsFontSize: calc(0.45em+0.3vw);
       border-radius: 10px;
     }
 
+    .creative-panels-headers {
+      display: flex;
+      border-bottom: solid 2px $greyBorder;
+      height: 12%;
+
+      > div {
+        @extend .cc;
+        width: 33.33%;
+        padding: 10px 0;
+        position: relative;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .creative-panel-active {
+        background: $blueAdmix;
+        color: white;
+      }
+    }
+
     #creative-webgl {
-      width: 50%;
+      width: 45%;
       position: relative;
       #creative-3d {
         > div {
@@ -1981,10 +1988,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
       display: flex;
       flex-flow: column;
       // border-left: none;
-      width: 25%;
+      width: 31%;
 
       #creative-panels-content {
-        .creative-panel {
+        height: 88%;
+
+        #creative-panel {
           height: 100%;
           > div {
             display: flex;
@@ -1992,10 +2001,54 @@ $inputsFontSize: calc(0.45em+0.3vw);
             align-items: center;
             justify-content: space-evenly;
             height: 100%;
+            padding: 0 5%;
 
             > div,
             button {
               padding: 15px;
+            }
+          }
+          #creative-panel-content {
+            height: 70%;
+
+            .creative-set-object {
+              > div {
+                &:first-child {
+                  @extend .mb;
+                  margin-bottom: 15%;
+                }
+
+                &:nth-child(2) {
+                  @extend .cc;
+                  margin-bottom: 5%;
+                }
+
+                &:last-child() {
+                  @extend .mbs;
+                  color: $greyText;
+                  text-align: center;
+                }
+              }
+            }
+          }
+
+          #creative-panel-footer {
+            height: 30%;
+            flex-flow: row;
+
+            button {
+              width: 100%;
+              box-shadow: unset;
+            }
+
+            > div {
+              padding: 0;
+              width: 45%;
+
+              .skip-btn {
+                display: block;
+                text-align: left;
+              }
             }
           }
         }
@@ -2017,10 +2070,14 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
     }
 
-    #creatives-panels-checklist {
+    #creative-panels-checklist {
       --parentHeight: 100%;
       width: 20%;
       height: var(--parentHeight);
+
+      img {
+        border-radius: 100%;
+      }
 
       .RSPBprogressBar {
         @extend .mbs;
@@ -2046,6 +2103,11 @@ $inputsFontSize: calc(0.45em+0.3vw);
             margin-left: 45%;
           }
         }
+      }
+
+      .current-item {
+        background: $bluePaleAdmix;
+        background: radial-gradient(closest-side, $blueAdmix, $blueAdmix, white);
       }
     }
   }
@@ -2233,6 +2295,9 @@ $ballSize: 20px;
   background-color: white;
   display: flex;
   flex-flow: column;
+  border-radius: 0.2rem;
+  border: solid 1px $greyText;
+  padding: 5px;
 
   &:hover {
     cursor: text;
@@ -2561,5 +2626,104 @@ $ballSize: 20px;
 
   #cancel-btn {
     margin-top: 5px;
+  }
+}
+
+.admix-track {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 13.8px 0;
+  --track-box-shadow: 0.1px 0.1px 1px #000000, 0px 0px 0.1px #0d0d0d;
+  --track-bg: rgb(84, 84, 84);
+  --track-gradient-bg: linear-gradient(90deg, rgba(56, 56, 56, 1) 0%, rgba(200, 194, 194, 1) 100%);
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: var(--track-box-shadow);
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+    border-radius: 21px;
+    border: 0px solid $greyBorder;
+  }
+  &:focus::-webkit-slider-runnable-track {
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+  }
+  &::-moz-range-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    box-shadow: var(--track-box-shadow);
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+    border-radius: 21px;
+    border: 0px solid $greyBorder;
+  }
+  &::-ms-track {
+    width: 100%;
+    height: 8.4px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+
+  &::-webkit-slider-thumb {
+    box-shadow: var(--track-box-shadow);
+    height: 28px;
+    width: 16px;
+    border-radius: 10px;
+    background: #000013;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -10px;
+  }
+  &::-moz-range-thumb {
+    box-shadow: var(--track-box-shadow);
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #000013;
+    cursor: pointer;
+  }
+  &::-ms-thumb {
+    box-shadow: var(--track-box-shadow);
+    border: 1px solid #000000;
+    height: 36px;
+    width: 16px;
+    border-radius: 3px;
+    background: #000013;
+    cursor: pointer;
+    height: 8.4px;
+  }
+
+  &::-ms-fill-lower {
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: var(--track-box-shadow);
+  }
+  &::-ms-fill-upper {
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+    box-shadow: var(--track-box-shadow);
+  }
+  &:focus::-ms-fill-lower {
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
+  }
+  &:focus::-ms-fill-upper {
+    background: var(--track-bg);
+    background: var(--track-gradient-bg);
   }
 }

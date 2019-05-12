@@ -3,83 +3,32 @@ import { Mutation, withApollo } from 'react-apollo';
 import actions from '../panelActions';
 import mutations from '../../../mutations';
 import queries from '../../../queries';
+import { PANELS } from '../../../lib/utils/constants';
 
 import SetObjectPanel from './SetObjectPanel';
+import PanelFooter from '../PanelFooter';
 
 const { uploadAction } = mutations;
 const { creativeXML } = queries;
-
-const NextPanelPrompt = ({ dispatch, setActionPanel, file, skipped, genXML, XMLloading }) => {
-  const mainLabel = () => {
-    if (file && !skipped) return 'Animation uploaded';
-
-    return 'No animation uploaded';
-  };
-
-  const checkLabel = () => {
-    if (file && !skipped) return file.name;
-
-    return 'no file';
-  };
-
-  const handleNext = async () => {
-    await genXML();
-
-    dispatch({ type: actions.SET_CURRENT_PANEL, payload: 3 });
-    if (skipped) {
-      dispatch({ type: actions.SET_FILE, payload: { panelName: 'action', panelFile: null } });
-    }
-  };
-
-  return (
-    <div>
-      <div className="creative-checks">
-        <div>
-          <h3>{mainLabel()}</h3>
-        </div>
-        <div>
-          <input type="checkbox" checked={!!file && !skipped} readOnly />
-          <span>{checkLabel()}</span>
-          <span onClick={() => setActionPanel(0)} className="creative-checks-edit">
-            edit
-          </span>
-        </div>
-      </div>
-
-      <div>You'll be able to preview your animated model at the end</div>
-      <div>
-        <button type="button" className="blue-btn" onClick={handleNext}>
-          {XMLloading ? 'Loading...' : 'Generate XML'}
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const ActionPanels = [
-  props => <SetObjectPanel {...props} label={'Upload action'} />,
-  props => <NextPanelPrompt {...props} />,
-];
 
 const Action = props => {
   const {
     client,
     loadFile,
-    loading,
+    loading3Dmodel,
     creative,
     dispatch,
     setXMLurl,
     setCheckListDone,
+    setCheckListCurrent,
     reducerState: {
       file: { action: actionFile },
     },
   } = props;
 
-  const [actionPanel, setActionPanel] = useState(actionFile ? 1 : 0);
-  const [skipped, setSkipped] = useState(false);
   const [XMLloading, setXMLloading] = useState(false);
 
-  const onConfirm = uploadAction => () => {
+  const handleNext = uploadAction => () => {
     if (actionFile) {
       uploadAction({
         variables: {
@@ -88,53 +37,67 @@ const Action = props => {
         },
       });
     }
-    setSkipped(false);
-    setCheckListDone(4);
-    setActionPanel(1);
   };
 
-  const onSkip = () => {
-    setSkipped(true);
-    setCheckListDone(4);
-    setActionPanel(1);
+  const onSkip = async () => {
+    actionFile &&
+      dispatch({ type: actions.SET_FILE, payload: { panelName: 'action', panelFile: null } });
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.DOWNLOAD });
+    await genXML();
   };
 
   const genXML = async () => {
     setXMLloading(true);
     setCheckListDone(5);
+    setCheckListCurrent(6);
     try {
       const res = await client.query({
         query: creativeXML,
         variables: { creative },
       });
       const url = res.data.creativeXML;
-      // setXMLurl(
-      //   'https://admix.in/wp-content/uploads/2019/04/Admix.Unity_Rev1.7.1_RC1.unitypackage',
-      // );
       setXMLurl(url);
     } catch (error) {
       console.error('error: ', error);
     } finally {
       setXMLloading(false);
       setCheckListDone(6);
+      setCheckListCurrent(7);
     }
   };
 
+  const handleUploadOnCompleted = async () => {
+    setCheckListDone(4);
+    setCheckListCurrent(5);
+    await genXML();
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.DOWNLOAD });
+  };
+
   return (
-    <Mutation mutation={uploadAction} onCompleted={() => console.log('size saved!')}>
-      {(uploadAction, { loading }) => (
-        <div className="creative-panel">
-          {ActionPanels[actionPanel]({
-            file: actionFile,
-            loadFile,
-            dispatch,
-            setActionPanel,
-            onConfirm: onConfirm(uploadAction),
-            onSkip,
-            skipped,
-            genXML,
-            XMLloading,
-          })}
+    <Mutation mutation={uploadAction} onCompleted={handleUploadOnCompleted}>
+      {(uploadAction, { loading: uploadLoading }) => (
+        <div id="creative-panel">
+          <div id="creative-panel-content">
+            <SetObjectPanel
+              loadFile={loadFile}
+              uploadLoading={uploadLoading}
+              loading3Dmodel={loading3Dmodel}
+              panelDescription={'Now set the model for action.'}
+              label={'Upload action animation'}
+              skippable={true}
+            />
+          </div>
+
+          <div id="creative-panel-footer">
+            <PanelFooter
+              onBack={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.GAZE })}
+              onSkip={onSkip}
+              onNext={handleNext(uploadAction)}
+              nextLoading={uploadLoading || loading3Dmodel || XMLloading}
+              loadedFile={actionFile}
+              nextText={'Generate XML'}
+            />
+          </div>
         </div>
       )}
     </Mutation>
