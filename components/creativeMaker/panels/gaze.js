@@ -15,7 +15,7 @@ const Gaze = props => {
     loading3Dmodel,
     creative,
     dispatch,
-    setCheckListDone,
+    updateChecklistDone,
     setCheckListCurrent,
     reducerState: {
       file: { gaze: gazeFile },
@@ -38,13 +38,13 @@ const Gaze = props => {
     gazeFile &&
       dispatch({ type: actions.SET_FILE, payload: { panelName: 'gaze', panelFile: null } });
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.ACTION });
-    setCheckListDone(3);
+    updateChecklistDone(3);
     setCheckListCurrent(4);
   };
 
   const handleUploadOnCompleted = () => {
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.ACTION });
-    setCheckListDone(3);
+    updateChecklistDone(3);
     setCheckListCurrent(4);
   };
 

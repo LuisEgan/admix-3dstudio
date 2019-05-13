@@ -16,6 +16,7 @@ import STR from '../../lib/utils/strFuncs';
 import actions from './panelActions';
 
 import admixLogo from '../../assets/img/isologo.png';
+import { PANELS } from '../../lib/utils/constants';
 
 const Panels = [
   props => <Model {...props} />,
@@ -35,14 +36,14 @@ const checklistSteps = [
   'ad generated',
 ];
 
+const panelsNames = ['Model', 'Gaze', 'Action'];
+let initialSize = 125;
+
 const CreativeMaker = props => {
   const { dispatch, creative, reducerState } = props;
   const { currentPanelName, currentPanel, farthestPanel, panelPreview3D } = reducerState;
-  const panelsNames = ['Model', 'Gaze', 'Action'];
   const totalChecklistSteps = checklistSteps.length;
   const stepPositions = [...checklistSteps.map((s, i) => (100 / totalChecklistSteps) * i), 100];
-
-  let initialSize = 125;
 
   if (creative.size === 'small') {
     initialSize = 25;
@@ -54,7 +55,9 @@ const CreativeMaker = props => {
   const [fileType, setFileType] = useState(null);
   const [size, setSize] = useState(initialSize);
   const [XMLurl, setXMLurl] = useState('');
+  // * check list steps done
   const [checkListDone, setCheckListDone] = useState(0);
+  // * panel view according to checklist
   const [checkListCurrent, setCheckListCurrent] = useState(1);
   const [loading3Dmodel, setLoading3Dmodel] = useState(false);
 
@@ -107,6 +110,28 @@ const CreativeMaker = props => {
   };
 
   const renderChecklistSteps = () => {
+    const _handleStepOnClick = stepNum => {
+      if (checkListDone + 1 < stepNum || stepNum === 0) return;
+
+      setCheckListCurrent(stepNum);
+
+      let newPanel = null;
+
+      switch (stepNum) {
+        case 3:
+          newPanel = PANELS.GAZE;
+          break;
+        case 4:
+        case 5:
+          newPanel = PANELS.ACTION;
+          break;
+        default:
+          newPanel = 0;
+      }
+
+      dispatch({ type: actions.SET_CURRENT_PANEL, payload: newPanel });
+    };
+
     let steps = checklistSteps.map((step, i) => {
       return (
         <Step transition="scale" key={step} position={(100 / totalChecklistSteps) * i}>
@@ -114,7 +139,7 @@ const CreativeMaker = props => {
             const { accomplished } = stepData;
 
             return (
-              <div className="step clickable" onClick={() => console.log(step)}>
+              <div className="step clickable" onClick={() => _handleStepOnClick(i)}>
                 <img
                   style={{ opacity: accomplished ? 1 : 0.3 }}
                   width="30"
@@ -131,7 +156,7 @@ const CreativeMaker = props => {
 
     steps = [
       ...steps,
-      <Step transition="scale" position={100} key="final">
+      <Step position={100} key="final">
         {stepData => {
           const { accomplished } = stepData;
           return (
@@ -150,6 +175,11 @@ const CreativeMaker = props => {
     ];
 
     return steps;
+  };
+
+  const updateChecklistDone = newChecklistItemNum => {
+    // * update checklist only if the new check hasn't been done
+    if (checkListDone < newChecklistItemNum) setCheckListDone(newChecklistItemNum);
   };
 
   const handleEditCreativeOnCompleted = callback => {
@@ -211,12 +241,15 @@ const CreativeMaker = props => {
                 editCreativeLoading,
                 handleEditCreativeOnCompleted,
 
-                // * Handle size, url and checklist
+                // * Handle size and url
                 size,
                 setSize,
                 setXMLurl,
                 XMLurl,
-                setCheckListDone,
+
+                // * Handle checklist
+                checkListCurrent,
+                updateChecklistDone,
                 setCheckListCurrent,
               })}
             </div>

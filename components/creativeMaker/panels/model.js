@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mutation, withApollo } from 'react-apollo';
 import STR from '../../../lib/utils/strFuncs';
 import actions from '../panelActions';
@@ -62,15 +62,21 @@ const Model = props => {
     size,
     setSize,
     dispatch,
-    setCheckListDone,
+    updateChecklistDone,
     setCheckListCurrent,
+    checkListCurrent,
     reducerState: {
       file: { model: modelFile },
     },
   } = props;
 
-  const [modelPanel, setModelPanel] = useState(modelFile ? 1 : 0);
-  // const [modelPanel, setModelPanel] = useState(1);
+  // * if there's a model already loaded show the set size panel
+  // * unless the user clicked on the checklist on "base model uploaded"
+  const [modelPanel, setModelPanel] = useState(checkListCurrent - 1);
+
+  useEffect(() => {
+    setModelPanel(checkListCurrent - 1);
+  }, [checkListCurrent]);
 
   const reScale = e => {
     const {
@@ -91,7 +97,7 @@ const Model = props => {
       dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.GAZE });
 
       // * Update checklist
-      setCheckListDone(2);
+      updateChecklistDone(2);
       setCheckListCurrent(3);
     });
   };
@@ -115,7 +121,7 @@ const Model = props => {
     setModelPanel(1);
 
     // * Update checklist
-    setCheckListDone(1);
+    updateChecklistDone(1);
     setCheckListCurrent(2);
   };
 

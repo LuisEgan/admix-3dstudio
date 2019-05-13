@@ -19,7 +19,7 @@ const Action = props => {
     creative,
     dispatch,
     setXMLurl,
-    setCheckListDone,
+    updateChecklistDone,
     setCheckListCurrent,
     reducerState: {
       file: { action: actionFile },
@@ -48,7 +48,7 @@ const Action = props => {
 
   const genXML = async () => {
     setXMLloading(true);
-    setCheckListDone(5);
+    updateChecklistDone(5);
     setCheckListCurrent(6);
     try {
       const res = await client.query({
@@ -61,13 +61,13 @@ const Action = props => {
       console.error('error: ', error);
     } finally {
       setXMLloading(false);
-      setCheckListDone(6);
+      updateChecklistDone(6);
       setCheckListCurrent(7);
     }
   };
 
   const handleUploadOnCompleted = async () => {
-    setCheckListDone(4);
+    updateChecklistDone(4);
     setCheckListCurrent(5);
     await genXML();
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.DOWNLOAD });

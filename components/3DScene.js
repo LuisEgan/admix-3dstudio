@@ -331,7 +331,7 @@ class THREEScene extends React.Component {
             this.mount = mount;
           }}
           style={{ display: 'flex' }}
-          className={panel !== 3 ? 'fullscreen-canvas' : 'medium-canvas'}
+          className={panel !== PANELS.DOWNLOAD ? 'fullscreen-canvas' : 'medium-canvas'}
         />
       </div>
     );
