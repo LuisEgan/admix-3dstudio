@@ -1977,6 +1977,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
         display: flex;
         justify-content: space-evenly;
         padding: 15px 0;
+
+        button {
+          width: 30%;
+        }
         #creative-size-text {
           text-align: right;
           width: 90%;
