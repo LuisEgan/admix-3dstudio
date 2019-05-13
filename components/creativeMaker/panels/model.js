@@ -13,7 +13,7 @@ const { uploadModel } = mutations;
 const SetSizePanel = props => {
   const { reScale, size } = props;
 
-  const inputStyle = { width: '100%' };
+  const inputStyle = { width: '100%', border: 'solid 1px #eee' };
   const inputContainerStyle = { width: '60%' };
 
   return (
