@@ -94,11 +94,19 @@ const CreativeMaker = props => {
 
     return panelsNames.map((toggle, i) => {
       const panelReached = i <= farthestPanel;
+      const toggleStyle =
+        i === 0
+          ? { borderLeftRadius: '10px' }
+          : i === panelsNames.length - 1
+          ? { borderRightRadius: '10px' }
+          : {};
+
       return (
         <div
           key={toggle}
           role="panel-toggle"
           className={currentPanel === i ? 'creative-panel-active' : ''}
+          style={toggleStyle}
           onClick={() =>
             panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: i }) : null
           }

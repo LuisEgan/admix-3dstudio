@@ -12,7 +12,7 @@ let DownloadXML = props => {
   let link;
 
   useEffect(() => {
-    XMLurl && !hadBeenVisited.download && link.click();
+    // XMLurl && !hadBeenVisited.download && link.click();
   }, []);
 
   const handleGoToCampaigns = () => {
