@@ -9,7 +9,7 @@ const s3Upload = require('../Utils/aws');
 const sendToUnityServer = body =>
   new Promise((resolve, reject) => {
     return request.post(
-      { url: 'http://54.161.80.239:5050/', form: body },
+      { url: 'http://54.161.80.239:5050/', form: JSON.stringify(body) },
       (error, response, body) => {
         if (error) return reject(error);
         return resolve(body);
@@ -44,7 +44,7 @@ const createXMLFiles = serverData =>
     fs.readFile(path.join(__dirname, 'behavior.xml'), 'utf8', (err, xml) => {
       if (err) reject(err);
       const convertedXMLTemplate = convert.xml2js(xml, options);
-      convertedXMLTemplate.XRAID.Unit.BundleUrl = serverData.url;
+      convertedXMLTemplate.XRAID.Unit.BundleUrl._text = serverData.url;
       const behaviorXML = convert.js2xml(convertedXMLTemplate, options);
       s3Upload({ filename: 'behavior.xml', stream: behaviorXML })
         .then(res => createXRAIDFile(res))
@@ -76,11 +76,9 @@ module.exports = {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { creative }) => {
-      // @TODO Need to test and sync
-
-      const { uploads } = await CreativesModel.findById(creative);
-      const data = await sendToUnityServer(uploads);
-      return await createXMLFiles(data);
+      const { _id, uploads } = await CreativesModel.findById(creative);
+      const data = await sendToUnityServer({ id: _id.toString(), ...uploads });
+      return await createXMLFiles(JSON.parse(data));
     },
   },
 };

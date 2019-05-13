@@ -1,11 +1,4 @@
-const {
-  GraphQLString,
-  GraphQLID,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLBoolean,
-} = require('graphql');
+const { GraphQLString, GraphQLID, GraphQLList, GraphQLNonNull } = require('graphql');
 const { GraphQLUpload } = require('graphql-upload');
 const s3Upload = require('../Utils/aws');
 const { Types } = require('mongoose');
@@ -151,9 +144,9 @@ module.exports = {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return await CreativesModel.findOneAndUpdate(
-        { id: creative },
-        { uploads: { model: { tag: ETag, url: Location, key: Key, size } } },
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
+        { uploads: { model: { tag: ETag, url: Location, key: Key } }, size },
         { new: true },
       );
     },
@@ -170,8 +163,8 @@ module.exports = {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return await CreativesModel.findOneAndUpdate(
-        { id: creative },
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
         { uploads: { gaze: { tag: ETag, url: Location, key: Key } } },
         { new: true },
       );
@@ -189,8 +182,8 @@ module.exports = {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
-      return await CreativesModel.findOneAndUpdate(
-        { id: creative },
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
         { uploads: { action: { tag: ETag, url: Location, key: Key } } },
         { new: true },
       );

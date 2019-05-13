@@ -3,24 +3,14 @@ const states = require('../Utils/constants').states;
 
 const Schema = mongoose.Schema;
 
-const FBXSchema = new Schema({
-  tag: { type: String },
-  url: { type: String },
-  key: { type: String },
-});
-
-const FBXSchemaModel = new Schema({
-  tag: { type: String },
-  url: { type: String },
-  key: { type: String },
-  size: { type: String },
-});
-
-const UploadsSchema = new Schema({
-  model: { type: FBXSchemaModel },
-  gaze: { type: FBXSchema },
-  action: { type: FBXSchema },
-});
+const FBXSchema = new Schema(
+  {
+    tag: { type: String, default: '' },
+    url: { type: String, default: '' },
+    key: { type: String, default: '' },
+  },
+  { _id: false },
+);
 
 const creativesSchema = new Schema(
   {
@@ -41,7 +31,11 @@ const creativesSchema = new Schema(
     },
     size: String,
     IAB: String,
-    uploads: UploadsSchema,
+    uploads: {
+      gaze: FBXSchema,
+      model: FBXSchema,
+      action: FBXSchema,
+    },
   },
   { timestamps: true },
 );

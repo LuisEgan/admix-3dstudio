@@ -6,27 +6,17 @@ const FBXFileType = name =>
   new GraphQLObjectType({
     name: `${name}Type`,
     fields: () => ({
+      id: { type: GraphQLID },
       tag: { type: GraphQLString },
       url: { type: GraphQLString },
       key: { type: GraphQLString },
     }),
   });
 
-const FBXFileTypeModel = new GraphQLObjectType({
-  name: 'ModelType',
-  fields: () => ({
-    tag: { type: GraphQLString },
-    url: { type: GraphQLString },
-    key: { type: GraphQLString },
-    size: { type: GraphQLString },
-  }),
-});
-
 const UploadType = new GraphQLObjectType({
   name: 'UploadsType',
   fields: () => ({
-    id: { type: GraphQLID },
-    model: { type: FBXFileTypeModel },
+    model: { type: FBXFileType('Model') },
     gaze: { type: FBXFileType('Gaze') },
     action: { type: FBXFileType('Action') },
   }),
@@ -51,7 +41,7 @@ module.exports = new GraphQLObjectType({
       resolve: async parentValue => await CreativesModel.getGroup(parentValue._id),
     },
     uploads: {
-      type: new GraphQLList(UploadType),
+      type: UploadType,
     },
   }),
 });
