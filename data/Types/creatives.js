@@ -34,6 +34,7 @@ module.exports = new GraphQLObjectType({
     state: { type: GraphQLString },
     size: { type: GraphQLString },
     IAB: { type: GraphQLString },
+    XMLUrl: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
     group: {

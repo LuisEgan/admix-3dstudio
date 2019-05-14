@@ -50,6 +50,7 @@ module.exports = {
       name: { type: GraphQLString },
       state: { type: GraphQLString },
       size: { type: GraphQLString },
+      XMLUrl: { type: GraphQLString },
     },
     resolve: async (_, args) => {
       const { creative } = args;
