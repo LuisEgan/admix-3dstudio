@@ -84,8 +84,9 @@ class THREEScene extends React.Component {
     // this.scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
     //CAMERA
-    this.camera = new THREE.PerspectiveCamera(45, width / height, 1, 2000);
+    this.camera = new THREE.PerspectiveCamera(45, width / height);
     this.camera.position.set(0, 100, 300);
+    this.cameraOriginalPos = new THREE.Vector3(0, 100, 300);
 
     //RENDERER
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -104,7 +105,7 @@ class THREEScene extends React.Component {
     light.position.set(0, 200, 0);
     this.scene.add(light);
     light = new THREE.DirectionalLight(0xffffff);
-    light.position.set(0, 200, 100);
+    light.position.set(0, 2000, 100);
     light.castShadow = true;
     light.shadow.camera.top = 180;
     light.shadow.camera.bottom = -100;
@@ -122,7 +123,7 @@ class THREEScene extends React.Component {
     this.scene.add(mesh);
 
     //GRID
-    const grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
+    const grid = new THREE.GridHelper(20000, 200, 0x000000, 0x000000);
     grid.material.opacity = 0.2;
     grid.material.transparent = true;
     this.scene.add(grid);
@@ -273,6 +274,7 @@ class THREEScene extends React.Component {
       // panel === 0 && setObjSize(box.getSize());
 
       this.scene.add(object);
+      this.fitCameraToObject(object);
       setLoading3Dmodel(false);
     }.bind(this);
 
@@ -319,6 +321,66 @@ class THREEScene extends React.Component {
     if (object) {
       object.scale.set(newScale, newScale, newScale);
       const box = new THREE.Box3().setFromObject(object);
+    }
+  };
+
+  fitCameraToObject = (object, offset, controls) => {
+    offset = offset || 1.5;
+
+    const boundingBox = new THREE.Box3();
+
+    // get bounding box of object - this will be used to setup controls and camera
+    boundingBox.setFromObject(object);
+
+    let center = new THREE.Vector3();
+    center = boundingBox.getCenter(center);
+
+    let size = new THREE.Vector3();
+    size = boundingBox.getSize(size);
+
+    // get the max side of the bounding box (fits to width OR height as needed )
+    const maxDim = Math.max(size.x, size.y, size.z).toFixed(1);
+    const max10percent = maxDim * 0.1;
+    const minDim = Math.min(size.x, size.y, size.z).toFixed(1);
+    const fov = (this.camera.fov * (Math.PI / 180)).toFixed(1);
+    let cameraZ = maxDim / 2 / Math.tan(fov / 2);
+
+    cameraZ *= offset; // zoom out a little so that objects don't fill the screen
+
+    this.camera.position.z = center.z + cameraZ;
+
+    if (minDim < max10percent) {
+      this.camera.position.y = this.camera.position.y + max10percent * 5;
+    } else {
+      this.camera.position.y = this.cameraOriginalPos.y;
+    }
+
+    this.scene.updateMatrixWorld(); //Update world positions
+    const objectWorldPosition = new THREE.Vector3();
+    objectWorldPosition.setFromMatrixPosition(object.matrixWorld);
+
+    const directionVector = this.camera.position.sub(objectWorldPosition); //Get vector from camera to object
+    const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
+    const cameraNewPos = unitDirectionVector.multiplyScalar(cameraZ); //Multiply unit vector times cameraZ distance
+    this.camera.position.set(cameraNewPos.x, cameraNewPos.y, cameraNewPos.z);
+    this.camera.lookAt(objectWorldPosition); //Look at object
+
+    const minZ = boundingBox.min.z;
+    const cameraToFarEdge = minZ < 0 ? -minZ + cameraZ : cameraZ - minZ;
+
+    this.camera.far = cameraToFarEdge * 3;
+    this.camera.updateProjectionMatrix();
+
+    if (controls) {
+      // set camera to rotate around center of loaded object
+      controls.target = center;
+
+      // prevent camera from zooming out far enough to create far plane cutoff
+      controls.maxDistance = cameraToFarEdge * 2;
+
+      controls.saveState();
+    } else {
+      this.camera.lookAt(center);
     }
   };
 
