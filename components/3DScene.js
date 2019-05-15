@@ -358,7 +358,6 @@ class THREEScene extends React.Component {
     objectWorldPosition.setFromMatrixPosition(object.matrixWorld);
 
     const directionVector = this.camera.position.sub(objectWorldPosition); //Get vector from camera to object
-    console.log('directionVector: ', directionVector);
     const unitDirectionVector = directionVector.normalize(); // Convert to unit vector
     const cameraNewPos = unitDirectionVector.multiplyScalar(cameraZ); //Multiply unit vector times cameraZ distance
     this.camera.position.set(cameraNewPos.x, cameraNewPos.y, cameraNewPos.z);
