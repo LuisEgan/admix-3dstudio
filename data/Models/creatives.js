@@ -31,6 +31,7 @@ const creativesSchema = new Schema(
     },
     size: String,
     IAB: String,
+    XMLUrl: String,
     uploads: {
       gaze: FBXSchema,
       model: FBXSchema,
