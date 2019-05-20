@@ -62,7 +62,10 @@ class THREEScene extends React.Component {
       currentObj && this.toggleObject({ obj: currentObj, show: false });
 
       const newObj = this.scene.getObjectByName(`ad_${showObjOfPanel}`);
-      newObj && this.toggleObject({ obj: newObj, show: true });
+      if (newObj) {
+        this.toggleObject({ obj: newObj, show: true });
+        this.fitCameraToObject(newObj);
+      }
     }
   }
 
