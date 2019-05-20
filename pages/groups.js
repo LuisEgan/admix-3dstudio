@@ -46,7 +46,8 @@ let Groups = props => {
   groups &&
     groups.forEach(group => {
       group.creatives.forEach((creative, i) => {
-        group.creatives[i].image = imagesBank[Math.floor(Math.random() * imagesBank.length)];
+        const imageIndex = i < imagesBank.length ? i : i % imagesBank.length;
+        group.creatives[i].image = imagesBank[imageIndex];
       });
     });
 

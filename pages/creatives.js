@@ -27,6 +27,7 @@ const reducer = (state, action) => {
   const { type, payload } = action;
   const { panelName, panelFile } = payload;
   // console.warn('type: ', type);
+  // console.warn('payload: ', payload);
   switch (type) {
     case actions.SET_CURRENT_PANEL:
       const { currentPanel, farthestPanel } = state;

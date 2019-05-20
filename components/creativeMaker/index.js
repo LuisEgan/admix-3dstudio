@@ -16,6 +16,8 @@ import STR from '../../lib/utils/strFuncs';
 import actions from './panelActions';
 
 import admixLogo from '../../assets/img/isologo.png';
+import ChecklistPending from '../../assets/svg/checked-NO.svg';
+import ChecklistDone from '../../assets/svg/checked-YES.svg';
 import { PANELS } from '../../lib/utils/constants';
 
 const Panels = [
@@ -92,14 +94,28 @@ const CreativeMaker = props => {
   const renderPanelToggles = () => {
     // if (currentPanel > 2) return;
 
+    const _handleToggleOnClick = (toggle, panelReached) => {
+      let newChecklistCurrent;
+
+      switch (toggle) {
+        case 1:
+          newChecklistCurrent = 3;
+          break;
+        case 2:
+          newChecklistCurrent = 4;
+          break;
+        default:
+          newChecklistCurrent = 2;
+      }
+
+      setCheckListCurrent(newChecklistCurrent);
+
+      panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: toggle }) : null;
+    };
+
     return panelsNames.map((toggle, i) => {
       const panelReached = i <= farthestPanel;
-      const toggleStyle =
-        i === 0
-          ? { borderLeftRadius: '10px' }
-          : i === panelsNames.length - 1
-          ? { borderRightRadius: '10px' }
-          : {};
+      const toggleStyle = panelReached ? {} : { color: '#f2f2f2' };
 
       return (
         <div
@@ -107,11 +123,10 @@ const CreativeMaker = props => {
           role="panel-toggle"
           className={currentPanel === i ? 'creative-panel-active' : ''}
           style={toggleStyle}
-          onClick={() =>
-            panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: i }) : null
-          }
+          onClick={() => _handleToggleOnClick(i, panelReached)}
         >
           {toggle}
+          {i !== panelsNames.length - 1 && <div className="panel-toggle-arrow" />}
         </div>
       );
     });
@@ -148,12 +163,17 @@ const CreativeMaker = props => {
 
             return (
               <div className="step clickable" onClick={() => _handleStepOnClick(i)}>
-                <img
+                {/* <img
                   style={{ opacity: accomplished ? 1 : 0.3 }}
                   width="30"
-                  src={admixLogo}
-                  className={checkListCurrent === i ? 'current-item' : ''}
-                />
+                  src={checklistPending}
+                  
+                /> */}
+                {i <= checkListDone ? (
+                  <ChecklistDone className={checkListCurrent === i ? 'current-item' : ''} />
+                ) : (
+                  <ChecklistPending className={checkListCurrent === i ? 'current-item' : ''} />
+                )}
                 <div>{step}</div>
               </div>
             );
@@ -174,7 +194,7 @@ const CreativeMaker = props => {
                 disabled={!accomplished}
                 onClick={triggerDownload}
               >
-                Download XML
+                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
               </button>
             </div>
           );
@@ -264,7 +284,9 @@ const CreativeMaker = props => {
           </div>
 
           <div id="creative-panels-checklist">
-            <div className="creative-panels-headers sst cc">Checklist</div>
+            <div className="creative-panels-headers cc">
+              <b>Checklist</b>
+            </div>
 
             <ProgressBar
               percent={(100 / totalChecklistSteps) * checkListDone}

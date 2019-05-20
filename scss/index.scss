@@ -1,9 +1,11 @@
 // @import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab");
 @import url('./animate.min.css');
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+// @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 
 $mobileBreakpoint: 830px;
 $blueAdmix: #157cc1;
+$blue: #4b44c5;
 $bluePaleAdmix: #d1eafa;
 $greyBorder: #eee;
 $greyText: #aaa;
@@ -13,10 +15,14 @@ $black: #000;
 $white: #fff;
 $successGreen: #2eb82e;
 $tableBorder: rgba(179, 179, 179, 0.1);
-$boxShadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
+$boxShadow: 0 1px 3px #c9c9c9;
+
+:root {
+  --sqr-2: 1.414214;
+}
 
 * {
-  font-family: 'Montserrat';
+  font-family: 'Roboto';
   // transition: 0.5s ease-in-out;
 
   &::-webkit-scrollbar {
@@ -1121,6 +1127,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   padding: 2% $sidesPadding calc(2% + 40px);
   width: 100%;
   overflow: auto;
+  min-width: 1200px;
 
   .step-title {
     margin: 35px 0 40px 0;
@@ -1412,7 +1419,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .asyncError {
-  color: red;
+  color: red !important;
 }
 
 .asyncSuccess {
@@ -1786,7 +1793,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       padding: 1% 0;
 
       button {
-        background-color: $blueAdmix;
+        background-color: $blue;
         color: white;
         border: none;
         border-radius: 5px;
@@ -1908,7 +1915,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         margin-left: 12%;
         > div {
           width: 7vw;
-          box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+          box-shadow: $boxShadow;
         }
       }
     }
@@ -1920,22 +1927,24 @@ $inputsFontSize: calc(0.45em+0.3vw);
     justify-content: space-between;
     > div {
       border: solid #f2f2f2;
-      box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+      box-shadow: $boxShadow;
       width: 50%;
       height: 100%;
       border-radius: 10px;
     }
 
     .creative-panels-headers {
+      --header-height: 50px;
       display: flex;
-      border-bottom: solid 2px $greyBorder;
-      height: 12%;
+      height: var(--header-height);
+      overflow: hidden;
 
       > div {
         @extend .cc;
-        width: 33.33%;
-        padding: 10px 0;
+        width: 30%;
+        padding: 10px 0 10px 5%;
         position: relative;
+        border-bottom: solid 1px $greyBorder;
 
         &:hover {
           cursor: pointer;
@@ -1943,8 +1952,21 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
 
       .creative-panel-active {
-        background: $blueAdmix;
-        color: white;
+        font-weight: bold;
+        border-bottom: 0;
+      }
+
+      .panel-toggle-arrow {
+        height: calc(var(--header-height) / var(--sqr-2));
+        border: solid $greyBorder 1px;
+        position: absolute;
+        transform: rotate(45deg);
+        transform-origin: top left;
+        width: calc(var(--header-height) / var(--sqr-2));
+        right: calc(var(--header-height) / var(--sqr-2) * -1);
+        top: -1px;
+        border-left: 0;
+        border-bottom: 0;
       }
     }
 
@@ -1972,6 +1994,22 @@ $inputsFontSize: calc(0.45em+0.3vw);
             height: 75% !important;
           }
         }
+        #webgl-placeholder {
+          @extend .sst;
+          position: absolute;
+          width: 100%;
+          text-align: center;
+          top: 30%;
+        }
+        #webgl-error {
+          @extend #webgl-placeholder;
+          top: 60%;
+          height: unset;
+          width: 70%;
+          margin: 0 auto;
+          left: 0;
+          right: 0;
+        }
       }
       #creative-size {
         display: flex;
@@ -1989,9 +2027,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
     }
 
     #creative-panels {
-      display: flex;
-      flex-flow: column;
-      // border-left: none;
       width: 31%;
 
       #creative-panels-content {
@@ -2106,12 +2141,23 @@ $inputsFontSize: calc(0.45em+0.3vw);
           button {
             margin-left: 45%;
           }
+
+          svg {
+            height: 30px;
+            width: 30px;
+            fill: $blue;
+            background: white;
+          }
         }
       }
 
       .current-item {
-        background: $bluePaleAdmix;
-        background: radial-gradient(closest-side, $blueAdmix, $blueAdmix, white);
+        border: solid;
+        border-radius: 100%;
+        color: $blueAdmix;
+        background: $blueAdmix !important;
+        // background: $bluePaleAdmix !important;
+        // background: radial-gradient(closest-side, $blueAdmix, $blueAdmix, white) !important;
       }
     }
   }
@@ -2130,7 +2176,7 @@ $ballSize: 20px;
   border: 0;
   background-color: #ffffff;
   border-radius: 50px;
-  box-shadow: 0 3px 4px 0 rgba(10, 31, 68, 0.1), 0 0 1px 0 rgba(10, 31, 68, 0.08);
+  box-shadow: $boxShadow;
   width: 180px;
   height: 48px;
   color: #0a1f44;
@@ -2142,7 +2188,8 @@ $ballSize: 20px;
 
 .blue-btn {
   @extend .white-btn;
-  background-color: $blueAdmix;
+  // background-color: $blueAdmix;
+  background-color: $blue;
   color: white;
 }
 

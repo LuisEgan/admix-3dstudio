@@ -14,6 +14,7 @@ class THREEScene extends React.Component {
 
     this.state = {
       source: null,
+      loadError: false,
     };
   }
 
@@ -246,13 +247,8 @@ class THREEScene extends React.Component {
   };
 
   loadFBX = source => {
-    const { setObjSize, panel, setLoading3Dmodel } = this.props;
-    setLoading3Dmodel(true);
-
-    const objAlreadyExists = this.scene.getObjectByName(`ad_${panel}`);
-    if (objAlreadyExists) this.scene.remove(objAlreadyExists);
-
     const onLoad = function(object) {
+      this.loadedObject = object;
       object.name = `ad_${panel}`;
       object.position.set(0, 0, 0);
       // this.exportGLTF(object);
@@ -276,16 +272,24 @@ class THREEScene extends React.Component {
       this.scene.add(object);
       this.fitCameraToObject(object);
       setLoading3Dmodel(false);
+      // this.setState({ loadError: false });
     }.bind(this);
 
     const onLoading = xhr => {
       console.log(`${(xhr.loaded / xhr.total) * 100}% loaded`);
     };
 
-    const onLoaderError = error => {
+    const onLoaderError = function(error) {
       console.error(error);
       setLoading3Dmodel(false);
-    };
+      this.setState({ loadError: true });
+    }.bind(this);
+
+    const { setObjSize, panel, setLoading3Dmodel } = this.props;
+    setLoading3Dmodel(true);
+
+    const objAlreadyExists = this.scene.getObjectByName(`ad_${panel}`);
+    if (objAlreadyExists) this.scene.remove(objAlreadyExists);
 
     // const loader = new FBXLoader(this.threeLoadingManager());
     const loader = new FBXLoader();
@@ -384,8 +388,19 @@ class THREEScene extends React.Component {
 
   render() {
     const { id, panel } = this.props;
+    const { loadError } = this.state;
     return (
       <div id={id}>
+        {panel === PANELS.MODEL && !this.loadedObject && !loadError && (
+          <div id="webgl-placeholder" className="unselectable">
+            Create your 3D ad in 5 easy steps
+          </div>
+        )}
+        {loadError && (
+          <div id="webgl-error" className="asyncError mbs">
+            FBX file could not be shown but it’s been uploaded successfully
+          </div>
+        )}
         <div
           ref={mount => {
             this.mount = mount;
