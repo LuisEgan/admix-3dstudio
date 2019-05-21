@@ -14,7 +14,7 @@ class THREEScene extends React.Component {
 
     this.state = {
       source: null,
-      loadError: false,
+      loadError: {},
     };
   }
 
@@ -285,7 +285,7 @@ class THREEScene extends React.Component {
     const onLoaderError = function(error) {
       console.error(error);
       setLoading3Dmodel(false);
-      this.setState({ loadError: true });
+      this.setState({ loadError: { [panel]: true } });
     }.bind(this);
 
     const { setObjSize, panel, setLoading3Dmodel } = this.props;
@@ -394,12 +394,12 @@ class THREEScene extends React.Component {
     const { loadError } = this.state;
     return (
       <div id={id}>
-        {panel === PANELS.MODEL && !this.loadedObject && !loadError && (
+        {panel === PANELS.MODEL && !this.loadedObject && !loadError[panel] && (
           <div id="webgl-placeholder" className="unselectable">
             Create your 3D ad in 5 easy steps
           </div>
         )}
-        {loadError && (
+        {loadError[panel] && (
           <div id="webgl-error" className="asyncError mbs">
             FBX file could not be shown but it’s been uploaded successfully
           </div>
