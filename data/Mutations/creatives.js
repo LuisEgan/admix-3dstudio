@@ -147,7 +147,7 @@ module.exports = {
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
       return await CreativesModel.findByIdAndUpdate(
         creative,
-        { uploads: { model: { tag: ETag, url: Location, key: Key } }, size },
+        { $set: { 'uploads.model': { tag: ETag, url: Location, key: Key }, size } },
         { new: true },
       );
     },
@@ -166,7 +166,7 @@ module.exports = {
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
       return await CreativesModel.findByIdAndUpdate(
         creative,
-        { uploads: { gaze: { tag: ETag, url: Location, key: Key } } },
+        { $set: { 'uploads.gaze': { tag: ETag, url: Location, key: Key } } },
         { new: true },
       );
     },
@@ -185,7 +185,7 @@ module.exports = {
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
       return await CreativesModel.findByIdAndUpdate(
         creative,
-        { uploads: { action: { tag: ETag, url: Location, key: Key } } },
+        { $set: { 'uploads.action': { tag: ETag, url: Location, key: Key } } },
         { new: true },
       );
     },
