@@ -275,7 +275,7 @@ class THREEScene extends React.Component {
       this.scene.add(object);
       this.fitCameraToObject(object);
       setLoading3Dmodel(false);
-      // this.setState({ loadError: false });
+      this.setState({ loadError: { [panel]: false } });
     }.bind(this);
 
     const onLoading = xhr => {
