@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Form from '../components/Form';
 import mutations from '../mutations';
 
-import isEmail from 'validator/lib/isEmail';
+import validator from '../data/Models/validators/users';
 import { parseErrors } from '../lib/utils/parsers';
 
 import App from '../components/App';
@@ -45,12 +45,16 @@ let Register = props => {
       errors.name = 'Please enter a name';
     }
 
-    if (!email || !isEmail(email)) {
+    if (!email) {
+      errors.email = 'Please enter an email';
+    } else if (!validator.email.validator(email)) {
       errors.email = 'Invalid email';
     }
 
     if (!password) {
       errors.password = 'Please enter a password';
+    } else if (!validator.password.validator(password)) {
+      errors.password = 'Invalid password';
     }
 
     if (password2 && password !== password2) {
@@ -66,12 +70,10 @@ let Register = props => {
         ...values,
       },
     });
-    // messageContainer.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'nearest' });
     messageContainer.scrollTop = messageContainer.scrollHeight;
   };
 
   const handleOnCompleted = res => {
-    console.log('createUser: ', createUser);
     const {
       createUser: { id },
     } = res;
