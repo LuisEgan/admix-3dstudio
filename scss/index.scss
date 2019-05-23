@@ -1127,7 +1127,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   padding: 2% $sidesPadding calc(2% + 40px);
   width: 100%;
   overflow: auto;
-  min-width: 1200px;
+  min-width: $mobileBreakpoint;
 
   .step-title {
     margin: 35px 0 40px 0;
