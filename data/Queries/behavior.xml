@@ -1,7 +1,7 @@
 <XRAID version="1.0">
     <Unit id="39e2f4ec_2018070410400212731MtVO33JkyLPPVdbjwY">
         <BundleUrl>https://drive.google.com/uc?export=download&amp;id=10zGheyPyQfj9xx9jbjLcfxKo5lYHvq1j</BundleUrl>
-        <RootName>DragonRed</RootName>
+        <RootName>model</RootName>
         <Behaviour>
             <Setup>
                 <Position>0,0,0</Position>
