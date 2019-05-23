@@ -1,26 +1,33 @@
 import React from 'react';
 
-const SetObjectPanel = ({ onConfirm, onSkip, loadFile, file, label }) => {
+const SetObjectPanel = props => {
+  const { panelDescription, label, loadFile, uploadLoading, loading3Dmodel, skippable } = props;
+
   return (
-    <div>
+    <div className="creative-set-object">
+      <div>{panelDescription}</div>
       <div>
-        <label htmlFor="3dfile" className="file-label blue-btn">
-          {label}
+        <label
+          htmlFor="3dfile"
+          className={`file-label blue-btn ${uploadLoading && 'disabled-btn'}`}
+        >
+          {loading3Dmodel
+            ? 'Loading 3D model...'
+            : uploadLoading && !skippable
+            ? 'Uploading...'
+            : label}
         </label>
-        <input id="3dfile" type="file" style={{ display: 'none' }} onChange={loadFile} />
+        <input
+          id="3dfile"
+          type="file"
+          style={{ display: 'none' }}
+          onChange={loadFile}
+          disabled={uploadLoading}
+        />
       </div>
-      <button
-        className={`blue-btn ${!file && !onSkip ? 'disabled-btn' : ''}`}
-        onClick={() => onConfirm()}
-        disabled={!file && !onSkip}
-      >
-        Confirm
-      </button>
-      {onSkip && (
-        <button className="white-btn" onClick={() => onSkip()}>
-          Skip
-        </button>
-      )}
+      <div>
+        Formats supported: fbx <br /> Max polycount: 3000 | Max size: 5Mb
+      </div>
     </div>
   );
 };

@@ -14,6 +14,7 @@ const initialPanel = 0;
 const initialState = {
   currentPanel: initialPanel,
   currentPanelName: panelNames[initialPanel],
+  currentChecklistItem: 1,
   farthestPanel: initialPanel,
   lastPanel: initialPanel,
   panelPreview3D: initialPanel,
@@ -26,6 +27,7 @@ const reducer = (state, action) => {
   const { type, payload } = action;
   const { panelName, panelFile } = payload;
   // console.warn('type: ', type);
+  // console.warn('payload: ', payload);
   switch (type) {
     case actions.SET_CURRENT_PANEL:
       const { currentPanel, farthestPanel } = state;
@@ -42,6 +44,9 @@ const reducer = (state, action) => {
     case actions.SET_PREVIEW_3D:
       return { ...state, panelPreview3D: payload };
 
+    case actions.SET_CURRENT_CHECKLIST_ITEM:
+      return { ...state, currentChecklistItem: payload };
+
     case actions.SET_FILE:
       return { ...state, file: { ...state.file, [panelName]: panelFile } };
 
@@ -53,7 +58,6 @@ let Creatives = props => {
   const { campaign, creative } = props;
 
   const [reducerState, dispatch] = useReducer(reducer, initialState);
-  const { currentPanel, farthestPanel } = reducerState;
 
   let returnToCampaigns = false;
   if (!Object.entries(campaign).length) {
@@ -93,36 +97,12 @@ let Creatives = props => {
       <div className="step-container" id="creatives">
         <div id="apps-header" className="step-title">
           <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
-          <div id="creatives-title">
+          <div id="creative-title">
             <h3 className="st sc-h3">{creative.name}</h3>
-            <div className="creative-panels-toggle">
-              <div
-                className={currentPanel < 3 ? 'creative-panel-active' : ''}
-                onClick={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: 0 })}
-              >
-                Edit
-              </div>
-              <div
-                className={
-                  currentPanel === 3
-                    ? 'creative-panel-active'
-                    : farthestPanel === 3
-                    ? ''
-                    : 'disabled-btn'
-                }
-                onClick={() =>
-                  farthestPanel === 3
-                    ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: 3 })
-                    : null
-                }
-              >
-                Download
-              </div>
-            </div>
           </div>
         </div>
 
-        <div id="creatives-content">
+        <div id="creative-content">
           <CreativeMaker reducerState={reducerState} dispatch={dispatch} creative={creative} />
         </div>
       </div>

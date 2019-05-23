@@ -85,7 +85,7 @@ export default {
   `,
   uploadGaze: gql`
     mutation UploadGaze($creative: ID!, $model: Upload) {
-      uploadModel(creative: $creative, model: $model) {
+      uploadGaze(creative: $creative, model: $model) {
         id
         name
       }
@@ -93,7 +93,7 @@ export default {
   `,
   uploadAction: gql`
     mutation UploadAction($creative: ID!, $model: Upload) {
-      uploadModel(creative: $creative, model: $model) {
+      uploadAction(creative: $creative, model: $model) {
         id
         name
       }

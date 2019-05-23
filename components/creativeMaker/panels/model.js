@@ -1,102 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mutation, withApollo } from 'react-apollo';
 import STR from '../../../lib/utils/strFuncs';
 import actions from '../panelActions';
 import mutations from '../../../mutations';
 
 import SetObjectPanel from './SetObjectPanel';
+import PanelFooter from '../PanelFooter';
+import { PANELS } from '../../../lib/utils/constants';
 
 const { uploadModel } = mutations;
 
-const SetSizePanel = ({ dispatch, setModelPanel, reScale, size, saveModel }) => {
-  const [sizeSet, setSizeSet] = useState(false);
+const SetSizePanel = props => {
+  const { reScale, size } = props;
 
-  const handleSave = () => {
-    saveModel();
-    setSizeSet(true);
-  };
+  const inputStyle = { width: '100%', border: 'solid 1px #eee' };
+  const inputContainerStyle = { width: '60%' };
 
   return (
-    <div>
-      <div className="creative-checks">
-        <div>
-          <input type="checkbox" checked={true} readOnly />
-          <span>Import model</span>
-          <span onClick={() => setModelPanel(0)} className="creative-checks-edit">
-            edit
-          </span>
-        </div>
-        <div>
-          <input type="checkbox" checked={sizeSet} readOnly />
-          <span>Set size</span>
-          <span onClick={() => setSizeSet(false)} className="creative-checks-edit">
-            edit
-          </span>
-        </div>
+    <React.Fragment>
+      <div className="mb">
+        Set the size of your object in the real world, so we can scale it for the virtual
+        environment.
       </div>
-      {!sizeSet && (
-        <React.Fragment>
-          <div style={{ display: 'flex', flexFlow: 'column' }}>
-            <input type="range" min={1} max={300} onChange={reScale} value={size} />
-            <input value={`${size} cm`} readOnly />
-          </div>
-          <div>
-            <button type="button" className="blue-btn" onClick={handleSave}>
-              Save size
-            </button>
-          </div>
-        </React.Fragment>
-      )}
-
-      {sizeSet && (
-        <React.Fragment>
-          <div>Your base model is ready to go. Now, set animated states.</div>
-          <div>
-            <button
-              type="button"
-              className="blue-btn"
-              onClick={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: 1 })}
-            >
-              Next
-            </button>
-          </div>
-        </React.Fragment>
-      )}
-    </div>
+      <div style={inputContainerStyle}>
+        <input
+          className="admix-track"
+          type="range"
+          min={1}
+          max={300}
+          onChange={reScale}
+          value={size}
+          style={inputStyle}
+        />
+      </div>
+      <div style={inputContainerStyle}>
+        <input className="input" value={`${size} cm`} readOnly style={inputStyle} />
+      </div>
+    </React.Fragment>
   );
 };
 
 const ModelPanels = [
-  props => <SetObjectPanel {...props} label={'Select 3D model'} />,
+  props => (
+    <SetObjectPanel
+      {...props}
+      panelDescription={"Let's start by uploading a 3D model of the product you want to promote"}
+      label={'Upload base 3D model'}
+    />
+  ),
   props => <SetSizePanel {...props} />,
 ];
 
 const Model = props => {
   const {
     editCreative,
-    loading,
+    loading3Dmodel,
+    editCreativeLoading,
+    handleEditCreativeOnCompleted,
     creative,
     loadFile,
     size,
     setSize,
     dispatch,
+    updateChecklistDone,
+    setCheckListCurrent,
+    checkListCurrent,
     reducerState: {
       file: { model: modelFile },
     },
   } = props;
 
-  const [modelPanel, setModelPanel] = useState(modelFile ? 1 : 0);
+  // * if there's a model already loaded show the set size panel
+  // * unless the user clicked on the checklist on "base model uploaded"
+  const [modelPanel, setModelPanel] = useState(checkListCurrent - 1);
 
-  const onConfirm = uploadModel => () => {
-    uploadModel({
-      variables: {
-        creative,
-        size: STR.parseSize(size),
-        model: modelFile,
-      },
-    });
-    setModelPanel(1);
-  };
+  useEffect(() => {
+    setModelPanel(checkListCurrent - 1);
+  }, [checkListCurrent]);
 
   const reScale = e => {
     const {
@@ -112,22 +92,66 @@ const Model = props => {
         size: STR.parseSize(size),
       },
     });
+    handleEditCreativeOnCompleted(() => {
+      // * Change panel to Gaze panel
+      dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.GAZE });
+
+      // * Update checklist
+      updateChecklistDone(2);
+      setCheckListCurrent(3);
+    });
+  };
+
+  const uploadFile = uploadModel => e => {
+    // * Load 3D model into webgl
+    const modelFile = loadFile(e);
+
+    // * Upload file to S3 bucket
+    uploadModel({
+      variables: {
+        creative,
+        size: STR.parseSize(size),
+        model: modelFile,
+      },
+    });
+  };
+
+  const handleUploadOnCompleted = () => {
+    // * Change panel to Set size on Model panel
+    setModelPanel(1);
+
+    // * Update checklist
+    updateChecklistDone(1);
+    setCheckListCurrent(2);
   };
 
   return (
-    <Mutation mutation={uploadModel} onCompleted={() => console.log('size saved!')}>
-      {(uploadModel, { loading }) => (
-        <div className="creative-panel">
-          {ModelPanels[modelPanel]({
-            file: modelFile,
-            loadFile,
-            setModelPanel,
-            reScale,
-            dispatch,
-            size,
-            saveModel,
-            onConfirm: onConfirm(uploadModel),
-          })}
+    <Mutation mutation={uploadModel} onCompleted={handleUploadOnCompleted}>
+      {(uploadModel, { loading: uploadLoading }) => (
+        <div id="creative-panel">
+          <div id="creative-panel-content">
+            {ModelPanels[modelPanel]({
+              file: modelFile,
+              loadFile,
+              uploadLoading,
+              loading3Dmodel,
+              editCreativeLoading,
+              setModelPanel,
+              reScale,
+              dispatch,
+              size,
+              saveModel,
+              loadFile: uploadFile(uploadModel),
+            })}
+          </div>
+          <div id="creative-panel-footer">
+            <PanelFooter
+              hide={modelPanel === 0}
+              onBack={() => setModelPanel(0)}
+              onNext={saveModel}
+              nextLoading={editCreativeLoading}
+            />
+          </div>
         </div>
       )}
     </Mutation>

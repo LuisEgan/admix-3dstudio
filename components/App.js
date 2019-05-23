@@ -5,12 +5,11 @@ import SideMenu from './SideMenu';
 
 import favicon from '../assets/img/favicon.png';
 
-class AppWrapper extends React.Component {
+export class AppWrapper extends React.Component {
   render() {
     const { children, isLoggedIn } = this.props;
-    const {
-      router: { pathname },
-    } = Router;
+    const { router } = Router;
+    const { pathname } = router || {};
 
     if (!isLoggedIn && pathname !== '/login' && pathname !== '/register') {
       Router.push('/login');
