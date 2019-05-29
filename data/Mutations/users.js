@@ -38,15 +38,15 @@ module.exports = {
     },
     resolve: async (_, { email, password }) => {
       const user = await Users.findOne({ email });
-      console.log('user: ', user);
       const samePasswords = await bcrypt.compare(password, user.password);
       let accessToken = null;
       if (samePasswords) {
         accessToken = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET, {
           expiresIn: TOKEN_EXPIRE,
         });
+        return { accessToken, email, name: user.name, id: user.id };
       }
-      return { accessToken, email, name: user.name, id: user.id };
+      throw new AuthenticationError('Invalid Username or Password');
     },
   },
 };
