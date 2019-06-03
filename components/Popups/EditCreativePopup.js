@@ -70,7 +70,7 @@ export default props => {
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Group name*" />
-            <TextInput name="description" label="Description*" />
+            <TextInput name="description" label="Description" />
             <div
               style={{
                 display: 'flex',

@@ -55,7 +55,7 @@ export default ({ show, togglePopup, userId }) => {
           >
             <TextInput name="name" label="Campaign name*" />
             <TextInput name="advertiser" label="Campaign advertiser*" />
-            <TextInput name="description" label="Campaign description*" />
+            <TextInput name="description" label="Campaign description" />
             <button type="submit" className="btn gradient-btn">
               {loading ? 'Loading...' : 'Create'}
             </button>

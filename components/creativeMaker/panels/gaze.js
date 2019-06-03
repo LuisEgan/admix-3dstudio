@@ -17,6 +17,7 @@ const Gaze = props => {
     dispatch,
     updateChecklistDone,
     setCheckListCurrent,
+    checkListCurrent,
     reducerState: {
       file: { gaze: gazeFile },
     },
@@ -42,6 +43,11 @@ const Gaze = props => {
     setCheckListCurrent(4);
   };
 
+  const onBack = () => {
+    setCheckListCurrent(checkListCurrent - 1);
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.MODEL });
+  };
+
   const handleUploadOnCompleted = () => {
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.ACTION });
     updateChecklistDone(3);
@@ -65,7 +71,7 @@ const Gaze = props => {
 
           <div id="creative-panel-footer">
             <PanelFooter
-              onBack={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.MODEL })}
+              onBack={onBack}
               onSkip={onSkip}
               onNext={handleNext(uploadGaze)}
               nextLoading={uploadLoading || loading3Dmodel}

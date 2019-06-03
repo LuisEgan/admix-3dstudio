@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "next/link";
-import { withRouter } from "next/router";
-import CaretSVG from "../assets/svg/caret-down.svg";
+import React from 'react';
+import Link from 'next/link';
+import { withRouter } from 'next/router';
+import CaretSVG from '../assets/svg/caret-down.svg';
 
 class Breadcrumbs extends React.Component {
   render() {
@@ -10,11 +10,11 @@ class Breadcrumbs extends React.Component {
     let linkClass, lastBread;
 
     return (
-      <div className="breadcrumbs">
+      <div className="breadcrumbs mb">
         {breadcrumbs &&
           breadcrumbs.map((breadcrumb, i) => {
             lastBread = i === allBreadcrumbs - 1;
-            linkClass = lastBread ? "last" : "";
+            linkClass = lastBread ? 'last' : '';
             return (
               <React.Fragment key={`${breadcrumb.title}-${Math.random()}`}>
                 <div key={`${breadcrumb.title}-${Math.random()}`}>
