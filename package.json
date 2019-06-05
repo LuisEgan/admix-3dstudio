@@ -8,7 +8,7 @@
     "front-dev": "next",
     "dev": "node index.js",
     "build": "next build",
-    "now-build": "next build",
+    "prod_start": "npm run build && NODE_ENV=production node index.js",
     "prestart": "npm run build",
     "start": "SET NODE_ENV=production&& node index.js",
     "front-start": "next start -p %PORT%"
