@@ -21,6 +21,7 @@ const Action = props => {
     setXMLurl,
     updateChecklistDone,
     setCheckListCurrent,
+    checkListCurrent,
     reducerState: {
       file: { action: actionFile },
     },
@@ -44,6 +45,11 @@ const Action = props => {
       dispatch({ type: actions.SET_FILE, payload: { panelName: 'action', panelFile: null } });
     dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.DOWNLOAD });
     await genXML();
+  };
+
+  const onBack = () => {
+    setCheckListCurrent(checkListCurrent - 1);
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.GAZE });
   };
 
   const genXML = async () => {
@@ -90,7 +96,7 @@ const Action = props => {
 
           <div id="creative-panel-footer">
             <PanelFooter
-              onBack={() => dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.GAZE })}
+              onBack={onBack}
               onSkip={onSkip}
               onNext={handleNext(uploadAction)}
               nextLoading={uploadLoading || loading3Dmodel || XMLloading}

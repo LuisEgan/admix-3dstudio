@@ -78,6 +78,11 @@ const Model = props => {
     setModelPanel(checkListCurrent - 1);
   }, [checkListCurrent]);
 
+  const onBack = () => {
+    setCheckListCurrent(checkListCurrent - 1);
+    setModelPanel(0);
+  };
+
   const reScale = e => {
     const {
       target: { value },
@@ -147,7 +152,7 @@ const Model = props => {
           <div id="creative-panel-footer">
             <PanelFooter
               hide={modelPanel === 0}
-              onBack={() => setModelPanel(0)}
+              onBack={onBack}
               onNext={saveModel}
               nextLoading={editCreativeLoading}
             />

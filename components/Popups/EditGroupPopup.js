@@ -77,7 +77,7 @@ export default props => {
             onSubmit={onSubmit}
           >
             <TextInput name="name" label="Group name*" />
-            <TextInput name="description" label="Description*" />
+            <TextInput name="description" label="Description" />
             <div
               style={{
                 display: 'flex',
@@ -93,7 +93,7 @@ export default props => {
               >
                 {loading ? 'Loading...' : 'Save'}
               </button>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => onDelete('GROUP_ID')}
                 className="btn red-btn"
@@ -101,7 +101,7 @@ export default props => {
                 disabled={loading}
               >
                 Delete
-              </button>
+              </button> */}
             </div>
           </Form>
         </div>
