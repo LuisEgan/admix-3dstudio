@@ -89,7 +89,7 @@ let Groups = props => {
                 style={{ backgroundImage: `url(${image})` }}
                 onClick={handleSelectCreative(creative)}
               >
-                <div className="creative-title">
+                <div className="creative-title mb">
                   <span>{name}</span>
                   <CogSVG
                     onClick={e => {
@@ -163,9 +163,11 @@ let Groups = props => {
         <div id="groups-content">
           {loading && <div>Loading...</div>}
           {groups && groups.map(group => renderGroup(group))}
-          <button className="blue-btn mb" onClick={() => togglePopup('showNewGroup')}>
-            <PlusSVG /> &nbsp; New group
-          </button>
+          {groups && (
+            <button className="blue-btn mb" onClick={() => togglePopup('showNewGroup')}>
+              <PlusSVG /> &nbsp; New group
+            </button>
+          )}
         </div>
       </div>
     </App>

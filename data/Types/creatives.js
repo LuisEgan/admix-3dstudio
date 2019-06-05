@@ -1,4 +1,10 @@
-const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } = require('graphql');
+const {
+  GraphQLObjectType,
+  GraphQLBoolean,
+  GraphQLString,
+  GraphQLID,
+  GraphQLInt,
+} = require('graphql');
 
 const CreativesModel = require('../Models/creatives');
 
@@ -26,17 +32,18 @@ module.exports = new GraphQLObjectType({
   name: 'CreativesType',
   fields: () => ({
     id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    description: { type: GraphQLString },
-    XRaidURL: { type: GraphQLString },
     behaviorURL: { type: GraphQLString },
-    format: { type: GraphQLString },
-    state: { type: GraphQLString },
-    size: { type: GraphQLString },
-    IAB: { type: GraphQLString },
-    XMLUrl: { type: GraphQLString },
     createdAt: { type: GraphQLString },
+    deleted: { type: GraphQLBoolean },
+    description: { type: GraphQLString },
+    format: { type: GraphQLString },
+    IAB: { type: GraphQLString },
+    name: { type: GraphQLString },
+    scale: { type: GraphQLInt },
+    size: { type: GraphQLString },
+    state: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    XRaidURL: { type: GraphQLString },
     group: {
       type: require('./groups'),
       resolve: async parentValue => await CreativesModel.getGroup(parentValue._id),

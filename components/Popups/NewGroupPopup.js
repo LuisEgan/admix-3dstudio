@@ -63,7 +63,7 @@ export default ({ show, togglePopup, campaign }) => {
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Group name*" />
-            <TextInput name="description" label="Description*" />
+            <TextInput name="description" label="Description" />
             <button type="submit" className="btn gradient-btn" disabled={loading}>
               {loading ? 'Loading...' : 'Create'}
             </button>

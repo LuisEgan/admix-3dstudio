@@ -1,16 +1,18 @@
 // @import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab");
 @import url('./animate.min.css');
-// @import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600');
+// @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 
 $mobileBreakpoint: 830px;
 $blueAdmix: #157cc1;
-$blue: #4b44c5;
+$blue: #002590;
 $bluePaleAdmix: #d1eafa;
+$brightBlue: rgb(20, 185, 190);
 $greyBorder: #eee;
 $greyText: #aaa;
 $greyDisabled: #cccccc;
 $greyDisabledText: #808080;
+$blank: #f5f7fa;
 $black: #000;
 $white: #fff;
 $successGreen: #2eb82e;
@@ -22,7 +24,7 @@ $boxShadow: 0 1px 3px #c9c9c9;
 }
 
 * {
-  font-family: 'Roboto';
+  font-family: 'Montserrat';
   // transition: 0.5s ease-in-out;
 
   &::-webkit-scrollbar {
@@ -1057,11 +1059,18 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
 .breadcrumbs {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+
+  svg {
+    path {
+      stroke: $brightBlue;
+    }
+  }
 
   > div {
     a {
       padding: 5px 0;
+      color: $brightBlue;
     }
 
     &:nth-child(2n) {
@@ -1128,9 +1137,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
   width: 100%;
   overflow: auto;
   min-width: $mobileBreakpoint;
+  background: $blank;
 
   .step-title {
-    margin: 35px 0 40px 0;
+    margin: 35px 0 3% 0;
   }
 }
 
@@ -1717,10 +1727,13 @@ $inputsFontSize: calc(0.45em+0.3vw);
     text-align: left;
     padding: 2.5vh 0;
   }
+
+  #apps-buttons {
+    margin-bottom: 3%;
+  }
 }
 
 #campaign-new-popup-btns {
-  padding: 5vh 0;
 }
 
 .campaign-select-container {
@@ -1824,7 +1837,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   g,
   path {
     height: 100%;
-    width: 15px;
+    width: 13px;
     fill: white;
 
     &:hover {
@@ -1849,11 +1862,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
     .group-creatives {
       display: flex;
-      box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.15);
+      box-shadow: $boxShadow;
       border-radius: 5px;
       padding: 15px;
       min-height: 25vh;
       flex-wrap: wrap;
+      background: white;
 
       .group-creative {
         display: flex;
@@ -1878,6 +1892,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
           justify-content: space-between;
           align-items: flex-end;
           padding: 10px 15px;
+          background: rgba(0, 0, 0, 0.6);
 
           span {
             max-width: 80%;
@@ -1926,11 +1941,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
     height: 65vh;
     justify-content: space-between;
     > div {
-      border: solid #f2f2f2;
+      // border: solid #f2f2f2;
       box-shadow: $boxShadow;
       width: 50%;
       height: 100%;
       border-radius: 10px;
+      background: white;
     }
 
     .creative-panels-headers {
@@ -2143,19 +2159,25 @@ $inputsFontSize: calc(0.45em+0.3vw);
           }
 
           svg {
-            height: 30px;
-            width: 30px;
+            height: 20px;
+            width: 20px;
             fill: $blue;
             background: white;
+
+            path {
+              // fill: $blue;
+            }
           }
         }
       }
 
       .current-item {
-        border: solid;
-        border-radius: 100%;
-        color: $blueAdmix;
-        background: $blueAdmix !important;
+        height: 30px !important;
+        width: 30px !important;
+        // border: solid;
+        // border-radius: 100%;
+        // color: $blueAdmix;
+        // background: $blueAdmix !important;
         // background: $bluePaleAdmix !important;
         // background: radial-gradient(closest-side, $blueAdmix, $blueAdmix, white) !important;
       }
@@ -2586,9 +2608,13 @@ $ballSize: 20px;
   width: 100vw;
   z-index: 9999;
 
+  button {
+    margin-top: 4%;
+  }
+
   .popup-x {
     position: absolute;
-    right: 5%;
+    right: 3%;
     top: 2.5%;
 
     &:hover {
@@ -2609,7 +2635,7 @@ $ballSize: 20px;
     position: relative;
     width: 30%;
     background: white;
-    padding: 2% 5%;
+    padding: 4% 5%;
     border-radius: 5px;
     z-index: 1;
 

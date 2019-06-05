@@ -1,8 +1,9 @@
+const { AuthenticationError } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 
-const { UsersType, JWTType } = require('../Types');
+const { UsersType } = require('../Types');
 const Users = require('../Models/users');
 
 const SECRET = process.env.SERVER_TOKEN_SECRET;
@@ -20,7 +21,11 @@ module.exports = {
       company: { type: GraphQLString },
     },
     resolve: async (_, args) => {
-      return await Users.create({ ...args });
+      try {
+        return await Users.create({ ...args });
+      } catch (e) {
+        throw new AuthenticationError('User already exist');
+      }
     },
   },
   loginUser: {
@@ -33,15 +38,15 @@ module.exports = {
     },
     resolve: async (_, { email, password }) => {
       const user = await Users.findOne({ email });
-      console.log('user: ', user);
       const samePasswords = await bcrypt.compare(password, user.password);
       let accessToken = null;
       if (samePasswords) {
         accessToken = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET, {
           expiresIn: TOKEN_EXPIRE,
         });
+        return { accessToken, email, name: user.name, id: user.id };
       }
-      return { accessToken, email, name: user.name, id: user.id };
+      throw new AuthenticationError('Invalid Username or Password');
     },
   },
 };

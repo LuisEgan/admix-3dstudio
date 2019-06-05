@@ -97,7 +97,7 @@ let Campaigns = props => {
         />
 
         <div id="apps-header" className="step-title">
-          <h3 className="st sc-h3">My apps</h3>
+          <h3 className="st sc-h3">My campaigns</h3>
         </div>
 
         <div id="apps-buttons">

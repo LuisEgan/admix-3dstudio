@@ -108,9 +108,10 @@ const CreativeMaker = props => {
           newChecklistCurrent = 2;
       }
 
-      setCheckListCurrent(newChecklistCurrent);
-
-      panelReached ? dispatch({ type: actions.SET_CURRENT_PANEL, payload: toggle }) : null;
+      if (panelReached) {
+        dispatch({ type: actions.SET_CURRENT_PANEL, payload: toggle });
+        setCheckListCurrent(newChecklistCurrent);
+      }
     };
 
     return panelsNames.map((toggle, i) => {
