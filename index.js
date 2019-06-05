@@ -31,11 +31,8 @@ app.prepare().then(() => {
 
   server.get('*', (req, res) => handle(req, res));
 
-  server.listen(PORT, () => {
+  server.listen(4000, () => {
     logger.info(`🎉 Application ready at ${HOST}:${PORT}`);
-    dev &&
-      logger.info(
-        `⚡️ GraphQL console ready at ${HOST}:${PORT}${apollo.graphqlPath}`,
-      );
+    dev && logger.info(`⚡️ GraphQL console ready at ${HOST}:${PORT}${apollo.graphqlPath}`);
   });
 });
