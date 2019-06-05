@@ -7,8 +7,8 @@ import { Mutation, withApollo } from 'react-apollo';
 import { ProgressBar, Step } from 'react-step-progress-bar';
 import mutations from '../../mutations';
 
-import Model from './panels/Model';
-import Gaze from './panels/Gaze';
+import Model from './panels/model';
+import Gaze from './panels/gaze';
 import Action from './panels/action';
 import DownloadXML from './panels/DownloadXML';
 
