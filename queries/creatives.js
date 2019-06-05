@@ -34,7 +34,7 @@ export default {
   creativeXML: gql`
     query CreativeXML($creative: ID!) {
       creativeXML(creative: $creative) {
-        id
+        XRaidURL
       }
     }
   `,

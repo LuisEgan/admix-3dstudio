@@ -137,7 +137,6 @@ const Model = props => {
           <div id="creative-panel-content">
             {ModelPanels[modelPanel]({
               file: modelFile,
-              loadFile,
               uploadLoading,
               loading3Dmodel,
               editCreativeLoading,

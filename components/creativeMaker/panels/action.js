@@ -61,7 +61,7 @@ const Action = props => {
         query: creativeXML,
         variables: { creative },
       });
-      const url = res.data.creativeXML;
+      const url = res.data.creativeXML.XRaidURL;
       setXMLurl(url);
     } catch (error) {
       console.error('error: ', error);
