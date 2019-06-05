@@ -9,7 +9,7 @@ import mutations from '../../mutations';
 
 import Model from './panels/Model';
 import Gaze from './panels/Gaze';
-import Action from './panels/Action';
+import Action from './panels/action';
 import DownloadXML from './panels/DownloadXML';
 
 import STR from '../../lib/utils/strFuncs';
@@ -168,7 +168,7 @@ const CreativeMaker = props => {
                   style={{ opacity: accomplished ? 1 : 0.3 }}
                   width="30"
                   src={checklistPending}
-                  
+
                 /> */}
                 {i <= checkListDone ? (
                   <ChecklistDone className={checkListCurrent === i ? 'current-item' : ''} />
