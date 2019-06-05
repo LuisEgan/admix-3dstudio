@@ -33,7 +33,9 @@ export default {
   `,
   creativeXML: gql`
     query CreativeXML($creative: ID!) {
-      creativeXML(creative: $creative)
+      creativeXML(creative: $creative) {
+        id
+      }
     }
   `,
 };
