@@ -7,12 +7,11 @@ import withApolloClient from '../lib/withApollo';
 import withRedux from '../lib/withRedux';
 
 import '../scss/index.scss';
+import 'react-step-progress-bar/styles.css';
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
-    const pageProps = Component.getInitialProps
-      ? await Component.getInitialProps(ctx)
-      : {};
+    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
 
     return { pageProps };
   }

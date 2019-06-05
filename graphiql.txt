@@ -1,0 +1,85 @@
+queries -----------------------------------------------------------
+
+query Campaigns {
+  campaigns {
+    id
+    name
+    user {
+      id
+      name
+    }
+    groups {
+      id
+      name
+      creatives {
+        id
+        name
+      }
+    }
+  }
+}
+
+query Groups {
+  groups {
+    id
+    name
+    campaign {
+      id
+      name
+    }
+    creatives {
+      id
+      name
+    }
+  }
+}
+
+query GroupsByCampaign {
+  groupsByCampaign(campaign: "5cae9be6ff5bf82b809a67c4") {
+    id
+    name
+  }
+}
+
+query Creatives {
+  creatives {
+    id
+    name
+    group {
+      id
+      name
+    }
+  }
+}
+
+mutations -----------------------------------------------------------
+
+mutation CreateGroup {
+  createGroup(campaign: "5cae9be6ff5bf82b809a67c4", name: "group I - campaign II") {
+    id
+    name
+    creatives {
+      id
+      name
+    }
+  }
+}
+
+mutation CreateCreative{
+	createCreative(group: "5cbd45c9024415163cd93b15", name: "creative I - group I", size: 1) {
+    id
+    name
+    group {
+      id
+      name
+    }
+  }
+}
+
+mutation DelGroup{
+  deleteGroup(group:"5cbd504f9a8c0f0c80ae6b21")
+}
+
+mutation DelCreative {
+  deleteCreative(creative: "5cbd42979814fc4cd01953ee")
+}

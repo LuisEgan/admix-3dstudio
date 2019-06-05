@@ -15,12 +15,7 @@ const emailSchema = yup
 const passwordSchema = yup
   .string()
   .min(8, 'at least 8 chars')
-  .matches(/[a-z]/, 'at least one lowercase char')
-  .matches(/[A-Z]/, 'at least one uppercase char')
-  .matches(
-    /[a-zA-Z]+[^a-zA-Z\s]+/,
-    'at least 1 number or special char (@,!,#, etc).',
-  );
+  .matches(/^(?=.*\d)(?=.*\D)(?=.*[a-zA-Z]).{8,}$/g, 'at least 1 letter and at least 1 number');
 
 // const passwordConfirmSchema = yup.string()
 //   .equalTo(yup.ref(passwordSchema), 'passwords dont match');
@@ -32,6 +27,7 @@ module.exports = {
   },
   password: {
     validator: password => passwordSchema.isValid(password),
-    message: props => `${props.value} is not a valid password!`,
+    // message: props => `${props.value} is not a valid password!`,
+    message: props => `Invalid password!`,
   },
 };

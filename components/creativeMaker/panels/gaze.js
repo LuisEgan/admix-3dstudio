@@ -1,22 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Mutation, withApollo } from 'react-apollo';
+import actions from '../panelActions';
+import mutations from '../../../mutations';
+
+import SetObjectPanel from './SetObjectPanel';
+import PanelFooter from '../PanelFooter';
+import { PANELS } from '../../../lib/utils/constants';
+
+const { uploadGaze } = mutations;
 
 const Gaze = props => {
-  const { setPanel, handleFile } = props;
+  const {
+    loadFile,
+    loading3Dmodel,
+    creative,
+    dispatch,
+    updateChecklistDone,
+    setCheckListCurrent,
+    checkListCurrent,
+    reducerState: {
+      file: { gaze: gazeFile },
+    },
+  } = props;
+
+  const handleNext = uploadGaze => () => {
+    // * Upload file to S3 bucket
+    if (gazeFile) {
+      uploadGaze({
+        variables: {
+          creative,
+          model: gazeFile,
+        },
+      });
+    }
+  };
+
+  const onSkip = () => {
+    gazeFile &&
+      dispatch({ type: actions.SET_FILE, payload: { panelName: 'gaze', panelFile: null } });
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.ACTION });
+    updateChecklistDone(3);
+    setCheckListCurrent(4);
+  };
+
+  const onBack = () => {
+    setCheckListCurrent(checkListCurrent - 1);
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.MODEL });
+  };
+
+  const handleUploadOnCompleted = () => {
+    dispatch({ type: actions.SET_CURRENT_PANEL, payload: PANELS.ACTION });
+    updateChecklistDone(3);
+    setCheckListCurrent(4);
+  };
+
   return (
-    <div className="creative-panel">
-      <div>
-        <label htmlFor="3dfile" className="blue-btn">
-          Select Image gaze
-        </label>
-        <input id="3dfile" type="file" style={{ display: 'none' }} onChange={handleFile} />
-      </div>
-      <div>
-        <button type="button" onClick={() => setPanel(2)}>
-          Next
-        </button>
-      </div>
-    </div>
+    <Mutation mutation={uploadGaze} onCompleted={handleUploadOnCompleted}>
+      {(uploadGaze, { loading: uploadLoading }) => (
+        <div id="creative-panel">
+          <div id="creative-panel-content">
+            <SetObjectPanel
+              loadFile={loadFile}
+              uploadLoading={uploadLoading}
+              loading3Dmodel={loading3Dmodel}
+              panelDescription={'Now set the model for gaze.'}
+              label={'Upload gaze animation'}
+              skippable={true}
+            />
+          </div>
+
+          <div id="creative-panel-footer">
+            <PanelFooter
+              onBack={onBack}
+              onSkip={onSkip}
+              onNext={handleNext(uploadGaze)}
+              nextLoading={uploadLoading || loading3Dmodel}
+              loadedFile={gazeFile}
+            />
+          </div>
+        </div>
+      )}
+    </Mutation>
   );
 };
 
-export default Gaze;
+export default withApollo(Gaze);

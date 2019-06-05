@@ -1,6 +1,7 @@
 const { GraphQLList, GraphQLID, GraphQLNonNull } = require('graphql');
-const { GroupsType } = require('../Types');
+const { GroupsType, CampaignsType } = require('../Types');
 const GroupsModel = require('../Models/groups');
+const CampaignModel = require('../Models/campaigns');
 
 module.exports = {
   groupById: {
@@ -16,5 +17,12 @@ module.exports = {
     description:
       'Get all groups of the application. No arguments required. Return array of groups.',
     resolve: async () => await GroupsModel.find({ deleted: false }, { deleted: 0 }),
+  },
+  groupsByCampaign: {
+    type: new GraphQLList(GroupsType),
+    args: {
+      campaign: { type: new GraphQLNonNull(GraphQLID) },
+    },
+    resolve: async (_, { campaign }) => await CampaignModel.getGroups(campaign),
   },
 };

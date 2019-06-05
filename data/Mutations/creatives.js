@@ -1,34 +1,10 @@
-const {
-  GraphQLString,
-  GraphQLID,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLInt,
-  GraphQLBoolean,
-} = require('graphql');
+const { GraphQLString, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull } = require('graphql');
 const { GraphQLUpload } = require('graphql-upload');
-const fs = require('fs');
-const path = require('path');
+const s3Upload = require('../Utils/aws');
 const { Types } = require('mongoose');
 const { CreativesType } = require('../Types');
 const CreativesModel = require('../Models/creatives');
 const GroupsModel = require('../Models/groups');
-
-const storeFS = ({ stream, filename }) => {
-  const filePath = path.join(__dirname, '..', '..', `./uploads/${filename}`);
-  return new Promise((resolve, reject) =>
-    stream
-      .on('error', error => {
-        if (stream.truncated)
-          // Delete the truncated file.
-          fs.unlinkSync(filePath);
-        reject(error);
-      })
-      .pipe(fs.createWriteStream(filePath))
-      .on('error', error => reject(error))
-      .on('finish', () => resolve(filePath)),
-  );
-};
 
 const AddCreativeToGroup = async (creative, group) => {
   return await GroupsModel.findByIdAndUpdate(group, {
@@ -37,7 +13,6 @@ const AddCreativeToGroup = async (creative, group) => {
 };
 
 const RemoveCreativeFromGroup = async (creative, groups) => {
-  group = Array.isArray(group) ? group : [group];
   return await GroupsModel.updateMany(
     {
       _id: { $in: groups },
@@ -56,7 +31,7 @@ module.exports = {
     args: {
       group: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: new GraphQLNonNull(GraphQLString) },
-      size: { type: new GraphQLNonNull(GraphQLInt) },
+      size: { type: new GraphQLNonNull(GraphQLString) },
       description: { type: GraphQLString },
       IAB: { type: GraphQLString },
     },
@@ -75,6 +50,7 @@ module.exports = {
       name: { type: GraphQLString },
       state: { type: GraphQLString },
       size: { type: GraphQLString },
+      XMLUrl: { type: GraphQLString },
     },
     resolve: async (_, args) => {
       const { creative } = args;
@@ -157,45 +133,62 @@ module.exports = {
     },
   },
   uploadModel: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Model` in the creative. Resolve `AWS ID` for replace/delete `Model`, if it will be needed.',
+      'This mutation helps you to upload new `Model` in the creative. Resolve `CreativesType` all info of `Model`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
+      size: { type: GraphQLString },
+      scale: { type: GraphQLInt },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative, size, scale }) => {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await s3Upload({ stream, filename });
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
+        { $set: { 'uploads.model': { tag: ETag, url: Location, key: Key }, size, scale } },
+        { new: true },
+      );
     },
   },
   uploadGaze: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Gaze` in the creative. Resolve `AWS ID` for replace/delete `Gaze`, if it will be needed.',
+      'This mutation helps you to upload new `Gaze` in the creative. Resolve `CreativesType` all info of `Gaze`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await s3Upload({ stream, filename });
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
+        { $set: { 'uploads.gaze': { tag: ETag, url: Location, key: Key } } },
+        { new: true },
+      );
     },
   },
   uploadAction: {
-    type: GraphQLBoolean,
+    type: CreativesType,
     description:
-      'This mutation helps you to upload new `Action` in the creative. Resolve `AWS ID` for replace/delete `Action`, if it will be needed.',
+      'This mutation helps you to upload new `Action` in the creative. Resolve `CreativesType` all info of `Action`, if it will be needed.',
     args: {
+      creative: { type: new GraphQLNonNull(GraphQLID) },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model }) => {
+    resolve: async (_, { model, creative }) => {
       const { filename, createReadStream } = await model;
       const stream = createReadStream();
-      const pathFile = await storeFS({ stream, filename });
-      return !!pathFile;
+      const { ETag, Location, Key } = await s3Upload({ stream, filename });
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
+        { $set: { 'uploads.action': { tag: ETag, url: Location, key: Key } } },
+        { new: true },
+      );
     },
   },
 };

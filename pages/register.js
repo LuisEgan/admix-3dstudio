@@ -1,79 +1,117 @@
-import React from "react";
-import Link from "next/link";
-import { gql } from "apollo-boost";
-import { Mutation, withApollo } from "react-apollo";
+import React, { useState } from 'react';
+import Router from 'next/router';
+import Link from 'next/link';
+import Form from '../components/Form';
+import mutations from '../mutations';
 
-import mutations from "../mutations";
+import validator from '../data/Models/validators/users';
+import { parseErrors } from '../lib/utils/parsers';
 
-import redirect from "../lib/redirect";
-import checkLoggedIn from "../lib/checkLoggedIn";
+import App from '../components/App';
+import BigImagePanel from '../components/BigImagePanel';
+import TextInput from '../components/inputs/TextInput';
 
 const { createUser } = mutations;
 
-class RegisterUser extends React.Component {
-  static async getInitialProps(context) {
-    const { loggedInUser } = await checkLoggedIn(context.apolloClient);
+const initialValues = { name: '', email: '', password: '' };
 
-    if (loggedInUser.user) {
-      redirect(context, "/");
-    }
+let Register = props => {
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
+  let messageContainer;
 
-    return {};
+  const { isLoggedIn } = props;
+
+  if (isLoggedIn) {
+    Router.push('/campaigns');
+    return null;
   }
 
-  handleSubmit = (e, registerUser) => {
-    e.preventDefault();
-    const { name, email, password, company } = document.register;
-    registerUser({
-      variables: {
-        name: name.value,
-        email: email.value,
-        password: password.value,
-        company: company.value,
-      },
-    });
+  const renderFooter = () => {
+    return (
+      <div>
+        <Link prefetch href="/login">
+          <a className="/login">Login</a>
+        </Link>
+      </div>
+    );
   };
 
-  render() {
-    const { client } = this.props;
+  const validate = values => {
+    const errors = {};
+    const { name, email, password, password2 } = values;
 
-    return (
-      <Mutation
-        mutation={createUser}
-        onCompleted={() => {
-          client.cache.reset().then(() => {
-            redirect({}, "/signin");
-          });
-        }}
-        onError={error => console.dir(error)}
-      >
-        {(registerUser, { loading, error }) => {
-          error && console.log("error.message: ", error);
+    if (!name) {
+      errors.name = 'Please enter a name';
+    }
 
-          return (
-            <React.Fragment>
-              <form
-                name="register"
-                onSubmit={e => this.handleSubmit(e, registerUser)}
-              >
-                <input type="text" name="name" placeholder="Name" />
-                <input type="text" name="email" placeholder="Email" />
-                <input type="password" name="password" placeholder="Password" />
-                <input type="text" name="company" placeholder="Company" />
-                <button type="submit">Create Account</button>
-                {error && <div>D: - {JSON.stringify(error)}</div>}
-              </form>
-              <hr />
-              Already have an account?{" "}
-              <Link prefetch href="/signin">
-                <a>Sign in</a>
-              </Link>
-            </React.Fragment>
-          );
-        }}
-      </Mutation>
-    );
-  }
-}
+    if (!email) {
+      errors.email = 'Please enter an email';
+    } else if (!validator.email.validator(email)) {
+      errors.email = 'Invalid email';
+    }
 
-export default withApollo(RegisterUser);
+    if (!password) {
+      errors.password = 'Please enter a password';
+    } else if (!validator.password.validator(password)) {
+      errors.password = 'Invalid password';
+    }
+
+    if (password2 && password !== password2) {
+      errors.password2 = 'Both passwords should match';
+    }
+
+    return errors;
+  };
+
+  const onSubmit = (values, mutation) => {
+    mutation({
+      variables: {
+        ...values,
+      },
+    });
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+  };
+
+  const handleOnCompleted = res => {
+    const {
+      createUser: { id },
+    } = res;
+    if (id) setMessage('User created!');
+  };
+
+  return (
+    <App>
+      <BigImagePanel title="Register" footer={renderFooter()}>
+        <Form
+          initialValues={initialValues}
+          validate={validate}
+          onSubmit={onSubmit}
+          mutation={createUser}
+          onCompleted={handleOnCompleted}
+          onError={e => {
+            setMessage(e.graphQLErrors[0].message);
+            setError(true);
+          }}
+        >
+          <TextInput name="name" label="Name" />
+          <TextInput name="email" label="Email" />
+          <TextInput name="password" label="Password" />
+          <TextInput name="password2" label="Repeat password" />
+          <div
+            ref={i => (messageContainer = i)}
+            className={`mbs ${error ? 'asyncError' : 'asyncSuccess'}`}
+            style={{ textAlign: 'center', margin: '10px 0' }}
+          >
+            {message && parseErrors(message)}
+          </div>
+          <button type="submit" className="btn gradient-btn">
+            Submit
+          </button>
+        </Form>
+      </BigImagePanel>
+    </App>
+  );
+};
+
+export default Register;

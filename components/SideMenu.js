@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import Link from "next/link";
-import { withRouter } from "next/router";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import Link from 'next/link';
+import { withRouter } from 'next/router';
 
-import actions from "../lib/actions";
+import actions from '../lib/actions';
 
-import logo from "../assets/img/logo-vertical.png";
-import ProfileSVG from "../assets/svg/profile.svg";
-import CampaignsSVG from "../assets/svg/campaigns.svg";
-import BellSVG from "../assets/svg/bell.svg";
-import DocumentationSVG from "../assets/svg/documentation.svg";
+import logo from '../assets/img/logo-vertical.png';
+import ProfileSVG from '../assets/svg/profile.svg';
+import CampaignsSVG from '../assets/svg/campaigns.svg';
+import BellSVG from '../assets/svg/bell.svg';
+import DocumentationSVG from '../assets/svg/documentation.svg';
 
 const { logout } = actions;
 
 function openInNewTab(url) {
-  const sideMenu = document.getElementById("sideMenu");
-  const a = document.createElement("a");
+  const sideMenu = document.getElementById('sideMenu');
+  const a = document.createElement('a');
   sideMenu.appendChild(a);
-  a.target = "_blank";
+  a.target = '_blank';
   a.href = url;
   a.click();
   sideMenu.removeChild(a);
@@ -26,23 +26,23 @@ function openInNewTab(url) {
 const sections = [
   {
     icon: <CampaignsSVG />,
-    title: "My campaigns",
-    pathname: "/campaigns",
+    title: 'My campaigns',
+    pathname: '/campaigns',
   },
   {
     icon: <DocumentationSVG />,
-    title: "Documentation",
-    pathname: "https://docs.admix.in/",
+    title: 'Documentation',
+    pathname: 'https://docs.admix.in/',
   },
-  {
-    icon: <DocumentationSVG />,
-    title: "Notifications",
-    pathname: "/",
-  },
+  // {
+  //   icon: <DocumentationSVG />,
+  //   title: "Notifications",
+  //   pathname: "/",
+  // },
   {
     icon: <ProfileSVG />,
-    title: "My profile",
-    pathname: "/",
+    title: 'My profile',
+    pathname: '/',
   },
 ];
 
@@ -57,26 +57,24 @@ class SideMenu extends Component {
   }
 
   redirectTo(pathname) {
-    if (pathname.indexOf("http") >= 0) {
+    if (pathname.indexOf('http') >= 0) {
       openInNewTab(pathname);
     }
   }
 
   renderSections() {
-    const pathname = "/";
+    const pathname = '/';
 
     let isSelected;
 
     return (
       <div id="sideMenu-body">
         {sections.map(section => {
-          isSelected = section.pathname === pathname ? "selectedSection" : "";
+          isSelected = section.pathname === pathname ? 'selectedSection' : '';
           return (
             <div key={section.title}>
               <Link prefetch href={section.pathname} key={section.title}>
-                <a
-                  target={section.title === "Documentation" ? "__blank" : null}
-                >
+                <a target={section.title === 'Documentation' ? '__blank' : null}>
                   <div>{section.icon}</div>
                   {section.title}
                 </a>

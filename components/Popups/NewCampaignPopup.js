@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import mutations from '../../mutations';
 import queries from '../../queries';
 
@@ -6,31 +6,38 @@ import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
+import { checkNonEmptyValues } from '../../lib/utils/validation';
+
 const { createCampaign } = mutations;
-const { campaigns } = queries;
+const { campaignsByUser } = queries;
 
 const initialValues = { name: '', advertiser: '', description: '' };
 
-export default ({ show, togglePopup }) => {
-  const validate = values => {
-    const errors = {};
+export default ({ show, togglePopup, userId }) => {
+  const [loading, setLoading] = useState(false);
 
-    for (let input in values) {
-      if (!values[input] || values[input] === '') {
-        errors[input] = 'We need this';
-      }
-    }
+  const validate = values => {
+    let errors = {};
+
+    errors = checkNonEmptyValues({ values, exceptions: ['description'] });
+
     return errors;
   };
 
   const onSubmit = (values, mutation) => {
+    setLoading(true);
     mutation({
       variables: {
-        user: '5c903dd7ea674f2b443f6491',
+        user: userId,
         ...values,
       },
-      refetchQueries: [{ query: campaigns }],
+      refetchQueries: [{ query: campaignsByUser, variables: { user: userId } }],
     });
+  };
+
+  const handleCompleted = ({ createCampaign }) => {
+    setLoading(false);
+    togglePopup();
   };
 
   return (
@@ -43,13 +50,14 @@ export default ({ show, togglePopup }) => {
             validate={validate}
             onSubmit={onSubmit}
             mutation={createCampaign}
+            onCompleted={handleCompleted}
             onError={e => console.log(e)}
           >
             <TextInput name="name" label="Campaign name*" />
             <TextInput name="advertiser" label="Campaign advertiser*" />
-            <TextInput name="description" label="Campaign description*" />
+            <TextInput name="description" label="Campaign description" />
             <button type="submit" className="btn gradient-btn">
-              Create
+              {loading ? 'Loading...' : 'Create'}
             </button>
           </Form>
         </div>

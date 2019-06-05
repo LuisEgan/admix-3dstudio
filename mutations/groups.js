@@ -2,10 +2,12 @@ import { gql } from 'apollo-boost';
 
 export default {
   createGroup: gql`
-    mutation CreateGroup($user: ID!, $name: String!, $campaign: ID!) {
-      createGroup(user: $user, name: $name, campaign: $campaign) {
+    mutation CreateGroup($campaign: ID!, $name: String!, $description: String) {
+      createGroup(campaign: $campaign, name: $name, description: $description) {
         id
+        state
         name
+        description
         campaign {
           id
           name
@@ -15,7 +17,6 @@ export default {
   `,
   editGroup: gql`
     mutation EditGroup(
-      $user: ID!
       $group: ID!
       $name: String
       $state: String
@@ -23,7 +24,6 @@ export default {
       $description: String
     ) {
       editGroup(
-        user: $user
         group: $group
         name: $name
         state: $state
@@ -32,6 +32,7 @@ export default {
       ) {
         id
         name
+        description
         campaign {
           id
           name

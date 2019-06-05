@@ -1,74 +1,78 @@
-import React, { Component } from "react";
-import Router from "next/router";
-import { connect } from "react-redux";
-import { Formik, Form } from "formik";
-import isEmail from "validator/lib/isEmail";
-import actions from "../lib/actions";
+import React, { useState } from 'react';
+import Router from 'next/router';
+import Link from 'next/link';
+import { connect } from 'react-redux';
+import Form from '../components/Form';
+import mutations from '../mutations';
 
-import App from "../components/App";
-import BigImagePanel from "../components/BigImagePanel";
-import TextInput from "../components/inputs/TextInput";
+import actions from '../lib/actions';
+
+import App from '../components/App';
+import BigImagePanel from '../components/BigImagePanel';
+import TextInput from '../components/inputs/TextInput';
+
+const { loginUser } = mutations;
 
 const { login } = actions;
 
-let Login = ({ login, isLoggedIn }) => {
+export const Login = props => {
+  const [error, setError] = useState(null);
+
+  const { login, isLoggedIn, client } = props;
 
   const renderFooter = () => {
     return (
       <div>
-        <span>Text</span>
+        <Link prefetch href="/register">
+          <a className="/register">Register</a>
+        </Link>
       </div>
     );
   };
 
-  const validate = values => {
-    const errors = {};
-    const { email, password } = values;
-
-    if (!email || !isEmail(email)) {
-      errors.email = "Invalid email";
-    }
-
-    if (!password) {
-      errors.password = "Please enter a password";
-    }
-
-    return errors;
+  const onSubmit = (values, mutation) => {
+    mutation({
+      variables: { ...values },
+    });
   };
 
-  const onSubmit = values => {
-    const { email, password } = values;
-    login(email, password);
-  };
+  const doLogin = ({ accessToken, name, id }) => {
+    if (!accessToken) {
+      setError(name ? 'Invalid password!' : 'No user found!');
+      return;
+    }
 
+    login({ accessToken, id });
+  };
 
   if (isLoggedIn) {
-    Router.push("/campaigns");
+    Router.push('/campaigns');
     return null;
   }
 
   return (
     <App>
       <BigImagePanel title="Login" footer={renderFooter()}>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validate={validate}
+        <Form
+          initialValues={{ email: '', password: '' }}
           onSubmit={onSubmit}
+          mutation={loginUser}
+          onCompleted={({ loginUser }) => {
+            doLogin(loginUser);
+          }}
+          onError={e => console.log(e)}
         >
-          {formProps => (
-            <Form>
-              <TextInput name="email" label="Email" {...formProps} />
-              <TextInput name="password" label="Password" {...formProps} />
-              <button
-                type="submit"
-                className="btn gradient-btn"
-                disabled={formProps.isSubmitting}
-              >
-                Submit
-              </button>
-            </Form>
-          )}
-        </Formik>
+          <TextInput name="email" label="Email" />
+          <TextInput name="password" label="Password" type="password" />
+          <button type="submit" className="btn gradient-btn">
+            Submit
+          </button>
+        </Form>
+        {error && (
+          <div className="mbs asyncError" style={{ textAlign: 'center', width: '70%' }}>
+            {error}
+          </div>
+        )}
       </BigImagePanel>
     </App>
   );
@@ -80,12 +84,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  login: (email, password) => dispatch(login({ email, password })),
+  login: ({ accessToken, id }) => dispatch(login({ accessToken, id })),
 });
 
-Login = connect(
+const LoginConnected = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Login);
 
-export default Login;
+export default LoginConnected;

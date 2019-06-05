@@ -1,19 +1,18 @@
-import { connect } from "react-redux";
-import Head from "next/head";
-import Router from "next/router";
-import SideMenu from "./SideMenu";
+import { connect } from 'react-redux';
+import Head from 'next/head';
+import Router from 'next/router';
+import SideMenu from './SideMenu';
 
-import favicon from "../assets/img/favicon.png";
+import favicon from '../assets/img/favicon.png';
 
-class AppWrapper extends React.Component {
+export class AppWrapper extends React.Component {
   render() {
     const { children, isLoggedIn } = this.props;
-    const {
-      router: { pathname },
-    } = Router;
+    const { router } = Router;
+    const { pathname } = router || {};
 
-    if (!isLoggedIn && pathname !== "/login") {
-      Router.push("/login");
+    if (!isLoggedIn && pathname !== '/login' && pathname !== '/register') {
+      Router.push('/login');
       return null;
     }
 
@@ -21,11 +20,8 @@ class AppWrapper extends React.Component {
       <main>
         <Head>
           <title>Admix - 3D Studio</title>
-          <link rel="shortcut icon" href={favicon}></link>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
+          <link rel="shortcut icon" href={favicon} />
+          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
         <SideMenu />
         {children}

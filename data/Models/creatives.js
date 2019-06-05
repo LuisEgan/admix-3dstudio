@@ -3,6 +3,15 @@ const states = require('../Utils/constants').states;
 
 const Schema = mongoose.Schema;
 
+const FBXSchema = new Schema(
+  {
+    tag: { type: String, default: '' },
+    url: { type: String, default: '' },
+    key: { type: String, default: '' },
+  },
+  { _id: false },
+);
+
 const creativesSchema = new Schema(
   {
     group: {
@@ -10,8 +19,9 @@ const creativesSchema = new Schema(
       ref: 'Group',
     },
     name: String,
-    sourceURL: String,
-    thumbURL: String,
+    description: String,
+    XRaidURL: String,
+    behaviorURL: String,
     format: String,
     deleted: { type: Boolean, default: false },
     state: {
@@ -19,8 +29,14 @@ const creativesSchema = new Schema(
       default: 'inactive',
       enum: states,
     },
-    size: Number,
+    size: String,
     IAB: String,
+    scale: Number,
+    uploads: {
+      gaze: FBXSchema,
+      model: FBXSchema,
+      action: FBXSchema,
+    },
   },
   { timestamps: true },
 );
