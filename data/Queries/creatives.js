@@ -47,7 +47,9 @@ const createXMLFiles = serverData =>
     fs.readFile(path.join(__dirname, 'behavior.xml'), 'utf8', (err, xml) => {
       if (err) reject(err);
       const convertedXMLTemplate = convert.xml2js(xml, options);
-      convertedXMLTemplate.XRAID.Unit.BundleUrl._text = serverData.url;
+      convertedXMLTemplate.XRAID.Unit.BundleUrl.map(
+        bundle => (bundle._text = serverData[bundle._attributes.platform].url),
+      );
       const behaviorXML = convert.js2xml(convertedXMLTemplate, options);
       s3Upload({ filename: 'behavior.xml', stream: behaviorXML })
         .then(res => createXRAIDFile(res))
