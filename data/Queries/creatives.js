@@ -6,6 +6,8 @@ const JSZip = require('jszip');
 const request = require('request');
 const s3Upload = require('../Utils/aws');
 
+let behaviorURL = '';
+
 const sendToUnityServer = body =>
   new Promise((resolve, reject) => {
     return request.post(
@@ -32,6 +34,7 @@ const createXRAIDFile = awsResponse =>
       XRAIDFiles.XRAIDFile._attributes.id = awsResponse.ETag.split('"').join('');
       XRAIDFiles.XRAIDFile._text = awsResponse.Location;
       const xraidXML = convert.js2xml(convertedXMLXRAID, options);
+      behaviorURL = awsResponse.Location;
       resolve({
         xml: xraidXML,
         folder: path.parse(path.parse(awsResponse.key).dir).base,
@@ -69,16 +72,26 @@ module.exports = {
     resolve: async () => await CreativesModel.find({ deleted: false }, { deleted: 0 }),
   },
   creativeXML: {
-    type: GraphQLString,
+    type: CreativesType,
     description:
       'Get ZIP archive by provided creative ID. Required ID argument. Response url to download archive.',
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
     },
     resolve: async (_, { creative }) => {
-      const { _id, uploads } = await CreativesModel.findById(creative);
-      const data = await sendToUnityServer({ id: _id.toString(), ...uploads });
-      return await createXMLFiles(JSON.parse(data));
+      const { _id, uploads, scale, size } = await CreativesModel.findById(creative);
+      const data = await sendToUnityServer({
+        scale,
+        size,
+        ...uploads,
+        id: _id.toString(),
+      });
+      const XRaidURL = await createXMLFiles(JSON.parse(data));
+      return await CreativesModel.findByIdAndUpdate(
+        creative,
+        { $set: { XRaidURL, behaviorURL } },
+        { new: true },
+      );
     },
   },
 };

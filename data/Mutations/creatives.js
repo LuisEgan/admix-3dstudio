@@ -1,4 +1,4 @@
-const { GraphQLString, GraphQLID, GraphQLList, GraphQLNonNull } = require('graphql');
+const { GraphQLString, GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull } = require('graphql');
 const { GraphQLUpload } = require('graphql-upload');
 const s3Upload = require('../Utils/aws');
 const { Types } = require('mongoose');
@@ -139,15 +139,16 @@ module.exports = {
     args: {
       creative: { type: new GraphQLNonNull(GraphQLID) },
       size: { type: GraphQLString },
+      scale: { type: GraphQLInt },
       model: { type: GraphQLUpload },
     },
-    resolve: async (_, { model, creative, size }) => {
+    resolve: async (_, { model, creative, size, scale }) => {
       const { createReadStream, filename } = await model;
       const stream = createReadStream();
       const { ETag, Location, Key } = await s3Upload({ stream, filename });
       return await CreativesModel.findByIdAndUpdate(
         creative,
-        { $set: { 'uploads.model': { tag: ETag, url: Location, key: Key }, size } },
+        { $set: { 'uploads.model': { tag: ETag, url: Location, key: Key }, size, scale } },
         { new: true },
       );
     },

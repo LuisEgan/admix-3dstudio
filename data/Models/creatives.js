@@ -20,8 +20,8 @@ const creativesSchema = new Schema(
     },
     name: String,
     description: String,
-    sourceURL: String,
-    thumbURL: String,
+    XRaidURL: String,
+    behaviorURL: String,
     format: String,
     deleted: { type: Boolean, default: false },
     state: {
@@ -31,7 +31,7 @@ const creativesSchema = new Schema(
     },
     size: String,
     IAB: String,
-    XMLUrl: String,
+    scale: Number,
     uploads: {
       gaze: FBXSchema,
       model: FBXSchema,
