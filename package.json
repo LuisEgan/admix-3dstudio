@@ -18,7 +18,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@zeit/next-sass": "^1.0.1",
-    "apollo-boost": "^0.3.1",
+    "apollo-boost": "^0.4.2",
     "apollo-link-context": "^1.0.15",
     "apollo-server-express": "^2.4.8",
     "apollo-upload-client": "^10.0.0",
