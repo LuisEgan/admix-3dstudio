@@ -19,6 +19,7 @@ const nextConfig = withImages(
         resolveAbsolutePath(config, 'queries');
         resolveAbsolutePath(config, 'mutations');
         resolveAbsolutePath(config, 'inputs');
+        resolveAbsolutePath(config, 'data');
 
         config.plugins = config.plugins || [];
 

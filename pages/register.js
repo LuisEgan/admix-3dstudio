@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
-import Form from '../components/Form';
-import mutations from '../mutations';
+import Form from 'components/Form';
+import mutations from 'mutations';
 
-import validator from '../data/Models/validators/users';
-import { parseErrors } from '../lib/utils/parsers';
+import validator from 'data/Models/validators/users';
+import { parseErrors } from 'lib/utils/parsers';
 
-import App from '../components/App';
-import BigImagePanel from '../components/BigImagePanel';
-import TextInput from '../components/inputs/TextInput';
+import App from 'components/App';
+import BigImagePanel from 'components/BigImagePanel';
+import TextInput from 'components/inputs/TextInput';
+import Button from 'components/Button';
 
 const { createUser } = mutations;
 
@@ -105,9 +106,9 @@ let Register = props => {
           >
             {message && parseErrors(message)}
           </div>
-          <button type="submit" className="btn gradient-btn">
+          <Button isSubmit fullWidth>
             Submit
-          </button>
+          </Button>
         </Form>
       </BigImagePanel>
     </App>

@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import Form from '../components/Form';
-import mutations from '../mutations';
+import Form from 'components/Form';
+import mutations from 'mutations';
 
-import actions from '../lib/actions';
+import actions from 'lib/actions';
 
-import App from '../components/App';
-import BigImagePanel from '../components/BigImagePanel';
-import TextInput from '../components/inputs/TextInput';
+import App from 'components/App';
+import BigImagePanel from 'components/BigImagePanel';
+import TextInput from 'components/inputs/TextInput';
+import Button from 'components/Button';
 
 const { loginUser } = mutations;
 
@@ -64,9 +65,9 @@ export const Login = props => {
         >
           <TextInput name="email" label="Email" />
           <TextInput name="password" label="Password" type="password" />
-          <button type="submit" className="btn gradient-btn">
-            Submit
-          </button>
+          <Button isSubmit fullWidth>
+            Login
+          </Button>
         </Form>
         {error && (
           <div className="mbs asyncError" style={{ textAlign: 'center', width: '70%' }}>
