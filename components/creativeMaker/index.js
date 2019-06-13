@@ -5,20 +5,21 @@ import React, { useState } from 'react';
 import THREEScene from '../3DScene';
 import { Mutation, withApollo } from 'react-apollo';
 import { ProgressBar, Step } from 'react-step-progress-bar';
-import mutations from '../../mutations';
+import mutations from 'mutations';
 
 import Model from './panels/model';
 import Gaze from './panels/gaze';
 import Action from './panels/action';
 import DownloadXML from './panels/DownloadXML';
 
-import STR from '../../lib/utils/strFuncs';
+import STR from 'lib/utils/strFuncs';
 import actions from './panelActions';
 
 import admixLogo from '../../assets/img/isologo.png';
 import ChecklistPending from '../../assets/svg/checked-NO.svg';
 import ChecklistDone from '../../assets/svg/checked-YES.svg';
-import { PANELS } from '../../lib/utils/constants';
+import { PANELS } from 'lib/utils/constants';
+import Button from 'components/Button';
 
 const Panels = [
   props => <Model {...props} />,
@@ -57,6 +58,8 @@ const CreativeMaker = props => {
   const [fileType, setFileType] = useState(null);
   const [size, setSize] = useState(initialSize);
   const [XMLurl, setXMLurl] = useState('');
+  const [accomplished, setAccomplished] = useState(false);
+
   // * check list steps done
   const [checkListDone, setCheckListDone] = useState(0);
   // * panel view according to checklist
@@ -122,11 +125,11 @@ const CreativeMaker = props => {
         <div
           key={toggle}
           role="panel-toggle"
-          className={currentPanel === i ? 'creative-panel-active' : ''}
+          className={`panel-toggle ${currentPanel === i ? 'creative-panel-active' : ''}`}
           style={toggleStyle}
           onClick={() => _handleToggleOnClick(i, panelReached)}
         >
-          {toggle}
+          <span className="panel-toggle-text">{toggle}</span>
           {i !== panelsNames.length - 1 && <div className="panel-toggle-arrow" />}
         </div>
       );
@@ -160,8 +163,6 @@ const CreativeMaker = props => {
       return (
         <Step transition="scale" key={step} position={(100 / totalChecklistSteps) * i}>
           {stepData => {
-            const { accomplished } = stepData;
-
             return (
               <div className="step clickable" onClick={() => _handleStepOnClick(i)}>
                 {/* <img
@@ -188,17 +189,8 @@ const CreativeMaker = props => {
       <Step position={100} key="final">
         {stepData => {
           const { accomplished } = stepData;
-          return (
-            <div className="step">
-              <button
-                className={`blue-btn ${!accomplished && 'disabled-btn'}`}
-                disabled={!accomplished}
-                onClick={triggerDownload}
-              >
-                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
-              </button>
-            </div>
-          );
+          setAccomplished(accomplished);
+          return <div className="step" />;
         }}
       </Step>,
     ];
@@ -239,8 +231,11 @@ const CreativeMaker = props => {
                     return (
                       <button
                         key={`${panel} - ${i}`}
+                        size="small"
                         onClick={() => dispatch({ type: actions.SET_PREVIEW_3D, payload: i })}
-                        className={panelPreview3D === i ? 'blue-btn' : 'white-btn'}
+                        className={`white-btn preview-btn ${
+                          panelPreview3D === i ? '' : 'inactive-btn'
+                        }`}
                       >
                         {`Preview ${panel}`}
                       </button>
@@ -298,6 +293,15 @@ const CreativeMaker = props => {
             >
               {renderChecklistSteps()}
             </ProgressBar>
+            <div className="downloadXMLContainer">
+              <Button
+                className={`downloadXML ${!accomplished && 'disabled-btn'}`}
+                disabled={!accomplished}
+                onClick={triggerDownload}
+              >
+                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
+              </Button>
+            </div>
           </div>
         </div>
       )}

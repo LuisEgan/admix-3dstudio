@@ -72,7 +72,7 @@ class SideMenu extends Component {
         {sections.map(section => {
           isSelected = section.pathname === pathname ? 'selectedSection' : '';
           return (
-            <div key={section.title}>
+            <div className="sidebarItem" key={section.title}>
               <Link prefetch href={section.pathname} key={section.title}>
                 <a target={section.title === 'Documentation' ? '__blank' : null}>
                   <div>{section.icon}</div>

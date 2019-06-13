@@ -2,19 +2,23 @@ import React, { useReducer } from 'react';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import Router from 'next/router';
-import queries from '../queries';
-import actions from '../lib/actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCog, faPlus } from '@fortawesome/free-solid-svg-icons';
+import queries from 'queries';
+import actions from 'lib/actions';
 import Link from 'next/link';
 
-import App from '../components/App';
-import Breadcrumbs from '../components/Breadcrumbs';
-import EditGroupPopup from '../components/Popups/EditGroupPopup';
-import NewGroupPopup from '../components/Popups/NewGroupPopup';
-import EditCreativePopup from '../components/Popups/EditCreativePopup';
-import NewCreativePopup from '../components/Popups/NewCreativePopup';
+import App from 'components/App';
+import Breadcrumbs from 'components/Breadcrumbs';
+import EditGroupPopup from 'components/Popups/EditGroupPopup';
+import NewGroupPopup from 'components/Popups/NewGroupPopup';
+import EditCreativePopup from 'components/Popups/EditCreativePopup';
+import NewCreativePopup from 'components/Popups/NewCreativePopup';
+import Button from 'components/Button';
 
-import CogSVG from '../assets/svg/cog.svg';
 import PlusSVG from '../assets/svg/cross.svg';
+
+import { GroupsTheme } from 'themes';
 
 const { groupsByCampaign } = queries;
 const { setSelected } = actions;
@@ -75,8 +79,13 @@ let Groups = props => {
 
     return (
       <div className="group" key={name}>
-        <div className="group-name mb">
-          {name} &nbsp; <CogSVG onClick={() => togglePopup('showEditGroup', { group })} />
+        <div className="group-container mb">
+          <span className="group-name">{name}</span>
+          <FontAwesomeIcon
+            icon={faCog}
+            className="editGroup"
+            onClick={() => togglePopup('showEditGroup', { group })}
+          />
         </div>
         <div className="group-creatives">
           {creatives.map(creative => {
@@ -91,7 +100,8 @@ let Groups = props => {
               >
                 <div className="creative-title mb">
                   <span>{name}</span>
-                  <CogSVG
+                  <FontAwesomeIcon
+                    icon={faCog}
                     onClick={e => {
                       e.stopPropagation();
                       togglePopup('showEditCreative', { creative });
@@ -106,8 +116,8 @@ let Groups = props => {
             className="group-creative group-creative-new mb"
             onClick={() => togglePopup('showNewCreative', { group: id })}
           >
-            <PlusSVG />
-            <span>New creative</span>
+            <FontAwesomeIcon icon={faPlus} size="3x" />
+            <span className="title">New creative</span>
           </div>
         </div>
       </div>
@@ -128,49 +138,51 @@ let Groups = props => {
   };
 
   return (
-    <App>
-      <EditGroupPopup
-        show={state.showEditGroup}
-        togglePopup={() => togglePopup('showEditGroup', { group: state.clickedGroup })}
-        group={state.clickedGroup}
-        campaign={campaign.id}
-      />
-      <NewGroupPopup
-        show={state.showNewGroup}
-        togglePopup={() => togglePopup('showNewGroup')}
-        campaign={campaign.id}
-      />
-      <EditCreativePopup
-        show={state.showEditCreative}
-        togglePopup={() => togglePopup('showEditCreative', { creative: state.clickedCreative })}
-        creative={state.clickedCreative}
-        campaign={campaign.id}
-      />
-      <NewCreativePopup
-        show={state.showNewCreative}
-        togglePopup={() => togglePopup('showNewCreative')}
-        group={state.clickedGroup}
-        campaign={campaign.id}
-        selectCreative={selectCreative}
-      />
+    <GroupsTheme>
+      <App>
+        <EditGroupPopup
+          show={state.showEditGroup}
+          togglePopup={() => togglePopup('showEditGroup', { group: state.clickedGroup })}
+          group={state.clickedGroup}
+          campaign={campaign.id}
+        />
+        <NewGroupPopup
+          show={state.showNewGroup}
+          togglePopup={() => togglePopup('showNewGroup')}
+          campaign={campaign.id}
+        />
+        <EditCreativePopup
+          show={state.showEditCreative}
+          togglePopup={() => togglePopup('showEditCreative', { creative: state.clickedCreative })}
+          creative={state.clickedCreative}
+          campaign={campaign.id}
+        />
+        <NewCreativePopup
+          show={state.showNewCreative}
+          togglePopup={() => togglePopup('showNewCreative')}
+          group={state.clickedGroup}
+          campaign={campaign.id}
+          selectCreative={selectCreative}
+        />
 
-      <div className="step-container" id="groups">
-        <div id="apps-header" className="step-title">
-          <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
-          <h3 className="st sc-h3">{campaign.name}</h3>
-        </div>
+        <div className="step-container" id="groups">
+          <div id="apps-header" className="step-title">
+            <Breadcrumbs breadcrumbs={setBreadcrumbs()} />
+            <h3 className="st sc-h3">{campaign.name}</h3>
+          </div>
 
-        <div id="groups-content">
-          {loading && <div>Loading...</div>}
-          {groups && groups.map(group => renderGroup(group))}
-          {groups && (
-            <button className="blue-btn mb" onClick={() => togglePopup('showNewGroup')}>
-              <PlusSVG /> &nbsp; New group
-            </button>
-          )}
+          <div id="groups-content">
+            {loading && <div>Loading...</div>}
+            {groups && groups.map(group => renderGroup(group))}
+            {groups && (
+              <Button icon={faPlus} onClick={() => togglePopup('showNewGroup')} size="large">
+                New group
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    </App>
+      </App>
+    </GroupsTheme>
   );
 };
 

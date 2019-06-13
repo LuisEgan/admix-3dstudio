@@ -860,6 +860,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 #sideMenu-header {
   @extend .cc;
   height: 15%;
+  margin-bottom: 20px;
 
   img {
     width: 55%;
@@ -870,9 +871,12 @@ $inputsFontSize: calc(0.45em+0.3vw);
   position: relative;
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
   height: 90%;
   width: 100%;
+
+  .sidebarItem {
+    margin-bottom: 30px;
+  }
 
   a {
     height: 100%;
@@ -1133,7 +1137,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 }
 
 .step-container {
-  padding: 2% $sidesPadding calc(2% + 40px);
+  padding: 1% $sidesPadding calc(2% + 40px);
   width: 100%;
   overflow: auto;
   min-width: $mobileBreakpoint;
@@ -1733,192 +1737,9 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 }
 
-#campaign-new-popup-btns {
-}
-
-.campaign-select-container {
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0px 5px 20px -9px #888888;
-  padding: 1% 3%;
-  margin: 1.5% 0;
-  border-radius: 10px;
-  background-color: #fff;
-  height: calc(2vh + 40px);
-
-  > div {
-    display: flex;
-  }
-
-  #campaign-select-info {
-    width: 70%;
-
-    .engine-logo {
-      width: 4vw;
-      max-width: 40px;
-
-      svg {
-        width: 100%;
-
-        path {
-          fill: black;
-        }
-      }
-
-      img {
-        width: 100%;
-      }
-    }
-
-    .campaign-name {
-      display: flex;
-      align-items: center;
-      padding: 0;
-      margin-left: 35px;
-      width: 50%;
-    }
-
-    .campaign-status {
-      min-width: 200px;
-      justify-content: left;
-      color: $greyText;
-    }
-  }
-
-  #campaign-select-buttons {
-    > div {
-      padding-left: 15px;
-
-      &:first-child {
-        display: flex;
-        align-items: center;
-      }
-
-      &:nth-child(2) {
-        display: flex;
-        align-items: center;
-      }
-    }
-
-    .campaign-buttons {
-      display: flex;
-      position: relative;
-      padding: 1% 0;
-
-      button {
-        background-color: $blue;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 7px 2.5vw;
-        box-shadow: $boxShadow;
-
-        &:not(:first-of-type) {
-          margin-left: 8px;
-        }
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    .pendingState {
-      box-shadow: inset 0 0 0 20px orange, 0 0 0 2px orange;
-    }
-  }
-}
-
 // ----------------------------------------------------------------------------------------------------------
 // GROUPS ----------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
-#groups {
-  svg,
-  g,
-  path {
-    height: 100%;
-    width: 13px;
-    fill: white;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .group {
-    padding: 1.5vh 0;
-
-    .group-name {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-
-      svg,
-      g,
-      path {
-        fill: black;
-      }
-    }
-
-    .group-creatives {
-      display: flex;
-      box-shadow: $boxShadow;
-      border-radius: 5px;
-      padding: 15px;
-      min-height: 25vh;
-      flex-wrap: wrap;
-      background: white;
-
-      .group-creative {
-        display: flex;
-        flex-flow: column-reverse;
-        position: relative;
-        width: 150px;
-        min-height: 20vh;
-        margin: 15px;
-        background-position: 0 0;
-        border-radius: 2px;
-        background-size: cover;
-        cursor: pointer;
-
-        img {
-          height: 100%;
-          width: 100%;
-        }
-
-        .creative-title {
-          display: flex;
-          color: white;
-          justify-content: space-between;
-          align-items: flex-end;
-          padding: 10px 15px;
-          background: rgba(0, 0, 0, 0.6);
-
-          span {
-            max-width: 80%;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-          }
-        }
-      }
-
-      .group-creative-new {
-        @extend .cc;
-        flex-flow: column;
-        background-color: #1b77e1;
-        color: white;
-
-        svg,
-        g,
-        path {
-          height: unset;
-          width: unset;
-        }
-      }
-    }
-  }
-}
 
 #creatives {
   #apps-header {
@@ -1938,7 +1759,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
   #creative-maker {
     display: flex;
-    height: 65vh;
+    height: 70vh;
     justify-content: space-between;
     > div {
       // border: solid #f2f2f2;
@@ -1973,6 +1794,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
       }
 
       .panel-toggle-arrow {
+
         height: calc(var(--header-height) / var(--sqr-2));
         border: solid $greyBorder 1px;
         position: absolute;
@@ -1983,7 +1805,17 @@ $inputsFontSize: calc(0.45em+0.3vw);
         top: -1px;
         border-left: 0;
         border-bottom: 0;
+
       }
+
+      .panel-toggle:nth-child(2) {
+
+          .panel-toggle-arrow {
+            margin-right: 10px;
+          }
+
+      }
+
     }
 
     #creative-webgl {
@@ -2016,6 +1848,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
           width: 100%;
           text-align: center;
           top: 30%;
+          .webgl-text {
+            font-size: 18px;
+            margin: 0;
+          }
         }
         #webgl-error {
           @extend #webgl-placeholder;
@@ -2032,9 +1868,14 @@ $inputsFontSize: calc(0.45em+0.3vw);
         justify-content: space-evenly;
         padding: 15px 0;
 
-        button {
-          width: 30%;
+        .preview-btn {
+          box-shadow: unset;
         }
+
+        .inactive-btn {
+          opacity: 0.4;
+        }
+        
         #creative-size-text {
           text-align: right;
           width: 90%;
@@ -2054,19 +1895,35 @@ $inputsFontSize: calc(0.45em+0.3vw);
             display: flex;
             flex-flow: column;
             align-items: center;
-            justify-content: space-evenly;
+            justify-content: space-between;
             height: 100%;
             padding: 0 5%;
 
-            > div,
-            button {
+            > div {
               padding: 15px;
             }
           }
           #creative-panel-content {
-            height: 70%;
+            height: 65%;
+            padding-top: 20px;
+
+            .title {
+              margin-bottom: 5px;
+            }
 
             .creative-set-object {
+
+              .panelDescription {
+
+                text-align: center;
+
+                span {
+                  display: inline-block;
+                  text-align: left;
+                }
+
+              }
+
               > div {
                 &:first-child {
                   @extend .mb;
@@ -2098,7 +1955,6 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
             > div {
               padding: 0;
-              width: 45%;
 
               .skip-btn {
                 display: block;
@@ -2129,6 +1985,21 @@ $inputsFontSize: calc(0.45em+0.3vw);
       --parentHeight: 100%;
       width: 20%;
       height: var(--parentHeight);
+      position: relative;
+
+      .downloadXMLContainer {
+        width: 100%;
+        text-align: center;
+      }
+
+      .downloadXML {
+        width: 80%;
+        position: absolute;
+        bottom: 0;
+        left: 0; 
+        right: 0; 
+        margin: 0 auto 20px auto;
+      }
 
       img {
         border-radius: 100%;
@@ -2155,7 +2026,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
           }
 
           button {
-            margin-left: 45%;
+            width: 150px;
           }
 
           svg {
@@ -2221,20 +2092,6 @@ $ballSize: 20px;
   color: white;
 }
 
-.gradient-btn {
-  background-image: linear-gradient(135.78deg, #002590 0%, #1388b7 50.87%, #56c4c6 100%);
-  border-radius: 50px;
-  width: 180px;
-  height: 48px;
-  color: white;
-  box-shadow: none;
-  border: 0;
-
-  &:focus {
-    outline: none;
-  }
-}
-
 .cancel-btn {
   border: 0;
   background: transparent;
@@ -2243,8 +2100,6 @@ $ballSize: 20px;
 }
 
 .disabled-btn {
-  color: $greyDisabledText;
-  background-color: $greyDisabled;
   &:hover {
     cursor: not-allowed !important;
   }
@@ -2614,8 +2469,8 @@ $ballSize: 20px;
 
   .popup-x {
     position: absolute;
-    right: 3%;
-    top: 2.5%;
+    right: 4%;
+    top: 4%;
 
     &:hover {
       cursor: pointer;
@@ -2634,6 +2489,8 @@ $ballSize: 20px;
   .popup-inner {
     position: relative;
     width: 30%;
+    max-height: 75vh;
+    overflow-y: auto;
     background: white;
     padding: 4% 5%;
     border-radius: 5px;

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
-import mutations from '../../mutations';
-import queries from '../../queries';
+import mutations from 'mutations';
+import queries from 'queries';
 
 import Popup from '../Popup';
 import Form from '../Form';
 import TextInput from '../inputs/TextInput';
 import SelectInput from '../inputs/SelectInput';
 
-import { checkNonEmptyValues } from '../../lib/utils/validation';
+import { checkNonEmptyValues } from 'lib/utils/validation';
+import Button from 'components/Button';
 
 const { groupsByCampaign } = queries;
 const { createCreative } = mutations;
@@ -74,9 +75,9 @@ export default ({ show, togglePopup, group, campaign, selectCreative }) => {
               options={[{ label: 'opt1', value: '1' }, { label: 'opt2', value: '2' }]}
             />
             <SelectInput name="size" label="Creative size in the real world" options={sizeValues} />
-            <button type="submit" className="btn gradient-btn" disabled={loading}>
+            <Button isSubmit fullWidth disabled={loading}>
               {loading ? 'Loading...' : 'Create'}
-            </button>
+            </Button>
           </Form>
         </div>
       </div>

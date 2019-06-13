@@ -2,16 +2,16 @@ import React, { useReducer } from 'react';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import Router from 'next/router';
-import queries from '../queries';
-import actions from '../lib/actions';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import queries from 'queries';
+import actions from 'lib/actions';
 
-import App from '../components/App';
-import NewCampaignPopup from '../components/Popups/NewCampaignPopup';
+import App from 'components/App';
+import Button from 'components/Button';
+import NewCampaignPopup from 'components/Popups/NewCampaignPopup';
 
-import AdmixLoading from '../components/SVG/AdmixLoading';
-import SetupSVG from '../assets/svg/setup.svg';
-import InfoSVG from '../assets/svg/info.svg';
-import ReportSVG from '../assets/svg/report.svg';
+import AdmixLoading from 'components/SVG/AdmixLoading';
+import { CampaignsTheme } from 'themes';
 
 const { campaignsByUser } = queries;
 const { setSelected } = actions;
@@ -88,34 +88,31 @@ let Campaigns = props => {
   const { showContent, showPopupNewCampaign } = state;
 
   return (
-    <App>
-      <div className="step-container" id="campaigns">
-        <NewCampaignPopup
-          show={showPopupNewCampaign}
-          togglePopup={() => togglePopup('showPopupNewCampaign')}
-          userId={userId}
-        />
+    <CampaignsTheme>
+      <App>
+        <div className="step-container" id="campaigns">
+          <NewCampaignPopup
+            show={showPopupNewCampaign}
+            togglePopup={() => togglePopup('showPopupNewCampaign')}
+            userId={userId}
+          />
 
-        <div id="apps-header" className="step-title">
-          <h3 className="st sc-h3">My campaigns</h3>
+          <div id="apps-header" className="step-title">
+            <h3 className="st sc-h3">My campaigns</h3>
+          </div>
+
+          <div id="apps-buttons">
+            <Button icon={faPlus} onClick={() => togglePopup('showPopupNewCampaign')}>
+              New campaign
+            </Button>
+          </div>
+
+          {!showContent && <AdmixLoading loadingText="Loading" />}
+
+          {showContent && renderCampaigns()}
         </div>
-
-        <div id="apps-buttons">
-          <button
-            id="filter"
-            className="mb unselectable blue-btn"
-            type="button"
-            onClick={() => togglePopup('showPopupNewCampaign')}
-          >
-            + &nbsp; <span>New campaign</span>
-          </button>
-        </div>
-
-        {!showContent && <AdmixLoading loadingText="Loading" />}
-
-        {showContent && renderCampaigns()}
-      </div>
-    </App>
+      </App>
+    </CampaignsTheme>
   );
 };
 
