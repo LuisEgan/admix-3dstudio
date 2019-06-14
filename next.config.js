@@ -5,12 +5,24 @@ const withImages = require('next-images');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
+const resolveAbsolutePath = (config, currentPath) =>
+  (config.resolve.alias[currentPath] = path.join(__dirname, currentPath));
+
 const dev = process.env.NODE_ENV === 'development';
 
 const nextConfig = withImages(
   withSass(
     withCSS({
       webpack(config) {
+        resolveAbsolutePath(config, 'components');
+        resolveAbsolutePath(config, 'pages');
+        resolveAbsolutePath(config, 'lib');
+        resolveAbsolutePath(config, 'themes');
+        resolveAbsolutePath(config, 'queries');
+        resolveAbsolutePath(config, 'mutations');
+        resolveAbsolutePath(config, 'inputs');
+        resolveAbsolutePath(config, 'data');
+
         config.plugins = config.plugins || [];
 
         config.plugins = [
