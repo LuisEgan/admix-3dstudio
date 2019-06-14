@@ -1,11 +1,11 @@
-require('dotenv').config();
+const dev = process.env.NODE_ENV === 'development';
+
+require('dotenv').config({ path: dev ? '.env.dev' : '.env' });
 
 const express = require('express');
 const next = require('next');
 const cors = require('cors');
 const mongoose = require('mongoose');
-
-const { PORT, HOST, dev } = require('./config');
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -32,7 +32,10 @@ app.prepare().then(() => {
   server.get('*', (req, res) => handle(req, res));
 
   server.listen(4000, () => {
-    logger.info(`🎉 Application ready at ${HOST}:${PORT}`);
-    dev && logger.info(`⚡️ GraphQL console ready at ${HOST}:${PORT}${apollo.graphqlPath}`);
+    logger.info(`🎉 Application ready at ${process.env.HOST}:${process.env.PORT}`);
+    dev &&
+      logger.info(
+        `⚡️ GraphQL console ready at ${process.env.HOST}:${process.env.PORT}${apollo.graphqlPath}`,
+      );
   });
 });
