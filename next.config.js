@@ -5,6 +5,8 @@ const withImages = require('next-images');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
 
+const dev = process.env.NODE_ENV === 'development';
+
 const nextConfig = withImages(
   withSass(
     withCSS({
@@ -15,7 +17,7 @@ const nextConfig = withImages(
           ...config.plugins,
 
           new Dotenv({
-            path: path.join(__dirname, '.env'),
+            path: path.join(__dirname, dev ? '.env.dev' : '.env'),
             systemvars: true,
             safe: true,
           }),
