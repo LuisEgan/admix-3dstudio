@@ -94,6 +94,7 @@ const Model = props => {
     editCreative({
       variables: {
         creative,
+        scale: size,
         size: STR.parseSize(size),
       },
     });
@@ -115,6 +116,7 @@ const Model = props => {
     uploadModel({
       variables: {
         creative,
+        scale: size,
         size: STR.parseSize(size),
         model: modelFile,
       },
