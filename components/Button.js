@@ -14,7 +14,7 @@ const Button = props => {
         type={isSubmit ? 'submit' : 'button'}
         onClick={onClick}
       >
-        <FontAwesomeIcon icon={icon} className="buttonIcon" />
+        {icon && <FontAwesomeIcon icon={icon} className="buttonIcon" />}
         {children}
       </button>
     </ButtonTheme>
