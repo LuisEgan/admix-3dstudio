@@ -8,6 +8,8 @@ const path = require('path');
 const resolveAbsolutePath = (config, currentPath) =>
   (config.resolve.alias[currentPath] = path.join(__dirname, currentPath));
 
+const dev = process.env.NODE_ENV === 'development';
+
 const nextConfig = withImages(
   withSass(
     withCSS({
@@ -27,7 +29,7 @@ const nextConfig = withImages(
           ...config.plugins,
 
           new Dotenv({
-            path: path.join(__dirname, '.env'),
+            path: path.join(__dirname, dev ? '.env.dev' : '.env'),
             systemvars: true,
             safe: true,
           }),
