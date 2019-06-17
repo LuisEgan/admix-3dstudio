@@ -1936,6 +1936,24 @@ $inputsFontSize: calc(0.45em+0.3vw);
               margin-bottom: 5px;
             }
 
+            .modelSize {
+
+              width: 50px;
+              border: solid 1px #eee;
+              border-radius: 0.2rem;
+              padding: 5px;
+              margin-right: 10px;
+
+              &::-webkit-outer-spin-button,
+              &::-webkit-inner-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+              }
+
+              -moz-appearance:textfield;
+   
+            }
+
             .creative-set-object {
 
               .panelDescription {
