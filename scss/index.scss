@@ -1560,13 +1560,31 @@ $inputsFontSize: calc(0.45em+0.3vw);
   background-color: white;
 
   form {
+    
     width: 70%;
     height: 100%;
-    padding: 5% 0;
+    padding: 0;
+
+    button {
+      margin-top: 10px;
+    }
 
     .gradient-btn {
       width: 100%;
     }
+
+    .form-header {
+      @extend .cc;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 36px;
+      color: #0a1f44;
+      height: 10%;
+      font-size: 15px;
+      border-bottom: solid #f5f7fa;
+      margin-bottom: 20px;
+    }
+
   }
 
   a,
@@ -1577,7 +1595,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 
   .input {
-    margin-bottom: 3vh;
+    margin-bottom: 1.5vh;
 
     svg {
       &:hover {
@@ -1637,23 +1655,30 @@ $inputsFontSize: calc(0.45em+0.3vw);
     height: 20%;
   }
 
-  #bigImagePanel-title {
-    height: 10%;
-
-    > div {
-      @extend .cc;
-      width: 70%;
-      height: 100%;
-      border-bottom: solid #f5f7fa;
-    }
-  }
-
   #bigImagePanel-forms {
     transition: 0s;
     position: relative;
     flex-flow: column;
     // height: 60%;
     overflow: auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+
+    .loginButton {
+      border-top: solid #f5f7fa;
+      text-align: center;
+      margin: 25px 0 30px 0;
+      padding-top: 15px;
+      color: #0a1f44;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 17px;
+
+      > p {
+        font-size: 11px;
+      }
+
+    }
 
     #register-feedback {
       @extend .cc;
@@ -2410,7 +2435,7 @@ $ballSize: 20px;
   .input-body {
     @extend .cc;
     flex-flow: column;
-    border: 2px solid #ededed;
+    border: 1px solid #ededed;
     border-radius: 5px;
     padding: 10px 0;
     min-height: 25px;
