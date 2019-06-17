@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 class Popup extends React.PureComponent {
   closePopup = () => {
@@ -22,9 +24,7 @@ class Popup extends React.PureComponent {
     return (
       <div id={id} className="popup">
         <div className="popup-inner">
-          <div className="popup-x" onClick={this.closePopup}>
-            x
-          </div>
+          <FontAwesomeIcon icon={faTimes} onClick={this.closePopup} className="popup-x" />
           {children}
         </div>
         <div className="popup-bg" onClick={this.closePopup.bind(this)} />

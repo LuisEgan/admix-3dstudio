@@ -49,6 +49,7 @@ module.exports = {
       creative: { type: new GraphQLNonNull(GraphQLID) },
       name: { type: GraphQLString },
       state: { type: GraphQLString },
+      scale: { type: GraphQLInt },
       size: { type: GraphQLString },
       XMLUrl: { type: GraphQLString },
     },

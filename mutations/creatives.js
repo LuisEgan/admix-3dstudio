@@ -33,8 +33,14 @@ export default {
     }
   `,
   editCreative: gql`
-    mutation EditCreative($creative: ID!, $name: String, $state: String, $size: String) {
-      editCreative(creative: $creative, name: $name, state: $state, size: $size) {
+    mutation EditCreative(
+      $creative: ID!
+      $name: String
+      $state: String
+      $scale: Int
+      $size: String
+    ) {
+      editCreative(creative: $creative, name: $name, state: $state, scale: $scale, size: $size) {
         id
         name
         size
@@ -76,8 +82,8 @@ export default {
   `,
 
   uploadModel: gql`
-    mutation UploadModel($creative: ID!, $size: String, $model: Upload) {
-      uploadModel(creative: $creative, size: $size, model: $model) {
+    mutation UploadModel($creative: ID!, $scale: Int, $size: String, $model: Upload) {
+      uploadModel(creative: $creative, scale: $scale, size: $size, model: $model) {
         id
         name
       }

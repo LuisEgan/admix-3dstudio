@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
 import { connect } from 'react-redux';
-import Form from '../components/Form';
-import mutations from '../mutations';
-
+import Form from 'components/Form';
+import mutations from 'mutations';
 import validator from '../data/Models/validators/users';
-import actions from '../lib/actions';
-
-import App from '../components/App';
-import BigImagePanel from '../components/BigImagePanel';
-import TextInput from '../components/inputs/TextInput';
+import actions from 'lib/actions';
+import App from 'components/App';
+import BigImagePanel from 'components/BigImagePanel';
+import TextInput from 'components/inputs/TextInput';
+import Button from 'components/Button';
 
 const { loginUser } = mutations;
 
@@ -91,9 +90,11 @@ export const Login = props => {
           </div>
           <TextInput name="email" label="Email" />
           <TextInput name="password" label="Password" type="password" />
-          <button type="submit" className="btn gradient-btn authButton">
+
+          <Button isSubmit fullWidth>
             Login
-          </button>
+          </Button>
+
           {renderFooter()}
         </Form>
         {error && (

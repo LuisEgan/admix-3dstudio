@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import mutations from '../../mutations';
-import queries from '../../queries';
+import mutations from 'mutations';
+import queries from 'queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-import { checkNonEmptyValues } from '../../lib/utils/validation';
+import { checkNonEmptyValues } from 'lib/utils/validation';
+import Button from 'components/Button';
 
 const { editGroup } = mutations;
 const { groupsByCampaign } = queries;
@@ -78,31 +79,19 @@ export default props => {
           >
             <TextInput name="name" label="Group name*" />
             <TextInput name="description" label="Description" />
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-evenly',
-                padding: '20px',
-              }}
-            >
-              <button
-                type="submit"
-                className="btn gradient-btn"
-                style={{ width: '40%' }}
-                disabled={loading}
-              >
-                {loading ? 'Loading...' : 'Save'}
-              </button>
-              {/* <button
-                type="button"
-                onClick={() => onDelete('GROUP_ID')}
-                className="btn red-btn"
-                style={{ width: '40%' }}
-                disabled={loading}
-              >
-                Delete
-              </button> */}
-            </div>
+
+            <Button fullWidth isSubmit disabled={loading}>
+              {loading ? 'Loading...' : 'Save'}
+            </Button>
+            {/* <button
+            type="button"
+            onClick={() => onDelete('GROUP_ID')}
+            className="btn red-btn"
+            style={{ width: '40%' }}
+            disabled={loading}
+          >
+            Delete
+          </button> */}
           </Form>
         </div>
       </div>
