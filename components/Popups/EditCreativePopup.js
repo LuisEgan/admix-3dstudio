@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import mutations from '../../mutations';
-import queries from '../../queries';
+import mutations from 'mutations';
+import queries from 'queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-import { checkNonEmptyValues } from '../../lib/utils/validation';
+import { checkNonEmptyValues } from 'lib/utils/validation';
+import Button from 'components/Button';
 
 const { editCreative } = mutations;
 const { groupsByCampaign } = queries;
@@ -78,23 +79,18 @@ export default props => {
                 padding: '20px',
               }}
             >
-              <button
-                type="submit"
-                className="btn gradient-btn"
-                style={{ width: '40%' }}
-                disabled={loading}
-              >
+              <Button size="small" isSubmit disabled={loading}>
                 {loading ? 'Loading...' : 'Save'}
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
                 onClick={() => onDelete('CREATIVE_ID')}
                 className="btn red-btn"
-                style={{ width: '40%' }}
+                type="danger"
+                size="small"
                 disabled={loading}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </Form>
         </div>

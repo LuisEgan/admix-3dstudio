@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import mutations from '../../mutations';
-import queries from '../../queries';
+import mutations from 'mutations';
+import queries from 'queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-import { checkNonEmptyValues } from '../../lib/utils/validation';
+import { checkNonEmptyValues } from 'lib/utils/validation';
+import Button from 'components/Button';
 
 const { createGroup } = mutations;
 const { groupsByCampaign } = queries;
@@ -64,9 +65,9 @@ export default ({ show, togglePopup, campaign }) => {
           >
             <TextInput name="name" label="Group name*" />
             <TextInput name="description" label="Description" />
-            <button type="submit" className="btn gradient-btn" disabled={loading}>
+            <Button isSubmit className="btn gradient-btn" disabled={loading} fullWidth>
               {loading ? 'Loading...' : 'Create'}
-            </button>
+            </Button>
           </Form>
         </div>
       </div>

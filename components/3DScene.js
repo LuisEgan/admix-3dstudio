@@ -4,9 +4,9 @@ import GLTFLoader from 'three-gltf-loader';
 import GLTFExporter from 'three-gltf-exporter';
 import TransformControls from 'three-transform-ctrls';
 import OrbitControls from 'three-orbitcontrols';
-import { FBXLoader } from '../lib/three.modules/FBXLoader';
+import { FBXLoader } from 'lib/three.modules/FBXLoader';
 import isEqual from 'lodash/isEqual';
-import { PANELS } from '../lib/utils/constants';
+import { PANELS } from 'lib/utils/constants';
 
 class THREEScene extends React.Component {
   constructor(props) {
@@ -396,7 +396,7 @@ class THREEScene extends React.Component {
       <div id={id}>
         {panel === PANELS.MODEL && !this.loadedObject && !loadError[panel] && (
           <div id="webgl-placeholder" className="unselectable">
-            Create your 3D ad in 5 easy steps
+            <p className="webgl-text">Create your 3D ad in 5 easy steps</p>
           </div>
         )}
         {loadError[panel] && (

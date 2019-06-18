@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'components/Button';
 
 export let PanelFooter = props => {
   const { onBack, onNext, onSkip, hide, nextLoading, loadedFile, nextText } = props;
@@ -21,13 +22,13 @@ export let PanelFooter = props => {
             Skip >
           </button>
         ) : (
-          <button
+          <Button
             onClick={onNext}
-            className={`blue-btn ${nextLoading && 'disabled-btn'}`}
+            className={`campaign-buttons ${nextLoading && 'disabled-btn'}`}
             disabled={nextLoading}
           >
             {nextLoading ? 'Loading...' : nextText || 'Save and Next >'}
-          </button>
+          </Button>
         )}
       </div>
     </React.Fragment>

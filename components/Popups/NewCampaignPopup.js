@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import mutations from '../../mutations';
+import mutations from 'mutations';
 import queries from '../../queries';
 
 import Form from '../Form';
 import Popup from '../Popup';
 import TextInput from '../inputs/TextInput';
 
-import { checkNonEmptyValues } from '../../lib/utils/validation';
+import { checkNonEmptyValues } from 'lib/utils/validation';
+import Button from 'components/Button';
 
 const { createCampaign } = mutations;
 const { campaignsByUser } = queries;
@@ -56,9 +57,9 @@ export default ({ show, togglePopup, userId }) => {
             <TextInput name="name" label="Campaign name*" />
             <TextInput name="advertiser" label="Campaign advertiser*" />
             <TextInput name="description" label="Campaign description" />
-            <button type="submit" className="btn gradient-btn">
+            <Button isSubmit fullWidth>
               {loading ? 'Loading...' : 'Create'}
-            </button>
+            </Button>
           </Form>
         </div>
       </div>
