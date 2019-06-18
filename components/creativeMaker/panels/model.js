@@ -14,7 +14,7 @@ const SetSizePanel = props => {
   const { reScale, size } = props;
 
   const inputStyle = { width: '100%', border: 'solid 1px #eee' };
-  const inputContainerStyle = { width: '60%', 'text-align': 'center' };
+  const inputContainerStyle = { width: '60%' };
 
   return (
     <React.Fragment>
@@ -34,15 +34,7 @@ const SetSizePanel = props => {
         />
       </div>
       <div style={inputContainerStyle}>
-        <input
-          className="modelSize"
-          value={size}
-          onChange={reScale}
-          min={1}
-          max={300}
-          type="number"
-        />
-        <span>cm</span>
+        <input className="input" value={`${size} cm`} readOnly style={inputStyle} />
       </div>
     </React.Fragment>
   );
@@ -95,9 +87,7 @@ const Model = props => {
     const {
       target: { value },
     } = e;
-    let roundedValue = Math.round(value);
-    if (roundedValue > 300) roundedValue = 300;
-    setSize(roundedValue);
+    setSize(Math.round(value));
   };
 
   const saveModel = () => {

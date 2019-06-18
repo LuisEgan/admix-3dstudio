@@ -1846,6 +1846,8 @@ $inputsFontSize: calc(0.45em+0.3vw);
     #creative-webgl {
       width: 45%;
       position: relative;
+      height: 440px;
+
       #creative-3d {
         > div {
           width: 100%;
@@ -1910,6 +1912,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
     #creative-panels {
       width: 31%;
+      height: 440px;
 
       #creative-panels-content {
         height: 88%;
@@ -1955,6 +1958,10 @@ $inputsFontSize: calc(0.45em+0.3vw);
             }
 
             .creative-set-object {
+
+              .modelButton {
+                margin-top: 20px;
+              }
 
               .panelDescription {
 
@@ -2025,7 +2032,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     }
 
     #creative-panels-checklist {
-      --parentHeight: 100%;
+      --parentHeight: 440px;
       width: 20%;
       height: var(--parentHeight);
       position: relative;
@@ -2041,7 +2048,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         bottom: 0;
         left: 0; 
         right: 0; 
-        margin: 0 auto 20px auto;
+        margin: 0 auto 30px auto;
       }
 
       img {
@@ -2054,7 +2061,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         transform-origin: 0;
         margin-top: 15%;
         margin-left: 15%;
-        width: calc(var(--parentHeight) + 15vh);
+        width: 300px;
 
         /* Steps */
         .step {
