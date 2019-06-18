@@ -33,7 +33,7 @@ export default styled.div`
           display: flex;
           flex-flow: column-reverse;
           position: relative;
-          width: 150px;
+          width: 20%;
           min-height: 20vh;
           margin: 15px;
           background-position: 0 0;

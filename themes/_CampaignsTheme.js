@@ -75,7 +75,7 @@ export default styled.div`
         button {
           background-image: linear-gradient(135.78deg, #002590 0%, #1388b7 50.87%, #56c4c6 100%);
           border-radius: 5px;
-          padding: 7px 2.5vw;
+          padding: 10px 35px;
           color: white;
           box-shadow: none;
           border: 0;

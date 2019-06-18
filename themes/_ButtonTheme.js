@@ -9,7 +9,7 @@ export default styled.div`
 
   button {
     width: 100%;
-    padding: 0 25px 0 25px;
+    padding: 0 20px 0 20px;
 
     ${({ type }) =>
       (!type || type === 'primary') &&
@@ -17,7 +17,7 @@ export default styled.div`
 
     ${({ type }) => type === 'danger' && ` background-color: #cc0000;`}
 
-        border-radius: 50px;
+    border-radius: 50px;
     height: 48px;
     color: white;
     box-shadow: none;

@@ -189,8 +189,18 @@ const CreativeMaker = props => {
       <Step position={100} key="final">
         {stepData => {
           const { accomplished } = stepData;
-          setAccomplished(accomplished);
-          return <div className="step" />;
+          return (
+            <div className="step">
+              <Button
+                size="small"
+                className={`downloadXML ${!accomplished && 'disabled-btn'}`}
+                disabled={!accomplished}
+                onClick={triggerDownload}
+              >
+                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
+              </Button>
+            </div>
+          );
         }}
       </Step>,
     ];
@@ -293,15 +303,6 @@ const CreativeMaker = props => {
             >
               {renderChecklistSteps()}
             </ProgressBar>
-            <div className="downloadXMLContainer">
-              <Button
-                className={`downloadXML ${!accomplished && 'disabled-btn'}`}
-                disabled={!accomplished}
-                onClick={triggerDownload}
-              >
-                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
-              </Button>
-            </div>
           </div>
         </div>
       )}
