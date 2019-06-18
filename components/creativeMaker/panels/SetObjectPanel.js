@@ -1,24 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Button from 'components/Button';
 
 const SetObjectPanel = props => {
+  const [fileInput, setFileInput] = useState();
   const { panelDescription, label, loadFile, uploadLoading, loading3Dmodel, skippable } = props;
+
+  const triggerInputFile = () => fileInput.click();
 
   return (
     <div className="creative-set-object">
-      <div>{panelDescription}</div>
+      <div className="panelDescription">
+        <span>{panelDescription}</span>
+      </div>
       <div>
-        <label
-          htmlFor="3dfile"
-          className={`file-label blue-btn ${uploadLoading && 'disabled-btn'}`}
+        <Button
+          size="large"
+          onClick={() => triggerInputFile()}
+          className={`modelButton ${(loading3Dmodel || uploadLoading) && 'disabled-btn'}`}
         >
-          {loading3Dmodel
-            ? 'Loading 3D model...'
-            : uploadLoading && !skippable
-            ? 'Uploading...'
-            : label}
-        </label>
+          {loading3Dmodel ? (
+            'Loading 3D model...'
+          ) : uploadLoading && !skippable ? (
+            'Uploading...'
+          ) : (
+            <span>{label}</span>
+          )}
+        </Button>
         <input
-          id="3dfile"
+          ref={fileInput => setFileInput(fileInput)}
           type="file"
           style={{ display: 'none' }}
           onChange={loadFile}

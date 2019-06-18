@@ -14,7 +14,7 @@ const SetSizePanel = props => {
   const { reScale, size } = props;
 
   const inputStyle = { width: '100%', border: 'solid 1px #eee' };
-  const inputContainerStyle = { width: '60%' };
+  const inputContainerStyle = { width: '60%', 'text-align': 'center' };
 
   return (
     <React.Fragment>
@@ -34,7 +34,15 @@ const SetSizePanel = props => {
         />
       </div>
       <div style={inputContainerStyle}>
-        <input className="input" value={`${size} cm`} readOnly style={inputStyle} />
+        <input
+          className="modelSize"
+          value={size}
+          onChange={reScale}
+          min={1}
+          max={300}
+          type="number"
+        />
+        <span>cm</span>
       </div>
     </React.Fragment>
   );
@@ -87,13 +95,16 @@ const Model = props => {
     const {
       target: { value },
     } = e;
-    setSize(Math.round(value));
+    let roundedValue = Math.round(value);
+    if (roundedValue > 300) roundedValue = 300;
+    setSize(roundedValue);
   };
 
   const saveModel = () => {
     editCreative({
       variables: {
         creative,
+        scale: size,
         size: STR.parseSize(size),
       },
     });
@@ -115,6 +126,7 @@ const Model = props => {
     uploadModel({
       variables: {
         creative,
+        scale: size,
         size: STR.parseSize(size),
         model: modelFile,
       },
