@@ -1564,13 +1564,31 @@ $inputsFontSize: calc(0.45em+0.3vw);
   background-color: white;
 
   form {
+    
     width: 70%;
     height: 100%;
-    padding: 5% 0;
+    padding: 0;
+
+    button {
+      margin-top: 10px;
+    }
 
     .gradient-btn {
       width: 100%;
     }
+
+    .form-header {
+      @extend .cc;
+      font-size: 30px;
+      font-weight: 600;
+      line-height: 36px;
+      color: #0a1f44;
+      height: 10%;
+      font-size: 15px;
+      border-bottom: solid #f5f7fa;
+      margin-bottom: 20px;
+    }
+
   }
 
   a,
@@ -1581,7 +1599,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
   }
 
   .input {
-    margin-bottom: 3vh;
+    margin-bottom: 1.5vh;
 
     svg {
       &:hover {
@@ -1641,23 +1659,30 @@ $inputsFontSize: calc(0.45em+0.3vw);
     height: 20%;
   }
 
-  #bigImagePanel-title {
-    height: 10%;
-
-    > div {
-      @extend .cc;
-      width: 70%;
-      height: 100%;
-      border-bottom: solid #f5f7fa;
-    }
-  }
-
   #bigImagePanel-forms {
     transition: 0s;
     position: relative;
     flex-flow: column;
     // height: 60%;
     overflow: auto;
+    padding-top: 10px;
+    padding-bottom: 20px;
+
+    .loginButton {
+      border-top: solid #f5f7fa;
+      text-align: center;
+      margin: 25px 0 30px 0;
+      padding-top: 15px;
+      color: #0a1f44;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 17px;
+
+      > p {
+        font-size: 11px;
+      }
+
+    }
 
     #register-feedback {
       @extend .cc;
@@ -1821,6 +1846,8 @@ $inputsFontSize: calc(0.45em+0.3vw);
     #creative-webgl {
       width: 45%;
       position: relative;
+      height: 440px;
+
       #creative-3d {
         > div {
           width: 100%;
@@ -1885,6 +1912,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
 
     #creative-panels {
       width: 31%;
+      height: 440px;
 
       #creative-panels-content {
         height: 88%;
@@ -1911,7 +1939,29 @@ $inputsFontSize: calc(0.45em+0.3vw);
               margin-bottom: 5px;
             }
 
+            .modelSize {
+
+              width: 50px;
+              border: solid 1px #eee;
+              border-radius: 0.2rem;
+              padding: 5px;
+              margin-right: 10px;
+
+              &::-webkit-outer-spin-button,
+              &::-webkit-inner-spin-button {
+                  -webkit-appearance: none;
+                  margin: 0;
+              }
+
+              -moz-appearance:textfield;
+   
+            }
+
             .creative-set-object {
+
+              .modelButton {
+                margin-top: 20px;
+              }
 
               .panelDescription {
 
@@ -1982,7 +2032,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
     }
 
     #creative-panels-checklist {
-      --parentHeight: 100%;
+      --parentHeight: 440px;
       width: 20%;
       height: var(--parentHeight);
       position: relative;
@@ -1998,7 +2048,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         bottom: 0;
         left: 0; 
         right: 0; 
-        margin: 0 auto 20px auto;
+        margin: 0 auto 30px auto;
       }
 
       img {
@@ -2011,7 +2061,7 @@ $inputsFontSize: calc(0.45em+0.3vw);
         transform-origin: 0;
         margin-top: 15%;
         margin-left: 15%;
-        width: calc(var(--parentHeight) + 15vh);
+        width: 300px;
 
         /* Steps */
         .step {
@@ -2265,7 +2315,7 @@ $ballSize: 20px;
   .input-body {
     @extend .cc;
     flex-flow: column;
-    border: 2px solid #ededed;
+    border: 1px solid #ededed;
     border-radius: 5px;
     padding: 10px 0;
     min-height: 25px;

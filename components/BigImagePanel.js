@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import admixLogo from "../assets/img/logo.png";
+import admixLogo from '../assets/img/logo.png';
 
 class BigImagePanel extends Component {
   static propTypes = {

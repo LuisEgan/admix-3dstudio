@@ -4,9 +4,8 @@ import Link from 'next/link';
 import { connect } from 'react-redux';
 import Form from 'components/Form';
 import mutations from 'mutations';
-
+import validator from '../data/Models/validators/users';
 import actions from 'lib/actions';
-
 import App from 'components/App';
 import BigImagePanel from 'components/BigImagePanel';
 import TextInput from 'components/inputs/TextInput';
@@ -23,7 +22,8 @@ export const Login = props => {
 
   const renderFooter = () => {
     return (
-      <div>
+      <div className="loginButton">
+        <p>or</p>
         <Link prefetch href="/register">
           <a className="/register">Register</a>
         </Link>
@@ -51,23 +51,51 @@ export const Login = props => {
     return null;
   }
 
+  const validate = async values => {
+    const errors = {};
+    const { email, password } = values;
+
+    const isEmailValid = await validator.email.validator(email);
+
+    if (!email) {
+      errors.email = 'Please enter an email';
+    } else if (!isEmailValid) {
+      errors.email = 'Invalid email';
+    }
+
+    if (!password) {
+      errors.password = 'Please enter a password';
+    }
+
+    if (Object.keys(errors).length) {
+      throw errors;
+    }
+  };
+
   return (
     <App>
-      <BigImagePanel title="Login" footer={renderFooter()}>
+      <BigImagePanel>
         <Form
           initialValues={{ email: '', password: '' }}
           onSubmit={onSubmit}
           mutation={loginUser}
+          validate={validate}
           onCompleted={({ loginUser }) => {
             doLogin(loginUser);
           }}
           onError={e => console.log(e)}
         >
+          <div className="form-header">
+            <p>Login</p>
+          </div>
           <TextInput name="email" label="Email" />
           <TextInput name="password" label="Password" type="password" />
+
           <Button isSubmit fullWidth>
             Login
           </Button>
+
+          {renderFooter()}
         </Form>
         {error && (
           <div className="mbs asyncError" style={{ textAlign: 'center', width: '70%' }}>

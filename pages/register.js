@@ -3,10 +3,8 @@ import Router from 'next/router';
 import Link from 'next/link';
 import Form from 'components/Form';
 import mutations from 'mutations';
-
 import validator from 'data/Models/validators/users';
 import { parseErrors } from 'lib/utils/parsers';
-
 import App from 'components/App';
 import BigImagePanel from 'components/BigImagePanel';
 import TextInput from 'components/inputs/TextInput';
@@ -30,7 +28,8 @@ let Register = props => {
 
   const renderFooter = () => {
     return (
-      <div>
+      <div className="loginButton">
+        <p>or</p>
         <Link prefetch href="/login">
           <a className="/login">Login</a>
         </Link>
@@ -38,9 +37,11 @@ let Register = props => {
     );
   };
 
-  const validate = values => {
+  const validate = async values => {
     const errors = {};
     const { name, email, password, password2 } = values;
+
+    const isEmailValid = await validator.email.validator(email);
 
     if (!name) {
       errors.name = 'Please enter a name';
@@ -48,21 +49,21 @@ let Register = props => {
 
     if (!email) {
       errors.email = 'Please enter an email';
-    } else if (!validator.email.validator(email)) {
+    } else if (!isEmailValid) {
       errors.email = 'Invalid email';
     }
 
     if (!password) {
       errors.password = 'Please enter a password';
-    } else if (!validator.password.validator(password)) {
-      errors.password = 'Invalid password';
     }
 
     if (password2 && password !== password2) {
       errors.password2 = 'Both passwords should match';
     }
 
-    return errors;
+    if (Object.keys(errors).length) {
+      throw errors;
+    }
   };
 
   const onSubmit = (values, mutation) => {
@@ -83,7 +84,7 @@ let Register = props => {
 
   return (
     <App>
-      <BigImagePanel title="Register" footer={renderFooter()}>
+      <BigImagePanel>
         <Form
           initialValues={initialValues}
           validate={validate}
@@ -95,10 +96,13 @@ let Register = props => {
             setError(true);
           }}
         >
+          <div className="form-header">
+            <p>Register</p>
+          </div>
           <TextInput name="name" label="Name" />
           <TextInput name="email" label="Email" />
-          <TextInput name="password" label="Password" />
-          <TextInput name="password2" label="Repeat password" />
+          <TextInput name="password" label="Password" type="password" />
+          <TextInput name="password2" label="Repeat password" type="password" />
           <div
             ref={i => (messageContainer = i)}
             className={`mbs ${error ? 'asyncError' : 'asyncSuccess'}`}
@@ -106,9 +110,12 @@ let Register = props => {
           >
             {message && parseErrors(message)}
           </div>
+
           <Button isSubmit fullWidth>
             Submit
           </Button>
+
+          {renderFooter()}
         </Form>
       </BigImagePanel>
     </App>
