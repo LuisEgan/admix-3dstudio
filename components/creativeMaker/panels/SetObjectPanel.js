@@ -16,8 +16,7 @@ const SetObjectPanel = props => {
         <Button
           size="large"
           onClick={() => triggerInputFile()}
-          className={`file-label gradient-btn ${(loading3Dmodel || uploadLoading) &&
-            'disabled-btn'}`}
+          className={`modelButton ${(loading3Dmodel || uploadLoading) && 'disabled-btn'}`}
         >
           {loading3Dmodel ? (
             'Loading 3D model...'

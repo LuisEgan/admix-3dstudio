@@ -24,15 +24,19 @@ class BigImagePanel extends Component {
             <img src={admixLogo} alt="admix" />
           </div>
 
-          <div id="bigImagePanel-title" className="st">
-            <div>{title}</div>
-          </div>
+          {title && (
+            <div id="bigImagePanel-title" className="st">
+              <div>{title}</div>
+            </div>
+          )}
 
           <div id="bigImagePanel-forms">{children}</div>
 
-          <div id="bigImagePanel-nav" className="mb">
-            {footer}
-          </div>
+          {footer && (
+            <div id="bigImagePanel-nav" className="mb">
+              {footer}
+            </div>
+          )}
         </div>
 
         {/* Big right image */}
