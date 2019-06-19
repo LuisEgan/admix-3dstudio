@@ -14,7 +14,7 @@ const SetSizePanel = props => {
   const { reScale, size } = props;
 
   const inputStyle = { width: '100%', border: 'solid 1px #eee' };
-  const inputContainerStyle = { width: '60%', 'text-align': 'center' };
+  const inputContainerStyle = { width: '80%', 'text-align': 'center' };
 
   return (
     <React.Fragment>
@@ -36,7 +36,7 @@ const SetSizePanel = props => {
       <div style={inputContainerStyle}>
         <input
           className="modelSize"
-          value={size}
+          value={Number(size).toString()}
           onChange={reScale}
           min={1}
           max={300}
