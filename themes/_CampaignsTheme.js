@@ -4,7 +4,7 @@ export default styled.div`
   .campaign-select-container {
     display: flex;
     justify-content: space-between;
-    box-shadow: 0px 5px 20px -9px #888888;
+    box-shadow: 0 1px 3px #c9c9c9;
     padding: 1% 3%;
     margin: 1.5% 0;
     border-radius: 10px;

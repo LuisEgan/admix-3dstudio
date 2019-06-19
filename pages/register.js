@@ -112,7 +112,7 @@ let Register = props => {
           </div>
 
           <Button isSubmit fullWidth>
-            Submit
+            Register
           </Button>
 
           {renderFooter()}

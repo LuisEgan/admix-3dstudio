@@ -15,20 +15,19 @@ export let PanelFooter = props => {
         {onSkip && !loadedFile ? (
           <button
             onClick={onSkip}
-            className={`white-btn skip-btn ${nextLoading && 'disabled-btn'}`}
-            style={{ textAlign: 'right' }}
+            className={`white-btn next-btn ${nextLoading && 'disabled-btn'}`}
             disabled={nextLoading}
           >
             Skip >
           </button>
         ) : (
-          <Button
+          <button
             onClick={onNext}
-            className={`campaign-buttons ${nextLoading && 'disabled-btn'}`}
             disabled={nextLoading}
+            className={`white-btn next-btn ${nextLoading && 'disabled-btn'}`}
           >
-            {nextLoading ? 'Loading...' : nextText || 'Save and Next >'}
-          </Button>
+            {`Next >`}
+          </button>
         )}
       </div>
     </React.Fragment>

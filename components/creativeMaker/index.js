@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import THREEScene from '../3DScene';
 import { Mutation, withApollo } from 'react-apollo';
 import { ProgressBar, Step } from 'react-step-progress-bar';
+import { faSpinner, faSave } from '@fortawesome/free-solid-svg-icons';
 import mutations from 'mutations';
 
 import Model from './panels/model';
@@ -189,15 +190,19 @@ const CreativeMaker = props => {
       <Step position={100} key="final">
         {stepData => {
           const { accomplished } = stepData;
+          const loading = currentPanel === PANELS.DOWNLOAD && !accomplished;
+
           return (
             <div className="step">
               <Button
                 size="small"
+                iconSpin={loading}
+                icon={loading ? faSpinner : faSave}
                 className={`downloadXML ${!accomplished && 'disabled-btn'}`}
                 disabled={!accomplished}
                 onClick={triggerDownload}
               >
-                {currentPanel === PANELS.DOWNLOAD && !accomplished ? 'Loading...' : 'Download XML'}
+                {loading ? 'Loading...' : 'Download XML'}
               </Button>
             </div>
           );

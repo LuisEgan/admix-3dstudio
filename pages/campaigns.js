@@ -2,7 +2,8 @@ import React, { useReducer } from 'react';
 import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import Router from 'next/router';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import queries from 'queries';
 import actions from 'lib/actions';
 
@@ -46,7 +47,14 @@ let Campaigns = props => {
   };
 
   const renderCampaigns = () => {
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+      return (
+        <div>
+          <FontAwesomeIcon className="loading" icon={faSpinner} spin />
+          Loading...
+        </div>
+      );
+
     return (campaigns || []).map(campaign => {
       const { id, name, advertiser } = campaign;
 

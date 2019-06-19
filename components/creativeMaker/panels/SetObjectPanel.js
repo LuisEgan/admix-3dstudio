@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Button from 'components/Button';
 
 const SetObjectPanel = props => {
@@ -15,6 +16,8 @@ const SetObjectPanel = props => {
       <div>
         <Button
           size="large"
+          iconSpin
+          icon={loading3Dmodel || uploadLoading ? faSpinner : null}
           onClick={() => triggerInputFile()}
           className={`modelButton ${(loading3Dmodel || uploadLoading) && 'disabled-btn'}`}
         >

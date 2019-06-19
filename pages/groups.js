@@ -3,7 +3,7 @@ import { graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import Router from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCog, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import queries from 'queries';
 import actions from 'lib/actions';
 import Link from 'next/link';
@@ -172,7 +172,12 @@ let Groups = props => {
           </div>
 
           <div id="groups-content">
-            {loading && <div>Loading...</div>}
+            {loading && (
+              <div>
+                <FontAwesomeIcon className="loading" icon={faSpinner} spin />
+                Loading...
+              </div>
+            )}
             {groups && groups.map(group => renderGroup(group))}
             {groups && (
               <Button icon={faPlus} onClick={() => togglePopup('showNewGroup')} size="large">
