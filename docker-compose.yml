@@ -5,7 +5,7 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 4000:4000
+      - 3005:4000
     depends_on:
       - db
 
