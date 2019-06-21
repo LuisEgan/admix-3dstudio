@@ -1,5 +1,7 @@
 <img style="display:block; margin:auto" src="https://admix.in/wp-content/uploads/2018/08/admix.1f291914fot.png">
 
+[![Build Status](https://travis-ci.com/advirltd/3DStudio.svg?token=ttnU7RLygok9s377YEa6&branch=master)](https://travis-ci.com/advirltd/3DStudio)
+
 # 3D Studio
 
 This application contains following frameworks and technologies:
