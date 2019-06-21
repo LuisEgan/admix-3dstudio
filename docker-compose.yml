@@ -1,0 +1,79 @@
+version: '3.3'
+services:
+  3d-studio-1:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+
+  3d-studio-2:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3005:4000
+    depends_on:
+      - db
+
+  3d-studio-3:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3006:4000
+    depends_on:
+      - db
+
+  3d-studio-4:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3007:4000
+    depends_on:
+      - db
+
+  3d-studio-5:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3008:4000
+    depends_on:
+      - db
+
+  3d-studio-6:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3009:4000
+    depends_on:
+      - db
+
+  3d-studio-7:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3010:4000
+    depends_on:
+      - db
+
+  3d-studio-8:
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3011:4000
+    depends_on:
+      - db
+
+  db:
+    container_name: mongo
+    restart: always
+    image: mongo
+    volumes:
+      - ~/data/db/:/data/db

@@ -8,9 +8,9 @@
     "front-dev": "next",
     "dev": "node index.js",
     "build": "next build",
-    "prod_start": "npm run build && NODE_ENV=production pm2 start index.js",
+    "prod_start": "pm2-runtime start ecosystem.config.js --env production",
     "prestart": "npm run build",
-    "start": "SET NODE_ENV=production&& node index.js",
+    "start": "SET NODE_ENV=production && node index.js",
     "front-start": "next start -p %PORT%"
   },
   "dependencies": {
