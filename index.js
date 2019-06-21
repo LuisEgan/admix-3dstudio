@@ -14,8 +14,10 @@ const apollo = require('./services/apollo')(dev);
 
 mongoose.set('debug', dev);
 
+const mongo_uri = dev ? 'localhost:27017' : 'mongo';
+
 mongoose
-  .connect('mongodb://localhost:27017/admix-studio', {
+  .connect(`mongodb://${mongo_uri}/admix-studio`, {
     useCreateIndex: true,
     useNewUrlParser: true,
   })

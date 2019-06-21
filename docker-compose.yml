@@ -14,7 +14,7 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 3005:4000
+      - 3006:4000
     depends_on:
       - db
 
@@ -23,7 +23,7 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 3006:4000
+      - 3007:4000
     depends_on:
       - db
 
@@ -32,7 +32,7 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 3007:4000
+      - 3008:4000
     depends_on:
       - db
 
@@ -41,7 +41,7 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 3008:4000
+      - 3009:4000
     depends_on:
       - db
 
@@ -50,24 +50,24 @@ services:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
-      - 3009:4000
-    depends_on:
-      - db
-
-  3d-studio-7:
-    build: .
-    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
-    restart: always
-    ports:
       - 3010:4000
     depends_on:
       - db
 
-  3d-studio-8:
+  3d-studio-7:
     image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
     restart: always
     ports:
       - 3011:4000
+    depends_on:
+      - db
+
+  3d-studio-8:
+    build: .
+    image: 840034178478.dkr.ecr.us-east-2.amazonaws.com/3d-studio
+    restart: always
+    ports:
+      - 3012:4000
     depends_on:
       - db
 
